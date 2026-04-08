@@ -1,0 +1,217 @@
+{% extends 'core/base.html' %}
+{% load socialaccount %}
+
+{% block title %}Iniciar Sesión - Renace{% endblock %}
+{% block body_class %}login-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="current">Iniciar Sesión</li>
+          </ol>
+        </nav>
+        <h1>Iniciar Sesión</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Login Section -->
+    <section id="login" class="login section py-5">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="row g-5 align-items-center">
+              
+              <!-- Left Side - Image/Info -->
+              <div class="col-lg-6" data-aos="fade-right" data-aos-delay="200">
+                <div class="login-info">
+                  <div class="login-image mb-4">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=500&h=400&fit=crop&crop=center" alt="Belleza y Maquillaje" class="img-fluid rounded-3 shadow">
+                  </div>
+                  <div class="login-benefits">
+                    <h4 class="mb-3">¡Bienvenido a Renace!</h4>
+                    <p class="text-muted mb-4">Descubre los mejores productos de belleza y maquillaje importados</p>
+                    <div class="benefits-list">
+                      <div class="benefit-item d-flex align-items-center mb-3">
+                        <div class="benefit-icon me-3">
+                          <i class="bi bi-cart-check" style="color: #e91e63;"></i>
+                        </div>
+                        <div>
+                          <h6 class="mb-1">Carrito Persistente</h6>
+                          <small class="text-muted">Guarda tus productos favoritos</small>
+                        </div>
+                      </div>
+                      <div class="benefit-item d-flex align-items-center mb-3">
+                        <div class="benefit-icon me-3">
+                          <i class="bi bi-percent" style="color: #e91e63;"></i>
+                        </div>
+                        <div>
+                          <h6 class="mb-1">Descuentos Exclusivos</h6>
+                          <small class="text-muted">Ofertas especiales para miembros</small>
+                        </div>
+                      </div>
+                      <div class="benefit-item d-flex align-items-center mb-3">
+                        <div class="benefit-icon me-3">
+                          <i class="bi bi-truck" style="color: #e91e63;"></i>
+                        </div>
+                        <div>
+                          <h6 class="mb-1">Envíos Rápidos</h6>
+                          <small class="text-muted">Entrega express a todo el Perú</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Side - Login Form -->
+              <div class="col-lg-6" data-aos="fade-left" data-aos-delay="300">
+                <div class="login-form-wrapper">
+                  <div class="login-form">
+                    <div class="form-header text-center mb-4">
+                      <div class="login-icon mb-3">
+                        <i class="bi bi-person-circle" style="font-size: 3rem; color: #e91e63;"></i>
+                      </div>
+                      <h3 class="fw-bold">Iniciar Sesión</h3>
+                      <p class="text-muted">Accede a tu cuenta y continúa con tu compra</p>
+                    </div>
+
+                    <form method="post" class="needs-validation" novalidate>
+                      {% csrf_token %}
+                      <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold">
+                          <i class="bi bi-person me-2"></i>Usuario o Email
+                        </label>
+                        <input type="text" class="form-control form-control-lg" id="username" name="username" 
+                               placeholder="Ingresa tu usuario o email" required>
+                        <div class="invalid-feedback">
+                          Por favor ingresa tu usuario o email
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold">
+                          <i class="bi bi-lock me-2"></i>Contraseña
+                        </label>
+                        <div class="input-group">
+                          <input type="password" class="form-control form-control-lg" id="password" name="password" 
+                                 placeholder="Ingresa tu contraseña" required>
+                          <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="bi bi-eye"></i>
+                          </button>
+                        </div>
+                        <div class="invalid-feedback">
+                          Por favor ingresa tu contraseña
+                        </div>
+                      </div>
+
+                      <div class="mb-4 d-flex justify-content-between align-items-center">
+                        <div class="form-check">
+                          <input type="checkbox" class="form-check-input" id="remember">
+                          <label class="form-check-label" for="remember">
+                            Recordarme
+                          </label>
+                        </div>
+                        <a href="#" class="text-decoration-none" style="color: #e91e63;">¿Olvidaste tu contraseña?</a>
+                      </div>
+
+                      <div class="d-grid mb-4">
+                        <button type="submit" class="btn btn-lg" style="background-color: #e91e63; border-color: #e91e63; color: white;">
+                          <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+                        </button>
+                      </div>
+                    </form>
+
+                    <div class="divider text-center mb-4">
+                      <span class="text-muted">o</span>
+                    </div>
+
+                    <div class="social-login mb-4">
+                      <div class="d-grid gap-2">
+                        {% get_providers as socialaccount_providers %}
+                        {% for provider in socialaccount_providers %}
+                          {% if provider.id == "google" %}
+                            <a href="{% provider_login_url provider.id %}" class="btn btn-outline-secondary btn-lg">
+                              <i class="bi bi-google me-2"></i> Continuar con Google
+                            </a>
+                          {% endif %}
+                        {% empty %}
+                          <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Google OAuth no está configurado. Usa el formulario de arriba para iniciar sesión.
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+
+                    <div class="form-footer text-center">
+                      <p class="mb-0">¿No tienes una cuenta? 
+                        <a href="{% url 'core:register' %}" class="fw-semibold text-decoration-none" style="color: #e91e63;">
+                          Crear cuenta
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Login Section -->
+
+  </main>
+
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle password visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            const icon = this.querySelector('i');
+            icon.classList.toggle('bi-eye');
+            icon.classList.toggle('bi-eye-slash');
+        });
+    }
+    
+    // Form validation
+    const form = document.querySelector('.needs-validation');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    }
+});
+</script>
+{% endblock %}

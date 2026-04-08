@@ -1,0 +1,236 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Carrito de Compras - Renace{% endblock %}
+{% block body_class %}cart-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="current">Carrito de Compras</li>
+          </ol>
+        </nav>
+        <h1>Carrito de Compras</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Cart Section -->
+    <section id="cart" class="cart section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        {% if items %}
+        <div class="row">
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="cart-items">
+              <div class="cart-header d-none d-lg-block">
+                <div class="row align-items-center">
+                  <div class="col-lg-6">
+                    <h5>Producto</h5>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <h5>Precio</h5>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <h5>Cantidad</h5>
+                  </div>
+                  <div class="col-lg-2 text-center">
+                    <h5>Total</h5>
+                  </div>
+                </div>
+              </div>
+
+              {% for item in items %}
+              <!-- Cart Item -->
+              <div class="cart-item">
+                <div class="row align-items-center">
+                  <div class="col-lg-6 col-12 mt-3 mt-lg-0 mb-lg-0 mb-3">
+                    <div class="product-info d-flex align-items-center">
+                      <div class="product-image">
+                        {% if item.producto.imagenes.exists %}
+                          <img src="{{ item.producto.imagenes.first.imagen.url }}" alt="{{ item.producto.nombre }}" class="img-fluid" loading="lazy">
+                        {% else %}
+                          <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=100&h=100&fit=crop&crop=center" alt="{{ item.producto.nombre }}" class="img-fluid" loading="lazy">
+                        {% endif %}
+                      </div>
+                      <div class="product-details">
+                        <h6 class="product-title">{{ item.producto.nombre }}</h6>
+                        <div class="product-meta">
+                          <span class="product-category">{{ item.producto.categoria.nombre }}</span>
+                          <span class="product-brand">{{ item.producto.marca.nombre }}</span>
+                        </div>
+                        <a href="{% url 'core:remover_del_carrito' item.id %}" class="remove-item" type="button">
+                          <i class="bi bi-trash"></i> Eliminar
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <div class="price-tag">
+                      <span class="current-price">S/ {{ item.producto.precio }}</span>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <div class="quantity-selector">
+                      <form method="post" action="{% url 'core:actualizar_carrito' item.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="quantity-btn decrease" name="cantidad" value="{{ item.cantidad|add:'-1' }}">
+                          <i class="bi bi-dash"></i>
+                        </button>
+                        <input type="number" class="quantity-input" value="{{ item.cantidad }}" min="1" max="{{ item.producto.stock }}" readonly>
+                        <button type="submit" class="quantity-btn increase" name="cantidad" value="{{ item.cantidad|add:'1' }}">
+                          <i class="bi bi-plus"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-12 mt-3 mt-lg-0 text-center">
+                    <div class="item-total">
+                      <span>S/ {{ item.subtotal }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- End Cart Item -->
+              {% endfor %}
+
+              <div class="cart-actions">
+                <div class="row">
+                  <div class="col-lg-6 mb-3 mb-lg-0">
+                    {% if user_authenticated %}
+                    <div class="coupon-form">
+                      <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Código de cupón">
+                        <button class="btn btn-outline-accent" type="button">Aplicar Cupón</button>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="guest-notice">
+                      <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>¿Tienes una cuenta?</strong> Inicia sesión para guardar tu carrito y acceder a descuentos exclusivos.
+                        <div class="mt-2">
+                          <a href="{% url 'core:login' %}" class="btn btn-sm btn-outline-primary me-2">Iniciar Sesión</a>
+                          <a href="{% url 'core:register' %}" class="btn btn-sm btn-primary">Crear Cuenta</a>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                  <div class="col-lg-6 text-md-end">
+                    <a href="{% url 'core:catalogo' %}" class="btn btn-outline-heading me-2">
+                      <i class="bi bi-arrow-left"></i> Continuar Comprando
+                    </a>
+                    <a href="{% url 'core:checkout' %}" class="btn btn-primary">
+                      <i class="bi bi-arrow-right"></i> Proceder al Pago
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 mt-4 mt-lg-0" data-aos="fade-up" data-aos-delay="300">
+            <div class="cart-summary">
+              <h4 class="summary-title">Resumen del Pedido</h4>
+
+              <div class="summary-item">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value">S/ {{ subtotal|floatformat:2 }}</span>
+              </div>
+
+              <div class="summary-item shipping-item">
+                <span class="summary-label">Envío</span>
+                <div class="shipping-options">
+                  <div class="form-check text-end">
+                    <input class="form-check-input" type="radio" name="shipping" id="standard" checked>
+                    <label class="form-check-label" for="standard">
+                      Envío Estándar - S/ 5.00
+                    </label>
+                  </div>
+                  <div class="form-check text-end">
+                    <input class="form-check-input" type="radio" name="shipping" id="express">
+                    <label class="form-check-label" for="express">
+                      Envío Express - S/ 12.00
+                    </label>
+                  </div>
+                  <div class="form-check text-end">
+                    <input class="form-check-input" type="radio" name="shipping" id="free">
+                    <label class="form-check-label" for="free">
+                      Envío Gratis (Pedidos mayores a S/ 259)
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="summary-item">
+                <span class="summary-label">IGV (18%)</span>
+                <span class="summary-value">S/ {{ igv|floatformat:2 }}</span>
+              </div>
+
+              <div class="summary-item discount">
+                <span class="summary-label">Descuento</span>
+                <span class="summary-value">-S/ 0.00</span>
+              </div>
+
+              <div class="summary-total">
+                <span class="summary-label">Total</span>
+                <span class="summary-value">S/ {{ total|floatformat:2 }}</span>
+              </div>
+
+              <div class="checkout-button">
+                <a href="{% url 'core:checkout' %}" class="btn btn-accent w-100">
+                  Proceder al Pago <i class="bi bi-arrow-right"></i>
+                </a>
+              </div>
+
+              <div class="continue-shopping">
+                <a href="{% url 'core:catalogo' %}" class="btn btn-link w-100">
+                  <i class="bi bi-arrow-left"></i> Continuar Comprando
+                </a>
+              </div>
+
+              <div class="payment-methods">
+                <p class="payment-title">Aceptamos</p>
+                <div class="payment-icons">
+                  <i class="bi bi-phone" aria-label="Yape"></i>
+                  <i class="bi bi-bank" aria-label="Transferencia Bancaria"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <!-- Empty Cart -->
+        <div class="empty-cart text-center" data-aos="fade-up" data-aos-delay="200">
+          <div class="empty-cart-icon">
+            <i class="bi bi-cart-x"></i>
+          </div>
+          <h3>Tu carrito está vacío</h3>
+          <p>¡Agrega algunos productos de belleza a tu carrito para comenzar tu compra!</p>
+          <a href="{% url 'core:catalogo' %}" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i> Ir al Catálogo
+          </a>
+        </div>
+        {% endif %}
+
+      </div>
+
+    </section><!-- /Cart Section -->
+
+  </main>
+
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

@@ -1,0 +1,158 @@
+
+{% extends 'core/base.html' %}
+
+{% block title %}Contacto | Renace - Tienda de Maquillaje y Belleza{% endblock %}
+
+{% block meta_description %}Contáctanos para consultas sobre productos de belleza y maquillaje importados. Atención al cliente especializada en cosméticos. Envíos a todo el Perú.{% endblock %}
+
+{% block meta_keywords %}contacto renace, atención al cliente, consultas maquillaje, productos belleza, cosméticos importados, soporte técnico, envíos perú{% endblock %}
+
+{% block og_title %}Contacto | Renace{% endblock %}
+
+{% block og_description %}Contáctanos para consultas sobre productos de belleza y maquillaje importados.{% endblock %}
+
+{% block twitter_title %}Contacto | Renace{% endblock %}
+
+{% block twitter_description %}Atención al cliente especializada en cosméticos y maquillaje.{% endblock %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:contact' %}{% endblock %}
+
+{% block dc_title %}Contacto | Renace{% endblock %}
+
+{% block dc_description %}Contáctanos para consultas sobre productos de belleza y maquillaje importados.{% endblock %}
+
+{% block dc_identifier %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:contact' %}{% endblock %}
+
+{% block dc_source %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:contact' %}{% endblock %}
+
+{% block dc_relation %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:contact' %}{% endblock %}
+{% block body_class %}contact-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+ 
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Inicio</a></li>
+            <li class="current">Contacto</li>
+          </ol>
+        </nav>
+        <h1>Contacto</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Contact 2 Section -->
+    <section id="contact-2" class="contact-2 section">
+
+      <div class="mb-4" data-aos="fade-up" data-aos-delay="200">
+        <iframe style="border:0; width: 100%; height: 350px;" 
+  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3902.9789487787875!2d-77.0013748!3d-11.9759584!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c568820a4cf7%3A0xd446ba021ad238f3!2sRio%20Ramis%20430%2C%20Lima%2015434!5e0!3m2!1ses!2spe!4v1759865693232!5m2!1ses!2spe" 
+  frameborder="0" 
+  allowfullscreen="" 
+  loading="lazy" 
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe></div><!-- End Google Maps -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4">
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+              <i class="bi bi-geo-alt flex-shrink-0"></i>
+              <div>
+                <h3>Dirección</h3>
+                <p>
+                  {% if configuracion_sitio and configuracion_sitio.direccion %}
+                    {{ configuracion_sitio.direccion }}
+                  {% else %}
+                    Cal. Rio Ramis Nro. 430 Urb. Canto Rey Et. Dos Lima - Lima - San Juan de Lurigancho
+                  {% endif %}
+                </p>
+              </div>
+            </div><!-- End Info Item -->
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+              <i class="bi bi-telephone flex-shrink-0"></i>
+              <div>
+                <h3>Llámanos</h3>
+                <p>
+                  {% if configuracion_sitio and configuracion_sitio.telefono_contacto %}
+                    {{ configuracion_sitio.telefono_contacto }}
+                  {% else %}
+                    +51 964 530 887 / +51 969 735 748
+                  {% endif %}
+                </p>
+              </div>
+            </div><!-- End Info Item -->
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
+              <i class="bi bi-envelope flex-shrink-0"></i>
+              <div>
+                <h3>Email</h3>
+                <p>
+                  {% if configuracion_sitio and configuracion_sitio.email_contacto %}
+                    <a href="mailto:{{ configuracion_sitio.email_contacto }}">{{ configuracion_sitio.email_contacto }}</a>
+                  {% else %}
+                    <a href="mailto:info@renace.com.pe">info@renace.com.pe</a>
+                  {% endif %}
+                </p>
+              </div>
+            </div><!-- End Info Item -->
+
+          </div>
+
+          <div class="col-lg-8">
+            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Nombre" required="">
+                </div>
+
+                <div class="col-md-6 ">
+                  <input type="email" class="form-control" name="email" placeholder="Email" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" class="form-control" name="subject" placeholder="Asunto" required="">
+                </div>
+
+                <div class="col-md-12">
+                  <textarea class="form-control" name="message" rows="6" placeholder="Mensaje" required=""></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <div class="loading">Cargando</div>
+                  <div class="error-message"></div>
+                  <div class="sent-message">Tu mensaje ha sido enviado. Gracias!</div>
+
+                  <button type="submit">Enviar Mensaje</button>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact 2 Section -->
+
+  </main>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

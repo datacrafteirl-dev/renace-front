@@ -1,0 +1,1170 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Acerca de Nosotros | Renace - Tienda de Maquillaje y Belleza{% endblock %}
+
+{% block meta_description %}Conoce la historia de Renace, tu tienda de confianza en maquillaje y productos de belleza importados. Más de 1000 clientes satisfechos en todo el Perú.{% endblock %}
+
+{% block meta_keywords %}acerca de renace, historia tienda belleza, maquillaje importado perú, productos belleza, cosméticos importados, tienda online confianza{% endblock %}
+
+{% block og_title %}Acerca de Nosotros | Renace{% endblock %}
+
+{% block og_description %}Conoce la historia de Renace, tu tienda de confianza en maquillaje y productos de belleza importados.{% endblock %}
+
+{% block twitter_title %}Acerca de Nosotros | Renace{% endblock %}
+
+{% block twitter_description %}Historia de Renace, tu tienda de confianza en maquillaje y belleza.{% endblock %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:about' %}{% endblock %}
+
+{% block dc_title %}Acerca de Nosotros | Renace{% endblock %}
+
+{% block dc_description %}Conoce la historia de Renace, tu tienda de confianza en maquillaje y productos de belleza importados.{% endblock %}
+
+{% block dc_identifier %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:about' %}{% endblock %}
+
+{% block dc_source %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:about' %}{% endblock %}
+
+{% block dc_relation %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:about' %}{% endblock %}
+{% block body_class %}about-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'assets/css/about-icons.css' %}">
+<style>
+  /* Diseño Moderno y Sofisticado - Timeline Style */
+  .about-hero {
+    background: linear-gradient(135deg, #c62076 0%, #b01d69 50%, #981958 100%);
+    padding: 30px 0 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .about-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+  }
+  
+  .about-hero-content {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .about-hero h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .about-hero .subtitle {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    margin-bottom: 0;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Slider Misión y Visión */
+  .mission-vision-slider {
+    padding: 50px 0;
+    background: white;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mission-vision-slider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(198, 32, 118, 0.05), rgba(176, 29, 105, 0.05));
+    z-index: 1;
+  }
+  
+  .mission-vision-container {
+    position: relative;
+    z-index: 2;
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mission-vision-slide {
+    text-align: center;
+    padding: 40px 20px;
+    opacity: 0;
+    transform: translateX(100px);
+    transition: all 0.6s ease;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+  }
+  
+  .mission-vision-slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    position: relative;
+    visibility: visible;
+  }
+  
+  /* Desactivar TODAS las transiciones cuando el slider está pausado */
+  .mission-vision-container.paused .mission-vision-slide,
+  .mission-vision-container.paused .mission-vision-slide.active,
+  .mission-vision-container.paused .mission-vision-icon,
+  .mission-vision-container.paused .mission-vision-icon::before,
+  .mission-vision-container.paused * {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .mission-vision-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 25px;
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 8px 32px rgba(198, 32, 118, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .mission-vision-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: rotate(45deg);
+    animation: iconShimmer 3s ease-in-out infinite;
+  }
+  
+  @keyframes iconShimmer {
+    0%, 100% {
+      transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    50% {
+      transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+  }
+  
+  .mission-vision-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+  
+  .mission-vision-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #6c757d;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  
+  .slider-controls {
+    display: none; /* Ocultar los dots */
+  }
+  
+  .slider-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(198, 32, 118, 0.1);
+    border: 2px solid rgba(198, 32, 118, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #c62076;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+  }
+  
+  .slider-nav:hover {
+    background: rgba(198, 32, 118, 0.2);
+    border-color: rgba(198, 32, 118, 0.4);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 16px rgba(198, 32, 118, 0.3);
+  }
+  
+  .slider-prev {
+    left: 10px;
+  }
+  
+  .slider-next {
+    right: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .mission-vision-slider {
+      padding: 30px 0;
+    }
+    
+    .mission-vision-container {
+      min-height: 350px;
+    }
+    
+    .mission-vision-slide {
+      padding: 30px 15px;
+    }
+    
+    .mission-vision-icon {
+      width: 60px;
+      height: 60px;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .mission-vision-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+    
+    .mission-vision-text {
+      font-size: 1rem;
+    }
+    
+    .slider-nav {
+      width: 40px;
+      height: 40px;
+      font-size: 1rem;
+    }
+    
+    .slider-prev {
+      left: 5px;
+    }
+    
+    .slider-next {
+      right: 5px;
+    }
+  }
+  
+  .timeline-section {
+    padding: 60px 0;
+    background: #fafafa;
+    position: relative;
+  }
+  
+  .timeline-section::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #c62076, #b01d69);
+    transform: translateX(-50%);
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .timeline-item:nth-child(odd) {
+    flex-direction: row;
+  }
+  
+  .timeline-item:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+  
+  .timeline-content {
+    flex: 1;
+    max-width: 45%;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(198, 32, 118, 0.1);
+    border: 1px solid rgba(198, 32, 118, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  
+  .timeline-content:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(198, 32, 118, 0.15);
+  }
+  
+  .timeline-content::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+  }
+  
+  .timeline-item:nth-child(odd) .timeline-content::before {
+    right: -24px;
+    border-left-color: white;
+  }
+  
+  .timeline-item:nth-child(even) .timeline-content::before {
+    left: -24px;
+    border-right-color: white;
+  }
+  
+  .timeline-icon {
+    position: absolute;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 16px rgba(198, 32, 118, 0.3);
+    z-index: 2;
+  }
+  
+  .timeline-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    line-height: 1.3;
+  }
+  
+  .timeline-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+  
+  .values-grid {
+    padding: 60px 0;
+    background: white;
+    overflow: hidden;
+  }
+  
+  .value-item {
+    text-align: center;
+    padding: 20px;
+    transition: all 0.3s ease;
+    position: relative;
+    animation: slideRightLoop 8s linear infinite;
+  }
+  
+  .value-item:nth-child(1) {
+    animation-delay: 0s;
+  }
+  
+  .value-item:nth-child(2) {
+    animation-delay: 2s;
+  }
+  
+  .value-item:nth-child(3) {
+    animation-delay: 4s;
+  }
+  
+  .value-item:nth-child(4) {
+    animation-delay: 6s;
+  }
+  
+  @keyframes slideRightLoop {
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  
+  .value-item:hover {
+    transform: translateY(-4px);
+    animation-play-state: paused;
+  }
+  
+  /* Pausar TODAS las animaciones de value-item cuando el mouse está sobre CUALQUIERA */
+  .values-grid:hover .value-item {
+    animation-play-state: paused !important;
+  }
+  
+  .value-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 6px 20px rgba(198, 32, 118, 0.25);
+    position: relative;
+  }
+  
+  .value-icon-wrapper::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    border-radius: 18px;
+    z-index: -1;
+    opacity: 0.2;
+  }
+  
+  .value-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
+  
+  .value-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+  
+  .stats-minimal {
+    padding: 40px 0;
+    background: #17167c;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .stats-minimal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="stats-pattern" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23stats-pattern)"/></svg>');
+    opacity: 0.3;
+  }
+  
+  .stat-item {
+    text-align: center;
+    padding: 20px 10px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  
+  .stat-item:hover {
+    transform: translateY(-8px);
+  }
+  
+  .stat-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .stat-icon-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+  }
+  
+  .stat-item:hover .stat-icon-wrapper::before {
+    opacity: 1;
+    animation: shimmer 1.5s ease-in-out;
+  }
+  
+  .stat-item:hover .stat-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .stat-icon {
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+  
+  .stat-item:hover .stat-icon {
+    transform: scale(1.2);
+  }
+  
+  .stat-number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .stat-item:hover .stat-number {
+    transform: scale(1.1);
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0.95;
+    margin-bottom: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .stat-item:hover .stat-label {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+  
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+      transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .stat-icon-wrapper {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .stat-item:nth-child(1) .stat-icon-wrapper {
+    animation-delay: 0s;
+  }
+  
+  .stat-item:nth-child(2) .stat-icon-wrapper {
+    animation-delay: 0.5s;
+  }
+  
+  .stat-item:nth-child(3) .stat-icon-wrapper {
+    animation-delay: 1s;
+  }
+  
+  .stat-item:nth-child(4) .stat-icon-wrapper {
+    animation-delay: 1.5s;
+  }
+  
+  /* Efectos de slider y movimiento adicional */
+  .stats-minimal {
+    background-attachment: fixed;
+  }
+  
+  .stats-minimal::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: slideLight 4s ease-in-out infinite;
+  }
+  
+  @keyframes slideLight {
+    0% {
+      left: -100%;
+    }
+    50% {
+      left: 100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+  
+  /* Efecto de pulso en los números */
+  .stat-number::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120%;
+    height: 120%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0;
+    }
+  }
+  
+  .stat-item:nth-child(1) .stat-number::after {
+    animation-delay: 0s;
+  }
+  
+  .stat-item:nth-child(2) .stat-number::after {
+    animation-delay: 0.5s;
+  }
+  
+  .stat-item:nth-child(3) .stat-number::after {
+    animation-delay: 1s;
+  }
+  
+  .stat-item:nth-child(4) .stat-number::after {
+    animation-delay: 1.5s;
+  }
+  
+  /* Efecto de partículas flotantes */
+  .stat-item::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: 10%;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: floatParticle 3s ease-in-out infinite;
+  }
+  
+  .stat-item:nth-child(2)::before {
+    top: 30%;
+    left: 80%;
+    animation-delay: 1s;
+  }
+  
+  .stat-item:nth-child(3)::before {
+    top: 60%;
+    left: 20%;
+    animation-delay: 2s;
+  }
+  
+  .stat-item:nth-child(4)::before {
+    top: 40%;
+    left: 70%;
+    animation-delay: 0.5s;
+  }
+  
+  @keyframes floatParticle {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-20px) scale(1.2);
+      opacity: 1;
+    }
+  }
+  
+  /* Responsive para móviles */
+  @media (max-width: 768px) {
+    .stats-minimal {
+      padding: 30px 0;
+    }
+    
+    .stat-item {
+      padding: 15px 5px;
+    }
+    
+    .stat-icon-wrapper {
+      width: 50px;
+      height: 50px;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    
+    .stat-number {
+      font-size: 1.8rem;
+      margin-bottom: 6px;
+    }
+    
+    .stat-label {
+      font-size: 0.8rem;
+    }
+  }
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .section-header h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  
+  .section-header .subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 768px) {
+    .about-hero {
+      padding: 20px 0 15px;
+    }
+    
+    .about-hero h1 {
+      font-size: 1.8rem;
+    }
+    
+    .about-hero .subtitle {
+      font-size: 0.9rem;
+    }
+    
+    .timeline-section::before {
+      left: 30px;
+    }
+    
+    .timeline-item {
+      flex-direction: column !important;
+      align-items: flex-start;
+      padding-left: 60px;
+    }
+    
+    .timeline-content {
+      max-width: 100%;
+      margin-left: 0;
+    }
+    
+    .timeline-content::before {
+      display: none;
+    }
+    
+    .timeline-icon {
+      left: 30px;
+      transform: translateX(-50%);
+    }
+    
+    .timeline-section {
+      padding: 40px 0;
+    }
+    
+    .values-grid {
+      padding: 40px 0;
+    }
+    
+    .stats-minimal {
+      padding: 40px 0;
+    }
+    
+    .section-header h2 {
+      font-size: 1.8rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section class="about-hero">
+      <div class="container about-hero-content">
+        <div class="row justify-content-center text-center">
+          <div class="col-lg-8">
+            <h1 data-aos="fade-up">Acerca de Nosotros</h1>
+            <p class="subtitle" data-aos="fade-up" data-aos-delay="100">
+              Transformando el cuidado personal en un ritual de empoderamiento
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Misión y Visión Slider -->
+    <section class="mission-vision-slider">
+      <div class="container">
+        <div class="mission-vision-container">
+          <!-- Misión -->
+          <div class="mission-vision-slide active" data-aos="fade-up">
+            <div class="mission-vision-icon">
+              <i class="bi bi-bullseye"></i>
+            </div>
+            <h2 class="mission-vision-title">Nuestra Misión</h2>
+            <p class="mission-vision-text">
+              Empoderar a mujeres y hombres a través del cuidado personal consciente, ofreciendo productos de alta calidad que transforman rutinas en rituales de amor propio. Creemos que cada persona merece sentirse auténtica, confiada y hermosa en su propia piel, sin importar su edad, género o estilo de vida.
+            </p>
+          </div>
+
+          <!-- Visión -->
+          <div class="mission-vision-slide" data-aos="fade-up">
+            <div class="mission-vision-icon">
+              <i class="bi bi-eye"></i>
+            </div>
+            <h2 class="mission-vision-title">Nuestra Visión</h2>
+            <p class="mission-vision-text">
+              Ser la marca líder en bienestar consciente y cuidado personal en Latinoamérica, reconocida por nuestra innovación, calidad y compromiso con la inclusión. Aspiramos a crear un movimiento cultural donde el amor propio sea la base de una sociedad más empática, auténtica y resiliente.
+            </p>
+          </div>
+
+          <!-- Navegación -->
+          <div class="slider-nav slider-prev">
+            <i class="bi bi-chevron-left"></i>
+          </div>
+          <div class="slider-nav slider-next">
+            <i class="bi bi-chevron-right"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 data-aos="fade-up">Nuestra Historia</h2>
+          <p class="subtitle" data-aos="fade-up" data-aos-delay="100">
+            Una historia de transformación, propósito y empoderamiento
+          </p>
+        </div>
+        
+        <div class="timeline-container">
+          <!-- Nuestro Origen -->
+          <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="timeline-content">
+              <h3 class="timeline-title">Nuestro Origen</h3>
+              <p class="timeline-text">
+                Renace con Jesusa y Arnol S.A.C. nació con convicción y propósito: redefinir el amor propio como un acto profundo de sanación. Desde terapias virtuales hasta productos que abrazan cuerpo y alma, la marca evolucionó hacia un ecosistema de bienestar integral.
+              </p>
+            </div>
+            <div class="timeline-icon">
+              <i class="bi bi-heart-fill"></i>
+            </div>
+          </div>
+
+          <!-- Nuestra Historia -->
+          <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="timeline-content">
+              <h3 class="timeline-title">Nuestra Historia</h3>
+              <p class="timeline-text">
+                Renafly nació del propósito, no del mercado. Jesusa y Arnol transformaron una historia de sanación personal en una marca con alma, dedicada a convertir el dolor en belleza consciente. Cada producto es un ritual, cada fragancia una invitación al cuidado auténtico.
+              </p>
+            </div>
+            <div class="timeline-icon">
+              <i class="bi bi-book"></i>
+            </div>
+          </div>
+
+          <!-- Creciendo con Propósito -->
+          <div class="timeline-item" data-aos="fade-up" data-aos-delay="400">
+            <div class="timeline-content">
+              <h3 class="timeline-title">Creciendo con Propósito</h3>
+              <p class="timeline-text">
+                La compañía nació como un mensaje íntimo de sanación. Hoy, es un referente en bienestar consciente y lujo transformador. No vende productos: crea rituales que empoderan, reconectan y ponen el amor propio en el centro.
+              </p>
+            </div>
+            <div class="timeline-icon">
+              <i class="bi bi-graph-up-arrow"></i>
+            </div>
+          </div>
+
+          <!-- Nuestra Filosofía -->
+          <div class="timeline-item" data-aos="fade-up" data-aos-delay="500">
+            <div class="timeline-content">
+              <h3 class="timeline-title">Nuestra Filosofía</h3>
+              <p class="timeline-text">
+                Es una comunidad que transforma el bienestar en prioridad, y el amor propio en revolución. Con productos que sanan, rituales que reconectan y una filosofía que empodera, la marca inspira a miles a cuidarse con autenticidad.
+              </p>
+            </div>
+            <div class="timeline-icon">
+              <i class="bi bi-lightbulb"></i>
+            </div>
+          </div>
+
+          <!-- Mirando hacia el futuro -->
+          <div class="timeline-item" data-aos="fade-up" data-aos-delay="600">
+            <div class="timeline-content">
+              <h3 class="timeline-title">Mirando hacia el futuro</h3>
+              <p class="timeline-text">
+                Renace con Jesusa y Arnol S.A.C. evoluciona con propósito, ampliando su portafolio de autocuidado y fortaleciendo alianzas con expertos en salud mental y bienestar. Más que una empresa, es un movimiento que transforma el amor propio en estilo de vida.
+              </p>
+            </div>
+            <div class="timeline-icon">
+              <i class="bi bi-rocket-takeoff"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Valores Section -->
+    <section class="values-grid">
+      <div class="container">
+        <div class="section-header">
+          <h2>Nuestros Valores</h2>
+          <p class="subtitle">
+            Los principios que guían nuestra misión y definen nuestra identidad
+          </p>
+        </div>
+        
+        <div class="row g-3">
+          <!-- Empoderamiento -->
+          <div class="col-lg-3 col-md-6">
+            <div class="value-item">
+              <div class="value-icon-wrapper">
+                <i class="bi bi-heart-fill"></i>
+              </div>
+              <h4 class="value-title">Empoderamiento</h4>
+              <p class="value-description">
+                Creemos en el poder interior de cada mujer y hombre, ofreciendo productos que empoderan, elevan la confianza y celebran la belleza auténtica.
+              </p>
+            </div>
+          </div>
+
+          <!-- Calidad -->
+          <div class="col-lg-3 col-md-6">
+            <div class="value-item">
+              <div class="value-icon-wrapper">
+                <i class="bi bi-star-fill"></i>
+              </div>
+              <h4 class="value-title">Calidad que Empodera</h4>
+              <p class="value-description">
+                Nos comprometemos a ofrecer cosméticos de alto rendimiento, formulados con ingredientes seguros y eficaces que respetan la piel.
+              </p>
+            </div>
+          </div>
+
+          <!-- Innovación -->
+          <div class="col-lg-3 col-md-6">
+            <div class="value-item">
+              <div class="value-icon-wrapper">
+                <i class="bi bi-lightbulb-fill"></i>
+              </div>
+              <h4 class="value-title">Innovación con Propósito</h4>
+              <p class="value-description">
+                Exploramos constantemente nuevas fórmulas y tecnologías para crear soluciones cosméticas que se anticipan a las necesidades.
+              </p>
+            </div>
+          </div>
+
+          <!-- Autocuidado -->
+          <div class="col-lg-3 col-md-6">
+            <div class="value-item">
+              <div class="value-icon-wrapper">
+                <i class="bi bi-heart-pulse"></i>
+              </div>
+              <h4 class="value-title">Autocuidado que Transforma</h4>
+              <p class="value-description">
+                Impulsamos el cuidado personal como un acto consciente de amor propio y empoderamiento para cada mujer y hombre.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-minimal">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-item">
+              <div class="stat-icon-wrapper">
+                <i class="bi bi-emoji-smile stat-icon"></i>
+              </div>
+              <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="1000" data-purecounter-duration="2">0</span>
+              <p class="stat-label">Clientes Felices</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-item">
+              <div class="stat-icon-wrapper">
+                <i class="bi bi-box-seam stat-icon"></i>
+              </div>
+              <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="50" data-purecounter-duration="2">0</span>
+              <p class="stat-label">Productos de Calidad</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="stat-item">
+              <div class="stat-icon-wrapper">
+                <i class="bi bi-headset stat-icon"></i>
+              </div>
+              <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="24" data-purecounter-duration="2">0</span>
+              <p class="stat-label">Horas de Soporte</p>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="stat-item">
+              <div class="stat-icon-wrapper">
+                <i class="bi bi-people stat-icon"></i>
+              </div>
+              <span class="stat-number purecounter" data-purecounter-start="0" data-purecounter-end="100" data-purecounter-duration="2">0</span>
+              <p class="stat-label">Expertos en Belleza</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Slider Misión y Visión
+    const slides = document.querySelectorAll('.mission-vision-slide');
+    const prevBtn = document.querySelector('.slider-prev');
+    const nextBtn = document.querySelector('.slider-next');
+    let currentSlide = 0;
+    let slideInterval;
+
+    function showSlide(index) {
+        // Ocultar todas las slides
+        slides.forEach((slide, i) => {
+            slide.classList.remove('active');
+            if (i !== index) {
+                slide.style.position = 'absolute';
+                slide.style.visibility = 'hidden';
+            }
+        });
+        
+        // Mostrar slide actual
+        slides[index].classList.add('active');
+        slides[index].style.position = 'relative';
+        slides[index].style.visibility = 'visible';
+        
+        currentSlide = index;
+    }
+
+    function nextSlide() {
+        const next = (currentSlide + 1) % slides.length;
+        showSlide(next);
+    }
+
+    function prevSlide() {
+        const prev = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(prev);
+    }
+
+    function startAutoSlide() {
+        slideInterval = setInterval(nextSlide, 5000); // Cambiar cada 5 segundos
+    }
+
+    function stopAutoSlide() {
+        clearInterval(slideInterval);
+    }
+
+    // Event listeners
+    nextBtn.addEventListener('click', () => {
+        nextSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    prevBtn.addEventListener('click', () => {
+        prevSlide();
+        stopAutoSlide();
+        startAutoSlide();
+    });
+
+    // Pausar auto-slide y detener TODAS las animaciones al hacer hover
+    const sliderContainer = document.querySelector('.mission-vision-container');
+    sliderContainer.addEventListener('mouseenter', function() {
+        stopAutoSlide();
+        // Agregar clase que desactiva todas las transiciones
+        sliderContainer.classList.add('paused');
+    });
+    sliderContainer.addEventListener('mouseleave', function() {
+        startAutoSlide();
+        // Remover la clase que desactiva transiciones
+        sliderContainer.classList.remove('paused');
+    });
+
+    // Inicializar slider
+    if (slides.length > 0) {
+        showSlide(0); // Mostrar primera slide
+        startAutoSlide();
+    }
+});
+</script>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

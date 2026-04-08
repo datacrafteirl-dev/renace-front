@@ -1,0 +1,2476 @@
+
+{% extends 'core/base.html' %}
+
+{% block title %}{{ producto.nombre }} - Renace{% endblock %}
+{% block body_class %}product-details-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+ 
+
+  <main class="main">
+
+    <!-- Breadcrumb y Categorías Compactas -->
+    <div class="page-title light-background" style="padding: 16px 0; margin-bottom: 0;">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <nav class="breadcrumbs" style="margin-bottom: 0;">
+            <ol style="margin-bottom: 0;">
+              <li><a href="{% url 'core:home' %}">Inicio</a></li>
+              <li><a href="{% url 'core:catalogo' %}">Catálogo</a></li>
+              {% if producto.categoria %}
+              <li><a href="{% url 'core:catalogo' %}?categoria={{ producto.categoria.id }}">{{ producto.categoria.nombre }}</a></li>
+              {% endif %}
+            </ol>
+          </nav>
+          
+          <!-- Etiquetas de categorías modernas -->
+          <div class="product-categories-tags">
+            {% if producto.subcategoria %}
+            <a href="{% url 'core:catalogo' %}?subcategoria={{ producto.subcategoria.id }}" class="category-tag-small">
+              <i class="bi bi-collection"></i>{{ producto.subcategoria.nombre }}
+            </a>
+            {% endif %}
+            {% if producto.marca %}
+            <a href="{% url 'core:catalogo' %}?marca={{ producto.marca.id }}" class="category-tag-small">
+              <i class="bi bi-award"></i>{{ producto.marca.nombre }}
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details Section -->
+    <section id="product-details" class="product-details section" style="padding-top: 20px;">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="50" style="margin-top: 0;">
+
+        <div class="row g-5">
+          <!-- Product Images Column -->
+          <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right" data-aos-delay="200">
+            <div class="product-gallery">
+              <!-- Product Badges -->
+              <div class="product-badges">
+                {% if producto.es_nuevo %}
+                <span class="product-badge badge-new">
+                  <i class="bi bi-star-fill"></i>
+                  Lo nuevo
+                </span>
+                {% endif %}
+                {% if producto.tiene_descuento %}
+                <span class="product-badge badge-discount">
+                  <i class="bi bi-percent"></i>
+                  {{ producto.porcentaje_descuento }}% OFF
+                </span>
+                {% endif %}
+                <span class="product-badge badge-exclusive">
+                  <i class="bi bi-shop"></i>
+                  Solo en Renace
+                </span>
+              </div>
+
+              <!-- Main Image Container -->
+              <div class="main-image-container">
+                <div class="main-image-wrapper">
+                  {% if producto.imagenes.exists %}
+                    {% with producto.imagenes.first as primera_imagen %}
+                    <img src="{{ primera_imagen.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid main-image" id="main-product-image" data-zoom="{{ primera_imagen.imagen.url }}">
+                    {% endwith %}
+                  {% else %}
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=800&fit=crop&crop=center" alt="{{ producto.nombre }}" class="img-fluid main-image" id="main-product-image" data-zoom="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&h=1200&fit=crop&crop=center">
+                  {% endif %}
+                  
+                  <!-- Zoom Button -->
+                  <button class="zoom-button" id="zoom-button" aria-label="Ver imagen en detalle">
+                    <i class="bi bi-zoom-in"></i>
+                    <span>Ver detalle</span>
+                  </button>
+                </div>
+
+                <!-- Thumbnails Navigation -->
+                <div class="thumbnails-container">
+                  {% for imagen in producto.imagenes.all|slice:":5" %}
+                  <div class="thumbnail-item {% if forloop.first %}active{% endif %}" data-image="{{ imagen.imagen.url }}">
+                    <img src="{{ imagen.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid" loading="lazy">
+                  </div>
+                  {% empty %}
+                  <div class="thumbnail-item active" data-image="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=800&h=800&fit=crop&crop=center">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=center" alt="{{ producto.nombre }}" class="img-fluid" loading="lazy">
+                  </div>
+                  {% endfor %}
+                </div>
+
+                <!-- Navigation Arrows -->
+                <div class="gallery-nav">
+                  <button class="nav-arrow prev-arrow" aria-label="Imagen anterior">
+                    <i class="bi bi-chevron-left"></i>
+                  </button>
+                  <button class="nav-arrow next-arrow" aria-label="Imagen siguiente">
+                    <i class="bi bi-chevron-right"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Info Column -->
+          <div class="col-lg-6" data-aos="fade-left" data-aos-delay="200">
+            <div class="product-info-wrapper" id="product-info-sticky">
+              <!-- Product Meta -->
+              <div class="product-meta">
+                <div class="product-title-wrapper d-flex justify-content-between align-items-center mb-3">
+                  <h1 class="product-title mb-0">{{ producto.nombre }}</h1>
+                  <div class="product-share">
+                    <button class="share-btn" aria-label="Compartir producto">
+                      <i class="bi bi-share"></i>
+                    </button>
+                    <div class="share-dropdown">
+                      <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" aria-label="Compartir en Facebook"><i class="bi bi-facebook"></i></a>
+                      <a href="https://www.instagram.com/" target="_blank" aria-label="Compartir en Instagram"><i class="bi bi-instagram"></i></a>
+                      <a href="https://www.tiktok.com/" target="_blank" aria-label="Compartir en TikTok"><i class="bi bi-tiktok"></i></a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="product-rating">
+                  <div class="stars">
+                    {% for i in "12345" %}
+                      {% if forloop.counter <= producto.calificacion_promedio %}
+                        <i class="bi bi-star-fill"></i>
+                      {% elif forloop.counter|add:"-0.5" <= producto.calificacion_promedio %}
+                        <i class="bi bi-star-half"></i>
+                      {% else %}
+                        <i class="bi bi-star"></i>
+                      {% endif %}
+                    {% endfor %}
+                    <span class="rating-value">{{ producto.calificacion_promedio|floatformat:1 }}</span>
+                  </div>
+                  <a href="#reviews" class="rating-count">{{ producto.resenas.count }} Reseñas</a>
+                </div>
+              </div>
+
+              <!-- Product Price -->
+              <div class="product-price-container">
+                <div class="price-wrapper">
+                  <span class="current-price">S/ {{ producto.precio }}</span>
+                  {% if producto.precio_anterior %}
+                    <span class="original-price">S/ {{ producto.precio_anterior }}</span>
+                  {% endif %}
+                </div>
+                {% if producto.tiene_descuento %}
+                  <span class="discount-badge">Ahorra {{ producto.porcentaje_descuento }}%</span>
+                {% endif %}
+                <div class="stock-info">
+                  {% if producto.stock > 0 %}
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span>En Stock</span>
+                    <span class="stock-count">({{ producto.stock }} unidades disponibles)</span>
+                  {% else %}
+                    <i class="bi bi-x-circle-fill"></i>
+                    <span>Agotado</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <!-- Product Options -->
+              <div class="product-options">
+                <!-- Tipo de Piel expandido -->
+                {% if producto.tipo_piel %}
+                <div class="skin-type-section">
+                  <div class="attr-item expanded">
+                    <span class="attr-label">Tipo de Piel</span>
+                    <span class="skin-type-badge expanded"><i class="bi bi-person-heart"></i><span>{{ producto.tipo_piel }}</span></span>
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- Contenido y Disponibilidad juntos -->
+                <div class="product-attributes-row">
+                  {% if producto.contenido_neto %}
+                  <div class="attr-item">
+                    <span class="attr-label">Contenido</span>
+                    <span class="content-badge"><i class="bi bi-box"></i><span>{{ producto.contenido_neto }}</span></span>
+                  </div>
+                  {% endif %}
+
+                  <div class="attr-item">
+                    <span class="attr-label">Disponibilidad</span>
+                    {% if producto.stock > 0 %}
+                      <span class="stock-badge available"><i class="bi bi-check-circle-fill"></i><span>En stock ({{ producto.stock }})</span></span>
+                    {% else %}
+                      <span class="stock-badge unavailable"><i class="bi bi-x-circle-fill"></i><span>Agotado</span></span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <!-- Quantity Selector -->
+                <div class="option-group">
+                  <h6 class="option-title">Cantidad</h6>
+                  <div class="quantity-selector">
+                    <button class="quantity-btn decrease">
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <input type="number" class="quantity-input" value="1" min="1" max="{{ producto.stock|default:1 }}">
+                    <button class="quantity-btn increase">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="product-actions">
+                {% if producto.stock > 0 %}
+                  <form method="post" action="{% url 'core:agregar_al_carrito' producto.id %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="cantidad" value="1" id="quantity-input">
+                    <button type="submit" class="btn btn-primary add-to-cart-btn">
+                      <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                    </button>
+                  </form>
+                  <a href="{% url 'core:checkout' %}" class="btn btn-outline-primary buy-now-btn">
+                    <i class="bi bi-lightning-fill"></i> Comprar Ahora
+                  </a>
+                {% else %}
+                  <button class="btn btn-secondary" disabled>
+                    <i class="bi bi-x-circle"></i> Agotado
+                  </button>
+                {% endif %}
+              </div>
+
+              <!-- Success Message Container -->
+              <div id="cart-success-message" class="cart-success-message" style="display: none;">
+                <div class="success-content">
+                  <i class="bi bi-check-circle-fill"></i>
+                  <span class="success-text">¡Producto agregado al carrito!</span>
+                </div>
+              </div>
+
+              <!-- Delivery Options -->
+              <div class="delivery-options">
+                <div class="delivery-option">
+                  <i class="bi bi-truck"></i>
+                  <div>
+                    <h6>ENVIOS A TODO EL PERÚ</h6>
+                    <p>Despachamos a Lima y provincias</p>
+                  </div>
+                </div>
+                <div class="delivery-option">
+                  <i class="bi bi-shield-check"></i>
+                  <div>
+                    <h6>Garantía de Calidad</h6>
+                    <p>Productos 100% originales</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky Add to Cart Bar (appears on scroll) -->
+        <div class="sticky-add-to-cart">
+          <div class="container">
+            <div class="sticky-content">
+              <div class="product-preview">
+                <img src="assets/img/product/product-details-1.webp" alt="Product" class="product-thumbnail">
+                <div class="product-info">
+                  <h5 class="product-title">Lorem Ipsum Wireless Headphones</h5>
+                  <div class="product-price">$249.99</div>
+                </div>
+              </div>
+              <div class="sticky-actions">
+                <div class="quantity-selector">
+                  <button class="quantity-btn decrease">
+                    <i class="bi bi-dash"></i>
+                  </button>
+                  <input type="number" class="quantity-input" value="1" min="1" max="24">
+                  <button class="quantity-btn increase">
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </div>
+                <button class="btn btn-primary add-to-cart-btn">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Details Accordion -->
+        <div class="row mt-5" data-aos="fade-up">
+          <div class="col-12">
+            <div class="product-details-accordion">
+              <!-- Product Description Accordion - MOVIDO ARRIBA -->
+              {% if producto.descripcion %}
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#description" aria-expanded="true" aria-controls="description">
+                    <i class="bi bi-file-text"></i> Descripción del Producto
+                  </button>
+                </h2>
+                <div id="description" class="accordion-collapse collapse show">
+                  <div class="accordion-body">
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="description-image-container">
+                          {% if producto.imagenes.exists %}
+                            {% with producto.imagenes.all.1 as segunda_imagen %}
+                              {% if segunda_imagen %}
+                                <img src="{{ segunda_imagen.imagen.url }}" alt="{{ producto.nombre }}" class="description-image">
+                              {% else %}
+                                <img src="{{ producto.imagenes.first.imagen.url }}" alt="{{ producto.nombre }}" class="description-image">
+                              {% endif %}
+                            {% endwith %}
+                          {% else %}
+                            <div class="description-placeholder">
+                              <i class="bi bi-info-circle"></i>
+                              <p>Descripción del producto</p>
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="col-lg-8">
+                        <div class="description-content">
+                          <h5 class="description-title mb-4">
+                            <i class="bi bi-lightbulb-fill me-2"></i>Sobre este Producto
+                          </h5>
+                          <div class="description-text">
+                            <p>{{ producto.descripcion|linebreaks }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- Información Consolidada del Producto -->
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button {% if not producto.descripcion %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#product-info" aria-expanded="{% if not producto.descripcion %}true{% else %}false{% endif %}" aria-controls="product-info">
+                    <i class="bi bi-gear"> </i> Especificaciones
+                  </button>
+                </h2>
+                <div id="product-info" class="accordion-collapse collapse {% if not producto.descripcion %}show{% endif %}">
+                  <div class="accordion-body">
+                    <div class="product-info-unified">
+
+                      <!-- Especificaciones Técnicas -->
+                      <div class="info-section">
+                        <div class="row">
+                          <div class="col-lg-8">
+                            <div class="specifications-table">
+                              <div class="spec-row">
+                                <div class="spec-label">SKU</div>
+                                <div class="spec-value">{{ producto.sku|default:producto.codigo }}</div>
+                              </div>
+                              {% if producto.marca.pais_origen %}
+                              <div class="spec-row">
+                                <div class="spec-label">PAÍS DE ORIGEN</div>
+                                <div class="spec-value">{{ producto.marca.pais_origen }}</div>
+                              </div>
+                              {% endif %}
+                              <div class="spec-row">
+                                <div class="spec-label">ESTADO</div>
+                                <div class="spec-value">
+                                  {% if producto.es_nuevo %}
+                                    <span class="status-badge new">Nuevo</span>
+                                  {% elif producto.es_oferta %}
+                                    <span class="status-badge offer">Oferta</span>
+                                  {% else %}
+                                    <span class="status-badge available">Disponible</span>
+                                  {% endif %}
+                                </div>
+                              </div>
+                              <div class="spec-row">
+                                <div class="spec-label">TIPO</div>
+                                <div class="spec-value">{{ producto.get_tipo_producto_display }}</div>
+                              </div>
+                              <div class="spec-row">
+                                <div class="spec-label">CATEGORÍA</div>
+                                <div class="spec-value">{{ producto.categoria.nombre }}</div>
+                              </div>
+                              {% if producto.subcategoria %}
+                              <div class="spec-row">
+                                <div class="spec-label">SUBCATEGORÍA</div>
+                                <div class="spec-value">{{ producto.subcategoria.nombre }}</div>
+                              </div>
+                              {% endif %}
+                              <div class="spec-row">
+                                <div class="spec-label">MARCA</div>
+                                <div class="spec-value">{{ producto.marca.nombre }}</div>
+                              </div>
+                              {% if producto.contenido_neto %}
+                              <div class="spec-row">
+                                <div class="spec-label">CONTENIDO</div>
+                                <div class="spec-value">{{ producto.contenido_neto }}</div>
+                              </div>
+                              {% endif %}
+                              {% if producto.tipo_piel %}
+                              <div class="spec-row">
+                                <div class="spec-label">TIPO DE PIEL</div>
+                                <div class="spec-value">{{ producto.tipo_piel }}</div>
+                              </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="col-lg-4">
+                            <div class="spec-image-container">
+                              {% if producto.imagenes.exists %}
+                                {% with producto.imagenes.all.1 as segunda_imagen %}
+                                  {% if segunda_imagen %}
+                                    <img src="{{ segunda_imagen.imagen.url }}" alt="{{ producto.nombre }}" class="spec-image">
+                                  {% else %}
+                                    <img src="{{ producto.imagenes.first.imagen.url }}" alt="{{ producto.nombre }}" class="spec-image">
+                                  {% endif %}
+                                {% endwith %}
+                              {% else %}
+                                <div class="spec-placeholder">
+                                  <i class="bi bi-image"></i>
+                                  <p>Imagen del producto</p>
+                                </div>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ingredients Accordion -->
+              {% if producto.ingredientes %}
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ingredients" aria-expanded="false" aria-controls="ingredients">
+                    <i class="bi bi-flask"></i> Ingredientes
+                  </button>
+                </h2>
+                <div id="ingredients" class="accordion-collapse collapse">
+                  <div class="accordion-body">
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="ingredients-image-container">
+                          {% if producto.imagenes.exists %}
+                            {% with producto.imagenes.all.2 as tercera_imagen %}
+                              {% if tercera_imagen %}
+                                <img src="{{ tercera_imagen.imagen.url }}" alt="{{ producto.nombre }}" class="ingredients-image">
+                              {% else %}
+                                <img src="{{ producto.imagenes.first.imagen.url }}" alt="{{ producto.nombre }}" class="ingredients-image">
+                              {% endif %}
+                            {% endwith %}
+                          {% else %}
+                            <div class="ingredients-placeholder">
+                              <i class="bi bi-flask"></i>
+                              <p>Ingredientes del producto</p>
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                      <div class="col-lg-8">
+                        <div class="ingredients-description">
+                          <h5 class="ingredients-description-title">
+                            <i class="bi bi-star-fill me-2"></i>Ingredientes Clave
+                          </h5>
+                          <div class="ingredients-description-content">
+                            {% if producto.informacion_general %}
+                              <p>{{ producto.informacion_general|linebreaks }}</p>
+                            {% else %}
+                              <p class="text-muted">No hay información de ingredientes clave disponible.</p>
+                            {% endif %}
+                          </div>
+                        </div>
+                        
+                        <!-- Botón para ver todos los ingredientes -->
+                        <div class="ingredients-action mt-4">
+                          <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#allIngredientsModal">
+                            <i class="bi bi-list-ul"></i> Ver todos los ingredientes
+                          </button>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- Usage Instructions Accordion -->
+              {% if producto.modo_uso %}
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#usage" aria-expanded="false" aria-controls="usage">
+                    <i class="bi bi-list-ol"></i> Modo de Uso
+                  </button>
+                </h2>
+                <div id="usage" class="accordion-collapse collapse">
+                  <div class="accordion-body">
+                    <div class="row">
+                      <div class="col-lg-8">
+                        <div class="usage-steps-container">
+                          <h5 class="usage-title mb-4">
+                            <i class="bi bi-list-ol"></i> Pasos para el uso correcto
+                          </h5>
+                          <div class="usage-steps" id="usage-steps-content">
+                            {{ producto.modo_uso|linebreaks }}
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="usage-image-container">
+                          {% if producto.imagenes.exists %}
+                            {% with producto.imagenes.all.3 as cuarta_imagen %}
+                              {% if cuarta_imagen %}
+                                <img src="{{ cuarta_imagen.imagen.url }}" alt="{{ producto.nombre }}" class="usage-image">
+                              {% else %}
+                                <img src="{{ producto.imagenes.first.imagen.url }}" alt="{{ producto.nombre }}" class="usage-image">
+                              {% endif %}
+                            {% endwith %}
+                          {% else %}
+                            <div class="usage-placeholder">
+                              <i class="bi bi-list-ol"></i>
+                              <p>Modo de uso del producto</p>
+                            </div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- Reviews Accordion -->
+              <div class="accordion-item" id="reviews">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#reviewsContent" aria-expanded="false" aria-controls="reviewsContent">
+                    Reseñas de Clientes ({{ total_resenas }})
+                  </button>
+                </h2>
+                <div id="reviewsContent" class="accordion-collapse collapse">
+                  <div class="accordion-body">
+                    <div class="product-reviews">
+                      {% if total_resenas > 0 %}
+                        <div class="reviews-summary">
+                          <div class="row">
+                            <div class="col-lg-4">
+                              <div class="overall-rating">
+                                <div class="rating-number">{{ promedio_calificacion }}</div>
+                                <div class="rating-stars">
+                                  {% for i in "12345" %}
+                                    {% if i|add:0 <= promedio_calificacion %}
+                                      <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                      <i class="bi bi-star"></i>
+                                    {% endif %}
+                                  {% endfor %}
+                                </div>
+                                <div class="rating-count">Basado en {{ total_resenas }} reseña{{ total_resenas|pluralize }}</div>
+                              </div>
+                            </div>
+
+                            <div class="col-lg-8">
+                              <div class="rating-breakdown">
+                                {% for stat in estadisticas_calificaciones %}
+                                  <div class="rating-bar">
+                                    <div class="rating-label">{{ stat.calificacion }} estrella{{ stat.calificacion|pluralize }}</div>
+                                    <div class="progress">
+                                      <div class="progress-bar" role="progressbar" style="width: {{ stat.porcentaje }}%;" aria-valuenow="{{ stat.porcentaje }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <div class="rating-count">{{ stat.count }}</div>
+                                  </div>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="reviews-list">
+                          {% for resena in resenas %}
+                            <div class="review-item">
+                              <div class="review-header">
+                                <div class="reviewer-info">
+                                  <div class="reviewer-avatar-placeholder">
+                                    <i class="bi bi-person-circle"></i>
+                                  </div>
+                                  <div>
+                                    <h5 class="reviewer-name">{{ resena.cliente.first_name|default:resena.cliente.username }}</h5>
+                                    <div class="review-date">{{ resena.fecha_creacion|date:"d/m/Y" }}</div>
+                                  </div>
+                                </div>
+                                <div class="review-rating">
+                                  {% for i in "12345" %}
+                                    {% if i|add:0 <= resena.calificacion %}
+                                      <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                      <i class="bi bi-star"></i>
+                                    {% endif %}
+                                  {% endfor %}
+                                </div>
+                              </div>
+                              <h5 class="review-title">{{ resena.titulo }}</h5>
+                              <div class="review-content">
+                                <p>{{ resena.comentario }}</p>
+                              </div>
+                            </div>
+                          {% endfor %}
+                        </div>
+                      {% else %}
+                        <div class="text-center py-5">
+                          <i class="bi bi-chat-square-text display-1 text-muted"></i>
+                          <h4 class="mt-3 text-muted">Aún no hay reseñas</h4>
+                          <p class="text-muted">Sé el primero en compartir tu experiencia con este producto.</p>
+                        </div>
+                      {% endif %}
+
+                      <div class="review-form-container mt-5">
+                        <h4>Escribir una Reseña</h4>
+                        
+                        {% if user.is_authenticated %}
+                          {% if puede_resenar and resena_form %}
+                            <form method="post" class="review-form">
+                              {% csrf_token %}
+                              <input type="hidden" name="resena_form" value="1">
+                              
+                              <div class="rating-select mb-4">
+                                <label class="form-label">{{ resena_form.calificacion.label }}</label>
+                                {{ resena_form.calificacion }}
+                                {% if resena_form.calificacion.errors %}
+                                  <div class="text-danger small mt-1">
+                                    {{ resena_form.calificacion.errors.0 }}
+                                  </div>
+                                {% endif %}
+                              </div>
+
+                              <div class="mb-3">
+                                <label class="form-label">{{ resena_form.titulo.label }}</label>
+                                {{ resena_form.titulo }}
+                                {% if resena_form.titulo.errors %}
+                                  <div class="text-danger small mt-1">
+                                    {{ resena_form.titulo.errors.0 }}
+                                  </div>
+                                {% endif %}
+                              </div>
+
+                              <div class="mb-4">
+                                <label class="form-label">{{ resena_form.comentario.label }}</label>
+                                {{ resena_form.comentario }}
+                                <div class="form-text">Cuéntanos qué piensas sobre este producto. ¡Sé honesto y útil!</div>
+                                {% if resena_form.comentario.errors %}
+                                  <div class="text-danger small mt-1">
+                                    {{ resena_form.comentario.errors.0 }}
+                                  </div>
+                                {% endif %}
+                              </div>
+
+                              {% if resena_form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                  {{ resena_form.non_field_errors.0 }}
+                                </div>
+                              {% endif %}
+
+                              <div class="text-end">
+                                <button type="submit" class="btn btn-primary">Enviar Reseña</button>
+                              </div>
+                            </form>
+                          {% else %}
+                            <div class="alert alert-info">
+                              <i class="bi bi-info-circle me-2"></i>
+                              Ya registraste una reseña para este producto.
+                            </div>
+                          {% endif %}
+                        {% else %}
+                          <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Debes <a href="{% url 'core:login' %}" class="alert-link">iniciar sesión</a> 
+                            para poder crear reseñas.
+                          </div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Product Details Section -->
+
+  </main>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Tema general para detalle de producto - look moderno y limpio */
+body.product-details-page { background: #f8f4f6; }
+.page-title.light-background { background: #f8f4f6; border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); }
+#product-details.section, .product-details.section { background: transparent; }
+
+/* Estilos para el botón de zoom */
+.zoom-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.zoom-button i {
+    font-size: 16px;
+}
+
+/* Modal de zoom */
+.zoom-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.zoom-modal.show {
+    opacity: 1;
+}
+
+.zoom-modal-content {
+    position: relative;
+    max-width: 95%;
+    max-height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.zoom-image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    cursor: grab;
+}
+
+.zoom-image:active {
+    cursor: grabbing;
+}
+
+.zoom-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-close:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.zoom-controls {
+    position: absolute;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-control-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.zoom-control-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+.zoom-instructions {
+    position: absolute;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 15px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.zoom-instructions i {
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .zoom-button {
+        top: 10px;
+        right: 10px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .zoom-button span {
+        display: none;
+    }
+    
+    .zoom-controls {
+        bottom: -50px;
+    }
+    
+    .zoom-instructions {
+        bottom: -80px;
+        font-size: 12px;
+    }
+    
+    .zoom-close {
+        top: -40px;
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}
+#product-details .container { padding-top: 24px; padding-bottom: 24px; }
+#product-details .row.g-5 { row-gap: 2rem; }
+
+/* Galería moderna estilo referencia */
+.product-gallery { position: relative; }
+
+/* Badges de producto */
+.product-badges { position: absolute; top: 16px; left: 16px; z-index: 10; display: flex; flex-direction: column; gap: 8px; }
+.product-badge { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.badge-new { background: linear-gradient(135deg, #ff6b9d, #ff8fab); }
+.badge-discount { background: linear-gradient(135deg, #ff4757, #ff6b7a); }
+.badge-exclusive { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+/* Contenedor principal de imagen */
+.main-image-container { position: relative; background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,.08); }
+.main-image-wrapper { position: relative; aspect-ratio: 1; overflow: hidden; }
+.main-image { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform .3s ease; }
+
+/* Indicador de zoom */
+.zoom-indicator { position: absolute; bottom: 16px; right: 16px; background: rgba(0,0,0,.7); color: #fff; padding: 8px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px; opacity: 0; transition: opacity .3s ease; }
+.main-image-wrapper:hover .zoom-indicator { opacity: 1; }
+
+/* Miniaturas horizontales */
+.thumbnails-container { display: flex; gap: 12px; padding: 16px; background: #f8f9fa; border-top: 1px solid #e9ecef; }
+.thumbnail-item { flex: 1; max-width: 80px; aspect-ratio: 1; border-radius: 12px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: all .3s ease; }
+.thumbnail-item:hover { border-color: color-mix(in srgb, var(--accent-color), transparent 60%); transform: translateY(-2px); }
+.thumbnail-item.active { border-color: var(--accent-color); box-shadow: 0 4px 16px color-mix(in srgb, var(--accent-color), transparent 70%); }
+.thumbnail-item img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Navegación de galería */
+.gallery-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 100%; display: flex; justify-content: space-between; padding: 0 16px; pointer-events: none; }
+.nav-arrow { pointer-events: all; width: 44px; height: 44px; border-radius: 50%; border: none; background: rgba(255,255,255,.95); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,.15); transition: all .3s ease; color: #333; }
+.nav-arrow:hover { background: #fff; transform: scale(1.1); }
+.nav-arrow i { font-size: 20px; }
+
+/* Zoom inline (Drift) */
+.drift-zoom-pane { border-radius: 16px; box-shadow: 0 12px 40px rgba(0,0,0,.25); border: 2px solid rgba(255,255,255,.2); }
+.drift-bounding-box { border: 3px solid var(--accent-color); background: color-mix(in srgb, var(--accent-color), transparent 90%); border-radius: 12px; }
+
+/* Product categories styling */
+.product-categories {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Etiquetas de categorías compactas */
+.product-categories-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.category-tag-small {
+  background: rgba(255, 255, 255, 0.9);
+  color: #6c757d;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(198, 32, 118, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.category-tag-small:hover {
+  background: linear-gradient(135deg, #c62076, #b01d69);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(198, 32, 118, 0.25);
+  border-color: #c62076;
+}
+
+.category-tag-small i {
+  font-size: 12px;
+}
+
+.product-category {
+  background: linear-gradient(135deg, #c62076, #b01d69);
+  color: white !important;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.product-category:hover {
+  background: linear-gradient(135deg, #b01d69, #9a1a5c);
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(198, 32, 118, 0.3);
+}
+
+.product-subcategory {
+  color: #6c757d;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.product-brand {
+  color: #c62076;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Skin type section - expandido */
+.skin-type-section {
+  margin-bottom: 20px;
+}
+
+.skin-type-section .attr-item.expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(198, 32, 118, 0.1), rgba(198, 32, 118, 0.05));
+  border: 1px solid rgba(198, 32, 118, 0.2);
+  border-radius: 12px;
+}
+
+.skin-type-section .attr-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c62076;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.skin-type-badge.expanded {
+  background: linear-gradient(135deg, #c62076, #b01d69);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(198, 32, 118, 0.3);
+}
+
+/* Product attributes row - contenido y disponibilidad juntos */
+.product-attributes-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.product-attributes-row .attr-item {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.product-attributes-row .attr-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .product-attributes-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .product-attributes-row .attr-item {
+    min-width: auto;
+  }
+  
+  .skin-type-badge.expanded {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
+  .nav-arrow { width: 36px; height: 36px; }
+  .nav-arrow i { font-size: 16px; }
+}
+
+/* Wrapper información */
+.product-info-wrapper { background: #fff; border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); border-radius: 12px; padding: 20px; box-shadow: 0 6px 24px rgba(0,0,0,.04); }
+.product-title-wrapper { margin-bottom: 16px; }
+.product-title { margin: 0; font-size: 28px; line-height: 1.3; font-weight: 700; color: #2c3e50; flex: 1; padding-right: 16px; }
+
+/* Botón compartir */
+.product-share { position: relative; flex-shrink: 0; }
+.share-btn { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 8px 12px; cursor: pointer; transition: all 0.3s ease; }
+.share-btn:hover { background: #e9ecef; border-color: #c62076; }
+.share-btn i { font-size: 18px; color: #6c757d; }
+.share-btn:hover i { color: #c62076; }
+.share-dropdown { position: absolute; top: 100%; right: 0; margin-top: 8px; background: #fff; border: 1px solid #e9ecef; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.1); padding: 8px; display: none; z-index: 1000; }
+.product-share:hover .share-dropdown { display: flex; gap: 8px; }
+.share-dropdown a { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 6px; transition: all 0.3s ease; }
+.share-dropdown a:hover { background: #f8f9fa; transform: scale(1.1); }
+.share-dropdown a i { font-size: 18px; }
+.share-dropdown a[aria-label*="Facebook"] i { color: #1877f2; }
+.share-dropdown a[aria-label*="Instagram"] i { color: #e4405f; }
+.share-dropdown a[aria-label*="TikTok"] i { color: #000; }
+
+.product-price-container { display: grid; gap: 8px; margin: 12px 0; }
+.current-price { font-size: 26px; font-weight: 800; color: var(--heading-color); }
+.original-price { text-decoration: line-through; color: color-mix(in srgb, var(--default-color), transparent 40%); margin-left: 8px; }
+.discount-badge { background: color-mix(in srgb, var(--accent-color), transparent 88%); color: var(--accent-color); padding: 4px 10px; border-radius: 999px; font-weight: 600; font-size: 12px; width: fit-content; }
+
+/* Estilos para opciones de producto de cosméticos (refactor) */
+.skin-type-badge, .content-badge, .stock-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+  transition: all 0.3s ease;
+}
+
+.skin-type-badge { background: #f8f4f6; color: var(--heading-color); }
+
+.content-badge { background: #f8f4f6; color: var(--heading-color); }
+
+.stock-badge.available {
+  background: #eaf7ee;
+  color: #1e7e34;
+  border-color: #bfe7cc;
+}
+
+.stock-badge.unavailable {
+  background: #fdecee;
+  color: #842029;
+  border-color: #f3c2c7;
+}
+
+.skin-type-info, .content-info, .stock-info {
+  margin-top: 8px;
+}
+
+.option-group { margin-bottom: 14px; padding: 14px; background: #fff; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); }
+
+.option-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.option-title {
+  font-weight: 600;
+  color: #495057;
+  margin: 0;
+  font-size: 16px;
+}
+
+.selected-option { font-size: 13px; color: color-mix(in srgb, var(--default-color), transparent 40%); font-weight: 500; }
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 120px;
+}
+
+.quantity-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #495057;
+}
+
+.quantity-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  background: #f8f4f6;
+}
+
+.quantity-input {
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 88%);
+  border-radius: 8px;
+  font-weight: 500;
+  color: #495057;
+}
+
+.quantity-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 85%);
+}
+
+/* Descripción corta refinada */
+.product-short-description { background: #f8f4f6; color: var(--heading-color); padding: 16px; border-radius: 12px; margin: 16px 0; border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); }
+
+.product-short-description p {
+  margin: 0;
+  font-size: 15px; line-height: 1.6; font-weight: 500;
+}
+
+/* Botones de acción con color de marca */
+.product-actions {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Mensaje de éxito del carrito */
+.cart-success-message {
+  margin-top: 15px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  animation: slideInFromTop 0.3s ease-out;
+}
+
+.success-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #155724;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.success-content i {
+  color: #28a745;
+  font-size: 16px;
+}
+
+@keyframes slideInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Atributos en una fila */
+.product-attributes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 10px 0 4px 0; }
+.product-attributes .attr-item { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.product-attributes .attr-label { font-size: 13px; color: color-mix(in srgb, var(--default-color), transparent 40%); white-space: nowrap; }
+@media (max-width: 768px) {
+  .product-attributes { grid-template-columns: 1fr; }
+}
+
+/* Información unificada del producto */
+.product-info-unified { padding: 20px 0; }
+.info-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 90%); }
+.info-section:last-child { border-bottom: none; margin-bottom: 0; }
+.info-section h4 { color: var(--accent-color); font-size: 18px; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.info-section h4 i { font-size: 16px; }
+
+/* Grid de especificaciones - Legacy (mantener para compatibilidad) */
+.specs-grid { display: grid; gap: 12px; }
+.spec-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 95%); }
+.spec-item:last-child { border-bottom: none; }
+.spec-item .spec-label { font-weight: 500; color: color-mix(in srgb, var(--default-color), transparent 30%); font-size: 14px; }
+.spec-item .spec-value { font-weight: 600; color: var(--default-color); font-size: 14px; }
+
+/* Nueva tabla de especificaciones */
+.specifications-table {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.spec-row {
+  display: flex;
+  border-bottom: 1px solid #f8f9fa;
+  transition: background-color 0.2s ease;
+}
+
+.spec-row:last-child {
+  border-bottom: none;
+}
+
+.spec-row:hover {
+  background-color: #f8f9fa;
+}
+
+.spec-row .spec-label {
+  flex: 0 0 40%;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 14px 18px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-right: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+}
+
+.spec-row .spec-value {
+  flex: 1;
+  padding: 14px 18px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #212529;
+  display: flex;
+  align-items: center;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.new {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.status-badge.offer {
+  background: linear-gradient(135deg, #ffc107, #fd7e14);
+  color: white;
+}
+
+.status-badge.available {
+  background: linear-gradient(135deg, #17a2b8, #6f42c1);
+  color: white;
+}
+
+/* Imagen de especificaciones */
+.spec-image-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.spec-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.spec-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  padding: 40px;
+}
+
+.spec-placeholder i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.spec-placeholder p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Responsive para especificaciones */
+@media (max-width: 768px) {
+  .spec-row {
+    flex-direction: column;
+  }
+  
+  .spec-row .spec-label {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid #e9ecef;
+    padding: 12px 16px;
+    font-size: 12px;
+  }
+  
+  .spec-row .spec-value {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .spec-image-container {
+    margin-top: 20px;
+    height: 200px;
+  }
+}
+
+/* Descripción de ingredientes clave */
+.ingredients-description {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.ingredients-description-title {
+  color: #c62076;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ingredients-description-title i {
+  color: #f06292;
+  font-size: 20px;
+}
+
+.ingredients-description-content {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #495057;
+  white-space: pre-line;
+}
+
+.ingredients-description-content p {
+  margin-bottom: 12px;
+  text-align: justify;
+}
+
+.ingredients-description-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Botón de ingredientes */
+.ingredients-action .btn {
+  background: linear-gradient(135deg, #1976d2, #1565c0);
+  border: none;
+  color: white;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+}
+
+.ingredients-action .btn:hover {
+  background: linear-gradient(135deg, #1565c0, #0d47a1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+  color: white;
+}
+
+.ingredients-action .btn:focus {
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.25);
+}
+
+/* Imagen de ingredientes */
+.ingredients-image-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.ingredients-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.ingredients-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #1976d2;
+  padding: 40px;
+}
+
+.ingredients-placeholder i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.ingredients-placeholder p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Modal de ingredientes */
+.all-ingredients-content {
+  padding: 15px 0;
+}
+
+.ingredients-text {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 8px;
+  border-left: 3px solid #1976d2;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #495057;
+}
+
+/* Responsive para ingredientes */
+@media (max-width: 768px) {
+  .ingredients-description {
+    padding: 16px;
+  }
+  
+  .ingredients-description-title {
+    font-size: 16px;
+  }
+  
+  .ingredients-description-content {
+    font-size: 14px;
+  }
+  
+  .ingredients-image-container {
+    margin-top: 20px;
+    height: 200px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   DESCRIPCIÓN DEL PRODUCTO - CON IMAGEN
+   ════════════════════════════════════════════════════════════════════ */
+
+.description-image-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.description-image-container:hover {
+  box-shadow: 0 8px 20px rgba(255, 152, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.description-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+}
+
+.description-image-container:hover .description-image {
+  transform: scale(1.05);
+}
+
+.description-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #ff9800;
+  padding: 40px;
+  text-align: center;
+}
+
+.description-placeholder i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.description-placeholder p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.description-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.description-title i {
+  color: #ff9800;
+  margin-right: 0.5rem;
+}
+
+.description-content {
+  padding: 0 1rem;
+}
+
+.description-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #495057;
+}
+
+.description-text p {
+  margin-bottom: 1rem;
+}
+
+.description-text p:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive para descripción */
+@media (max-width: 768px) {
+  .description-content {
+    padding: 16px 0;
+    margin-top: 20px;
+  }
+  
+  .description-title {
+    font-size: 1.1rem;
+  }
+  
+  .description-text {
+    font-size: 14px;
+  }
+  
+  .description-image-container {
+    height: 250px;
+  }
+}
+
+/* Contenedor de pasos de uso */
+.usage-steps-container {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.usage-title {
+  color: #28a745;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.usage-title i {
+  font-size: 18px;
+  color: #28a745;
+}
+
+.usage-steps {
+  font-size: 15px;
+  line-height: 1.9;
+  color: #495057;
+  white-space: pre-line;
+}
+
+.usage-steps p {
+  margin-bottom: 0;
+  line-height: 1.9;
+}
+
+/* Convertir texto numerado en lista visual */
+.usage-steps-content {
+  white-space: pre-line;
+  word-wrap: break-word;
+  line-height: 1.9;
+}
+
+.usage-steps-content::before {
+  content: '';
+  display: table;
+}
+
+/* Formatear pasos numerados automáticamente */
+.usage-steps-content {
+  white-space: pre-line;
+}
+
+/* Estilo para pasos numerados en texto plano */
+.usage-steps p {
+  margin-bottom: 16px;
+  padding-left: 32px;
+  position: relative;
+  min-height: 36px;
+}
+
+.usage-steps p:last-child {
+  margin-bottom: 0;
+}
+
+/* Estilos para pasos formateados con JavaScript */
+.usage-step-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid #28a745;
+  transition: all 0.3s ease;
+}
+
+.usage-step-item:hover {
+  background: #f0f4f7;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.15);
+}
+
+.usage-step-number {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.usage-step-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #495057;
+  padding-top: 2px;
+}
+
+/* Imagen de modo de uso */
+.usage-image-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f5e8, #d4edda);
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.usage-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.usage-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #28a745;
+  padding: 40px;
+}
+
+.usage-placeholder i {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.usage-placeholder p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ESTILOS PARA DESCRIPCIÓN DEL PRODUCTO
+   ════════════════════════════════════════════════════════════════ */
+
+.product-description-content {
+  padding: 30px;
+  background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(255, 255, 255, 1) 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(198, 32, 118, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.product-description-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #c62076 0%, #f06292 100%);
+}
+
+/* Estilos obsoletos removidos - La descripción ahora usa la estructura con imagen en col-lg-4 */
+
+/* Responsive para modo de uso */
+@media (max-width: 768px) {
+  .usage-steps-container {
+    padding: 20px;
+  }
+  
+  .usage-title {
+    font-size: 16px;
+  }
+  
+  .usage-steps {
+    font-size: 14px;
+  }
+  
+  .usage-image-container {
+    margin-top: 20px;
+    height: 200px;
+  }
+  
+  .usage-step-item {
+    padding: 10px;
+    margin-bottom: 14px;
+  }
+  
+  .usage-step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+  
+  .usage-step-text {
+    font-size: 14px;
+  }
+}
+
+/* Mejoras generales para acordeones */
+.accordion-button {
+  font-weight: 600;
+  font-size: 15px;
+  padding: 16px 20px;
+  border: none;
+  background: #ffffff;
+  color: #495057;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-button:not(.collapsed) {
+  background: #f8f9fa;
+  color: #212529;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 3px rgba(198, 32, 118, 0.15);
+  border-color: transparent;
+}
+
+.accordion-body {
+  padding: 20px;
+  background: #ffffff;
+}
+
+.accordion-item {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.accordion-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Información técnica */
+.tech-info { display: grid; gap: 12px; }
+.tech-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 95%); }
+.tech-item:last-child { border-bottom: none; }
+.tech-label { font-weight: 500; color: color-mix(in srgb, var(--default-color), transparent 30%); font-size: 14px; }
+.tech-value { font-weight: 600; color: var(--default-color); font-size: 14px; }
+
+/* Contenido de ingredientes y uso */
+.ingredients-content, .usage-content, .general-info-content { background: color-mix(in srgb, var(--accent-color), transparent 95%); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-color); }
+.ingredients-content p, .usage-content p, .general-info-content p { margin: 0; line-height: 1.6; color: color-mix(in srgb, var(--default-color), transparent 20%); }
+
+@media (max-width: 768px) {
+  .info-section h4 { font-size: 16px; }
+  .spec-item, .tech-item { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .spec-label, .tech-label { font-size: 13px; }
+  .spec-value, .tech-value { font-size: 13px; }
+}
+
+.add-to-cart-btn, .buy-now-btn {
+  flex: 1;
+  min-width: 200px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.add-to-cart-btn { background: var(--accent-color); border: none; color: #fff; box-shadow: 0 4px 15px color-mix(in srgb, var(--accent-color), transparent 70%); }
+
+.add-to-cart-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-color), transparent 60%);
+  color: white;
+}
+
+.buy-now-btn { background: #fff; border: 2px solid var(--accent-color); color: var(--accent-color); }
+
+.buy-now-btn:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent-color), transparent 70%);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .product-actions {
+    flex-direction: column;
+  }
+  
+  .add-to-cart-btn, .buy-now-btn {
+    min-width: 100%;
+  }
+  
+  .option-group {
+    padding: 12px;
+  }
+  
+  .product-title-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .product-title {
+    font-size: 22px;
+    padding-right: 0;
+  }
+  
+  .product-share {
+    align-self: flex-end;
+  }
+  
+  .share-dropdown {
+    left: auto;
+    right: 0;
+  }
+  
+  .product-categories-header {
+    padding: 10px 15px;
+  }
+  
+  .product-category-link {
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Estilos para reseñas */
+.reviewer-avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 24px;
+  border: 2px solid #e9ecef;
+}
+
+.review-item {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.review-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.reviewer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reviewer-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.review-date {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.review-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.review-rating i {
+  color: #ffc107;
+  font-size: 16px;
+}
+
+.review-title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--heading-color);
+}
+
+.review-content p {
+  margin: 0;
+  color: #495057;
+  line-height: 1.6;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Funcionalidad del selector de cantidad
+    const quantityInput = document.querySelector('.quantity-input');
+    const decreaseBtn = document.querySelector('.quantity-btn.decrease');
+    const increaseBtn = document.querySelector('.quantity-btn.increase');
+    const addToCartForm = document.querySelector('form[action*="agregar_al_carrito"]');
+    const hiddenQuantityInput = document.getElementById('quantity-input');
+    const successMessage = document.getElementById('cart-success-message');
+    
+    if (quantityInput && decreaseBtn && increaseBtn) {
+        const maxQuantity = parseInt(quantityInput.getAttribute('max')) || 1;
+        const minQuantity = parseInt(quantityInput.getAttribute('min')) || 1;
+        
+        // Función para actualizar el estado de los botones
+        function updateButtonStates() {
+            const currentValue = parseInt(quantityInput.value) || minQuantity;
+            decreaseBtn.disabled = currentValue <= minQuantity;
+            increaseBtn.disabled = currentValue >= maxQuantity;
+            
+            // Actualizar el input oculto del formulario
+            if (hiddenQuantityInput) {
+                hiddenQuantityInput.value = currentValue;
+            }
+        }
+        
+        // Event listeners para los botones
+        decreaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value) || minQuantity;
+            if (currentValue > minQuantity) {
+                quantityInput.value = currentValue - 1;
+                updateButtonStates();
+            }
+        });
+        
+        increaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value) || minQuantity;
+            if (currentValue < maxQuantity) {
+                quantityInput.value = currentValue + 1;
+                updateButtonStates();
+            }
+        });
+        
+        // Event listener para el input
+        quantityInput.addEventListener('input', function() {
+            let value = parseInt(this.value) || minQuantity;
+            if (value < minQuantity) value = minQuantity;
+            if (value > maxQuantity) value = maxQuantity;
+            this.value = value;
+            updateButtonStates();
+        });
+        
+        // Inicializar estado de los botones
+        updateButtonStates();
+    }
+    
+    // Manejar el envío del formulario de agregar al carrito
+    if (addToCartForm && successMessage) {
+        addToCartForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener la cantidad actual
+            const currentQuantity = quantityInput ? quantityInput.value : 1;
+            if (hiddenQuantityInput) {
+                hiddenQuantityInput.value = currentQuantity;
+            }
+            
+            // Crear FormData para enviar
+            const formData = new FormData(this);
+            
+            // Enviar petición AJAX
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Mostrar mensaje de éxito
+                    successMessage.style.display = 'block';
+                    
+                    // Ocultar mensaje después de 3 segundos
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 3000);
+                    
+                    // Actualizar contador del carrito si existe
+                    const cartCountElement = document.querySelector('.cart-count');
+                    if (cartCountElement && data.cart_count !== undefined) {
+                        cartCountElement.textContent = data.cart_count;
+                    }
+                } else {
+                    // Mostrar mensaje de error si es necesario
+                    console.error('Error al agregar al carrito:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // En caso de error, enviar el formulario normalmente
+                this.submit();
+            });
+        });
+    }
+    
+    // Mejorar la experiencia de los badges
+    const badges = document.querySelectorAll('.skin-type-badge, .content-badge, .stock-badge');
+    badges.forEach(badge => {
+        badge.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        
+        badge.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    });
+    
+    // Animación suave para los botones de acción
+    const actionButtons = document.querySelectorAll('.add-to-cart-btn, .buy-now-btn');
+    actionButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Galería moderna: miniaturas, navegación y zoom inline
+    (function initModernGallery() {
+        const mainImg = document.getElementById('main-product-image');
+        const thumbs = Array.from(document.querySelectorAll('.thumbnail-item'));
+        const prevBtn = document.querySelector('.nav-arrow.prev-arrow');
+        const nextBtn = document.querySelector('.nav-arrow.next-arrow');
+        const mainContainer = document.querySelector('.main-image-container');
+        
+        if (!mainImg || thumbs.length === 0) return;
+
+        let currentIndex = Math.max(0, thumbs.findIndex(t => t.classList.contains('active')));
+
+        function setActive(index) {
+            currentIndex = (index + thumbs.length) % thumbs.length;
+            thumbs.forEach(t => t.classList.remove('active'));
+            const activeThumb = thumbs[currentIndex];
+            activeThumb.classList.add('active');
+            const url = activeThumb.getAttribute('data-image');
+            if (url) {
+                mainImg.src = url;
+                mainImg.setAttribute('data-zoom', url);
+                // Reiniciar zoom con nueva imagen
+                initDrift();
+            }
+        }
+
+        // Event listeners para miniaturas
+        thumbs.forEach((t, i) => {
+            t.addEventListener('click', () => setActive(i));
+        });
+
+        // Event listeners para navegación
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => setActive(currentIndex - 1));
+            nextBtn.addEventListener('click', () => setActive(currentIndex + 1));
+        }
+
+        // Funcionalidad de zoom con modal moderno
+        function initZoomModal() {
+            const zoomButton = document.getElementById('zoom-button');
+            const zoomModal = document.getElementById('zoom-modal');
+            const zoomImage = document.getElementById('zoom-image');
+            const zoomClose = document.getElementById('zoom-close');
+            
+            if (!zoomButton || !zoomModal) return;
+            
+            // Abrir modal de zoom
+            zoomButton.addEventListener('click', function() {
+                const currentImageSrc = mainImg.src;
+                zoomImage.src = currentImageSrc;
+                zoomModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                // Animación de entrada
+                setTimeout(() => {
+                    zoomModal.classList.add('show');
+                }, 10);
+            });
+            
+            // Cerrar modal
+            function closeZoomModal() {
+                zoomModal.classList.remove('show');
+                setTimeout(() => {
+                    zoomModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+            
+            zoomClose.addEventListener('click', closeZoomModal);
+            zoomModal.addEventListener('click', function(e) {
+                if (e.target === zoomModal) {
+                    closeZoomModal();
+                }
+            });
+            
+            // Cerrar con tecla ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && zoomModal.classList.contains('show')) {
+                    closeZoomModal();
+                }
+            });
+            
+            // Zoom con rueda del mouse
+            zoomImage.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                const currentScale = parseFloat(zoomImage.style.transform.replace('scale(', '').replace(')', '')) || 1;
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.max(0.5, Math.min(3, currentScale * delta));
+                zoomImage.style.transform = `scale(${newScale})`;
+            });
+            
+            // Controles de zoom
+            const zoomInBtn = document.getElementById('zoom-in');
+            const zoomOutBtn = document.getElementById('zoom-out');
+            const zoomResetBtn = document.getElementById('zoom-reset');
+            
+            zoomInBtn.addEventListener('click', function() {
+                const currentScale = parseFloat(zoomImage.style.transform.replace('scale(', '').replace(')', '')) || 1;
+                const newScale = Math.min(3, currentScale * 1.2);
+                zoomImage.style.transform = `scale(${newScale})`;
+            });
+            
+            zoomOutBtn.addEventListener('click', function() {
+                const currentScale = parseFloat(zoomImage.style.transform.replace('scale(', '').replace(')', '')) || 1;
+                const newScale = Math.max(0.5, currentScale * 0.8);
+                zoomImage.style.transform = `scale(${newScale})`;
+            });
+            
+            zoomResetBtn.addEventListener('click', function() {
+                zoomImage.style.transform = 'scale(1)';
+            });
+            
+            // Reset zoom al cambiar imagen
+            const originalSetActive = setActive;
+            setActive = function(index) {
+                originalSetActive(index);
+                zoomImage.style.transform = 'scale(1)';
+            };
+        }
+
+        // Inicializar modal de zoom
+        initZoomModal();
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft') {
+                setActive(currentIndex - 1);
+            } else if (e.key === 'ArrowRight') {
+                setActive(currentIndex + 1);
+            }
+        });
+    })();
+});
+</script>
+
+<script>
+// Función para copiar ingredientes
+function copyIngredients() {
+    const ingredientsText = document.querySelector('.ingredients-text').innerText;
+    navigator.clipboard.writeText(ingredientsText).then(() => {
+        // Mostrar notificación de éxito
+        const button = event.target.closest('button');
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="bi bi-check"></i> ¡Copiado!';
+        button.classList.remove('btn-primary');
+        button.classList.add('btn-success');
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-primary');
+        }, 2000);
+    }).catch(err => {
+        console.error('Error al copiar ingredientes: ', err);
+        alert('Error al copiar los ingredientes');
+    });
+}
+
+// Función para formatear el modo de uso con iconos numerados
+document.addEventListener('DOMContentLoaded', function() {
+    const usageContent = document.getElementById('usage-steps-content');
+    if (usageContent) {
+        const textContent = usageContent.textContent || usageContent.innerText;
+        
+        // Dividir el texto por líneas
+        const lines = textContent.split('\n').filter(line => line.trim());
+        
+        // Detectar si hay pasos numerados (1., 2., 3., etc.)
+        const numberedSteps = lines.filter(line => /^\d+\./.test(line.trim()));
+        
+        if (numberedSteps.length > 0) {
+            // Crear HTML con iconos numerados
+            let formattedHTML = '';
+            
+            lines.forEach((line, index) => {
+                const trimmedLine = line.trim();
+                
+                // Verificar si es un paso numerado
+                const match = trimmedLine.match(/^(\d+)\.\s*(.+)$/);
+                
+                if (match) {
+                    const stepNumber = match[1];
+                    const stepText = match[2];
+                    
+                    formattedHTML += `
+                        <div class="usage-step-item">
+                            <div class="usage-step-number">${stepNumber}</div>
+                            <div class="usage-step-text">${stepText}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            if (formattedHTML) {
+                usageContent.innerHTML = formattedHTML;
+            }
+        }
+    }
+});
+</script>
+
+<!-- Modal para mostrar todos los ingredientes -->
+<div class="modal fade" id="allIngredientsModal" tabindex="-1" aria-labelledby="allIngredientsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="allIngredientsModalLabel">
+          <i class="bi bi-flask"></i> Todos los Ingredientes
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="all-ingredients-content">
+          <h6 class="mb-3">Lista completa de ingredientes:</h6>
+          <div class="ingredients-text">
+            {{ producto.ingredientes|linebreaks }}
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="copyIngredients()">
+          <i class="bi bi-clipboard"></i> Copiar Lista
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Zoom para Imágenes -->
+<div id="zoom-modal" class="zoom-modal">
+  <div class="zoom-modal-content">
+    <button id="zoom-close" class="zoom-close" aria-label="Cerrar zoom">
+      <i class="bi bi-x-lg"></i>
+    </button>
+    <div class="zoom-controls">
+      <button class="zoom-control-btn" id="zoom-in" aria-label="Acercar">
+        <i class="bi bi-zoom-in"></i>
+      </button>
+      <button class="zoom-control-btn" id="zoom-out" aria-label="Alejar">
+        <i class="bi bi-zoom-out"></i>
+      </button>
+      <button class="zoom-control-btn" id="zoom-reset" aria-label="Tamaño original">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+    <img id="zoom-image" class="zoom-image" alt="Imagen ampliada">
+    <div class="zoom-instructions">
+      <i class="bi bi-mouse"></i>
+      <span>Usa la rueda del mouse para hacer zoom</span>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

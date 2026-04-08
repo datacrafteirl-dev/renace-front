@@ -1,0 +1,127 @@
+{% load static %}
+
+<!-- Mensajes del sistema -->
+{% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+            {% if 'login' in message.tags %}
+                <!-- Mensajes de Login/Registro -->
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show login-message" role="alert">
+                    <i class="bi bi-person-check me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% elif 'carrito' in message.tags %}
+                <!-- Mensajes de Carrito -->
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show carrito-message" role="alert">
+                    <i class="bi bi-cart-check me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% elif 'checkout' in message.tags %}
+                <!-- Mensajes de Checkout -->
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show checkout-message" role="alert">
+                    <i class="bi bi-credit-card me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% elif 'perfil' in message.tags %}
+                <!-- Mensajes de Perfil -->
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show perfil-message" role="alert">
+                    <i class="bi bi-person-gear me-2"></i>
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% else %}
+                <!-- Mensajes generales -->
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
+
+<style>
+.messages-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 400px;
+}
+
+.login-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.carrito-message {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.checkout-message {
+    background: linear-gradient(135deg, #fd7e14 0%, #e83e8c 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(253, 126, 20, 0.3);
+}
+
+.perfil-message {
+    background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+}
+
+.messages-container .alert {
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-weight: 500;
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.messages-container .btn-close {
+    filter: invert(1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .messages-container {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}
+</style>
+
+<script>
+// Auto-dismiss messages after 5 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.messages-container .alert');
+    alerts.forEach(function(alert) {
+        setTimeout(function() {
+            const bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        }, 5000);
+    });
+});
+</script>

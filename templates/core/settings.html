@@ -1,0 +1,344 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Configuración - Renace{% endblock %}
+{% block body_class %}settings-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<main class="main">
+  <!-- Page Title -->
+  <div class="page-title light-background">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <ol>
+          <li><a href="{% url 'core:home' %}">Inicio</a></li>
+          <li class="current">Configuración</li>
+        </ol>
+      </nav>
+      <h1>Configuración</h1>
+    </div>
+  </div><!-- End Page Title -->
+
+  <div class="container">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div class="avatar-placeholder">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <h4>{{ user.first_name|default:user.username }}</h4>
+            <p>{{ user.email }}</p>
+          </div>
+          
+          <nav class="profile-nav">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:perfil' %}">
+                  <i class="bi bi-person me-2"></i>Información Personal
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:mis_pedidos' %}">
+                  <i class="bi bi-bag-check me-2"></i>Mis Pedidos
+                </a>
+              </li>
+              <li class="nav-item">
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:addresses' %}">
+                  <i class="bi bi-geo-alt me-2"></i>Direcciones
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'core:payment_methods' %}">
+                  <i class="bi bi-credit-card me-2"></i>Métodos de Pago
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:settings' %}">
+                  <i class="bi bi-gear me-2"></i>Configuración
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <div class="profile-content">
+          
+          <!-- Settings Header -->
+          <div class="section-header">
+            <h3>Configuración de Cuenta</h3>
+            <p>Personaliza tu experiencia y gestiona las preferencias de tu cuenta</p>
+          </div>
+
+          <!-- Notification Settings -->
+          <div class="settings-section">
+            <h4>Notificaciones</h4>
+            <div class="settings-card">
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h6>Notificaciones por Email</h6>
+                  <p>Recibe actualizaciones sobre tus pedidos y ofertas especiales</p>
+                </div>
+                <div class="setting-control">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="email-notifications" {% if user.profile.newsletter %}checked{% endif %}>
+                    <label class="form-check-label" for="email-notifications"></label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h6>Ofertas y Promociones</h6>
+                  <p>Recibe notificaciones sobre descuentos y productos en oferta</p>
+                </div>
+                <div class="setting-control">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="promotions" checked>
+                    <label class="form-check-label" for="promotions"></label>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="setting-item">
+                <div class="setting-info">
+                  <h6>Estado de Pedidos</h6>
+                  <p>Notificaciones cuando cambie el estado de tus pedidos</p>
+                </div>
+                <div class="setting-control">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="order-updates" checked>
+                    <label class="form-check-label" for="order-updates"></label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Save Settings -->
+          <div class="settings-actions">
+            <!-- Token CSRF oculto para JavaScript -->
+            {% csrf_token %}
+            <button class="btn btn-primary" onclick="guardarConfiguracion()">
+              <i class="bi bi-check-circle me-2"></i>Guardar Configuración
+            </button>
+            <button class="btn btn-outline-secondary" onclick="restaurarConfiguracion()">
+              <i class="bi bi-arrow-clockwise me-2"></i>Restaurar Valores
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.settings-page {
+  background-color: #f8f9fa;
+}
+
+.profile-sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.profile-nav .nav-link {
+  color: #6c757d;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.profile-nav .nav-link:hover,
+.profile-nav .nav-link.active {
+  color: #c62076;
+  background: none;
+}
+
+.profile-nav .nav-link.active {
+  font-weight: 600;
+}
+
+.profile-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.section-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-header h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.section-header h4 {
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+}
+
+.section-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+.settings-section {
+  margin-bottom: 3rem;
+}
+
+.settings-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-info h6 {
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.setting-info p {
+  color: #6c757d;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.setting-control {
+  flex-shrink: 0;
+}
+
+.form-check-input:checked {
+  background-color: #c62076;
+  border-color: #c62076;
+}
+
+.settings-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .profile-sidebar {
+    margin-bottom: 1rem;
+  }
+  
+  .profile-content {
+    padding: 1rem;
+  }
+  
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .settings-actions {
+    flex-direction: column;
+  }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function guardarConfiguracion() {
+  // Recopilar configuración de notificaciones
+  const emailNotifications = document.getElementById('email-notifications').checked;
+  const promotions = document.getElementById('promotions').checked;
+  const orderUpdates = document.getElementById('order-updates').checked;
+  
+  // Crear formulario para enviar datos
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = '{% url "core:actualizar_notificaciones" %}';
+  
+  // Agregar token CSRF
+  const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+  if (csrfToken) {
+    form.appendChild(csrfToken.cloneNode(true));
+  }
+  
+  // Agregar campos de notificaciones
+  const emailInput = document.createElement('input');
+  emailInput.type = 'hidden';
+  emailInput.name = 'email_notifications';
+  emailInput.value = emailNotifications ? 'on' : '';
+  form.appendChild(emailInput);
+  
+  const smsInput = document.createElement('input');
+  smsInput.type = 'hidden';
+  smsInput.name = 'sms_notifications';
+  smsInput.value = promotions ? 'on' : '';
+  form.appendChild(smsInput);
+  
+  // Enviar formulario
+  document.body.appendChild(form);
+  form.submit();
+}
+
+function restaurarConfiguracion() {
+  if (confirm('¿Estás seguro de que quieres restaurar la configuración por defecto?')) {
+    // Restaurar valores por defecto
+    document.getElementById('email-notifications').checked = true;
+    document.getElementById('promotions').checked = true;
+    document.getElementById('order-updates').checked = true;
+  }
+}
+</script>
+{% endblock %}

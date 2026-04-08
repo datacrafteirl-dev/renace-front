@@ -1,0 +1,593 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mis Pedidos - Renace{% endblock %}
+{% block body_class %}orders-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<main class="main">
+  <!-- Page Title -->
+  <div class="page-title light-background">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <ol>
+          <li><a href="{% url 'core:home' %}">Inicio</a></li>
+          <li class="current">Mis Pedidos</li>
+        </ol>
+      </nav>
+      <h1>Mis Pedidos</h1>
+    </div>
+  </div><!-- End Page Title -->
+
+  <div class="container">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div class="avatar-placeholder">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <h4>{{ user.first_name|default:user.username }}</h4>
+            <p>{{ user.email }}</p>
+          </div>
+          
+          <nav class="profile-nav">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:perfil' %}">
+                  <i class="bi bi-person me-2"></i>Información Personal
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'core:mis_pedidos' %}">
+                  <i class="bi bi-bag-check me-2"></i>Mis Pedidos
+                </a>
+              </li>
+              <li class="nav-item">
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:addresses' %}">
+                  <i class="bi bi-geo-alt me-2"></i>Direcciones
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:payment_methods' %}">
+                  <i class="bi bi-credit-card me-2"></i>Métodos de Pago
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:settings' %}">
+                  <i class="bi bi-gear me-2"></i>Configuración
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <div class="orders-content">
+          
+          <!-- Orders Header -->
+          <div class="orders-header">
+            <h3>Historial de Pedidos</h3>
+            <p>Gestiona y rastrea todos tus pedidos</p>
+          </div>
+
+          <!-- Orders Filter -->
+          <div class="orders-filter">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <div class="filter-group">
+                  <label for="status-filter">Filtrar por estado:</label>
+                  <select class="form-control" id="status-filter">
+                    <option value="">Todos los pedidos</option>
+                    <option value="pendiente">Pendiente</option>
+                    <option value="confirmado">Confirmado</option>
+                    <option value="enviado">Enviado</option>
+                    <option value="entregado">Entregado</option>
+                    <option value="cancelado">Cancelado</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="search-group">
+                  <label for="order-search">Buscar pedido:</label>
+                  <input type="text" class="form-control" id="order-search" placeholder="Número de pedido...">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Orders List -->
+          <div class="orders-list">
+            {% if pedidos %}
+              {% for pedido in pedidos %}
+              <div class="order-card" data-status="{{ pedido.estado }}">
+                <div class="order-header">
+                  <div class="order-info">
+                    <h4>Pedido #{{ pedido.codigo }}</h4>
+                    <p class="order-date">{{ pedido.fecha_pedido|date:"d/m/Y H:i" }}</p>
+                  </div>
+                  <div class="order-status">
+                    <span class="status-badge status-{{ pedido.estado }}">
+                      {% if pedido.estado == 'pendiente' %}
+                        <i class="bi bi-clock me-1"></i>Pendiente
+                      {% elif pedido.estado == 'confirmado' %}
+                        <i class="bi bi-check-circle me-1"></i>Confirmado
+                      {% elif pedido.estado == 'enviado' %}
+                        <i class="bi bi-truck me-1"></i>Enviado
+                      {% elif pedido.estado == 'entregado' %}
+                        <i class="bi bi-check2-all me-1"></i>Entregado
+                      {% elif pedido.estado == 'cancelado' %}
+                        <i class="bi bi-x-circle me-1"></i>Cancelado
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="order-items">
+                  {% for item in pedido.items.all %}
+                  <div class="order-item">
+                    <div class="item-image">
+                      {% if item.producto.imagenes.first %}
+                        <img src="{{ item.producto.imagenes.first.imagen.url }}" alt="{{ item.producto.nombre }}">
+                      {% else %}
+                        <div class="no-image">
+                          <i class="bi bi-image"></i>
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="item-details">
+                      <h5>{{ item.producto.nombre }}</h5>
+                      <p class="item-variant">
+                        {% if item.variante %}
+                          Variante: {{ item.variante.nombre }}
+                        {% endif %}
+                      </p>
+                      <p class="item-quantity">Cantidad: {{ item.cantidad }}</p>
+                    </div>
+                    <div class="item-price">
+                      <span>S/ {{ item.precio_unitario|floatformat:2 }}</span>
+                    </div>
+                  </div>
+                  {% endfor %}
+                </div>
+
+                <div class="order-footer">
+                  <div class="order-total">
+                    <span>Total: <strong>S/ {{ pedido.total|floatformat:2 }}</strong></span>
+                  </div>
+                  <div class="order-actions">
+                    <a href="{% url 'core:detalle_pedido' pedido.id %}" class="btn btn-outline-primary btn-sm">
+                      <i class="bi bi-eye me-1"></i>Ver Detalles
+                    </a>
+                    {% if pedido.estado == 'pendiente' %}
+                      <button class="btn btn-outline-danger btn-sm" onclick="cancelarPedido({{ pedido.id }})">
+                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                      </button>
+                    {% elif pedido.estado == 'entregado' %}
+                      <button class="btn btn-outline-success btn-sm">
+                        <i class="bi bi-star me-1"></i>Calificar
+                      </button>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="empty-orders">
+                <div class="empty-icon">
+                  <i class="bi bi-bag"></i>
+                </div>
+                <h4>No tienes pedidos aún</h4>
+                <p>Cuando realices tu primer pedido, aparecerá aquí</p>
+                <a href="{% url 'core:catalogo' %}" class="btn btn-primary">
+                  <i class="bi bi-shop me-2"></i>Explorar Productos
+                </a>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Pagination -->
+          {% if pedidos.has_other_pages %}
+          <nav aria-label="Navegación de pedidos">
+            <ul class="pagination justify-content-center">
+              {% if pedidos.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page=1">Primera</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ pedidos.previous_page_number }}">Anterior</a>
+                </li>
+              {% endif %}
+
+              {% for num in pedidos.paginator.page_range %}
+                {% if pedidos.number == num %}
+                  <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                  </li>
+                {% elif num > pedidos.number|add:'-3' and num < pedidos.number|add:'3' %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                  </li>
+                {% endif %}
+              {% endfor %}
+
+              {% if pedidos.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ pedidos.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ pedidos.paginator.num_pages }}">Última</a>
+                </li>
+              {% endif %}
+            </ul>
+          </nav>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.orders-page {
+  background-color: #f8f9fa;
+}
+
+.profile-sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.profile-nav .nav-link {
+  color: #6c757d;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.profile-nav .nav-link:hover,
+.profile-nav .nav-link.active {
+  color: #e91e63;
+  background: none;
+}
+
+.profile-nav .nav-link.active {
+  font-weight: 600;
+}
+
+.orders-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.orders-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.orders-header h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.orders-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+.orders-filter {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.filter-group,
+.search-group {
+  margin-bottom: 1rem;
+}
+
+.filter-group label,
+.search-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #e91e63;
+  box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.25);
+}
+
+.order-card {
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.order-header {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.order-info h4 {
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+.order-date {
+  color: #6c757d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmado {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-enviado {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-entregado {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.order-items {
+  padding: 1.5rem;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.no-image {
+  width: 100%;
+  height: 100%;
+  background: #e9ecef;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 1.5rem;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h5 {
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+  font-size: 1rem;
+}
+
+.item-variant,
+.item-quantity {
+  color: #6c757d;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.item-price {
+  font-weight: 600;
+  color: #e91e63;
+  font-size: 1.1rem;
+}
+
+.order-footer {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-total {
+  font-size: 1.1rem;
+}
+
+.order-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.empty-orders {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.empty-orders h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.empty-orders p {
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .order-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .order-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Filtro de estado
+document.getElementById('status-filter').addEventListener('change', function() {
+  const status = this.value;
+  const orderCards = document.querySelectorAll('.order-card');
+  
+  orderCards.forEach(card => {
+    if (status === '' || card.dataset.status === status) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+// Búsqueda de pedidos
+document.getElementById('order-search').addEventListener('input', function() {
+  const searchTerm = this.value.toLowerCase();
+  const orderCards = document.querySelectorAll('.order-card');
+  
+  orderCards.forEach(card => {
+    const orderNumber = card.querySelector('.order-info h4').textContent.toLowerCase();
+    if (orderNumber.includes(searchTerm)) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+});
+
+// Función para cancelar pedido
+function cancelarPedido(pedidoId) {
+  if (confirm('¿Estás seguro de que quieres cancelar este pedido?')) {
+    // Aquí iría la lógica para cancelar el pedido
+    fetch(`/cancelar-pedido/${pedidoId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert('Error al cancelar el pedido');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error al cancelar el pedido');
+    });
+  }
+}
+</script>
+{% endblock %}

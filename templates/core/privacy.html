@@ -1,0 +1,144 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Política de Privacidad - Renace{% endblock %}
+{% block body_class %}privacy-page{% endblock %}
+
+{% block extra_css %}
+<style>
+  .privacy-hero {
+    background: linear-gradient(135deg, #c62076 0%, #b01d69 50%, #981958 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin: 24px auto 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .privacy-hero::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.25), rgba(255,255,255,0));
+    filter: blur(2px);
+  }
+  .privacy-hero h1 {
+    font-size: 1.75rem;
+    margin: 0 0 8px;
+  }
+  .privacy-hero p {
+    margin: 0;
+    opacity: .95;
+  }
+  .policy-card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 22px 20px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  }
+  .policy-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px; color: #6c757d;
+    font-size: .95rem;
+  }
+  .policy-content pre {
+    white-space: pre-wrap;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #333;
+    margin: 0;
+  }
+  .policy-badge {
+    display: inline-block;
+    background: rgba(198,32,118,.08);
+    color: #c62076;
+    border: 1px solid rgba(198,32,118,.25);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .85rem;
+    margin-left: 8px;
+  }
+  .policy-actions {
+    display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;
+  }
+  .btn-soft {
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #fff;
+    color: #333;
+  }
+  .btn-soft:hover { background: #f8f9fa; }
+  @media (max-width: 576px) {
+    .privacy-hero { padding: 22px 18px; }
+    .policy-card { padding: 18px 14px; }
+  }
+</style>
+{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<section class="container py-4">
+  <div class="privacy-hero">
+    <h1>Política de Privacidad <span class="policy-badge">Actualizada</span></h1>
+    <p>Transparencia y protección de tus datos en ReNafly</p>
+  </div>
+
+  <div class="policy-card mt-3">
+    <div class="policy-meta">
+      <i class="bi bi-shield-lock"></i>
+      <span>Vigente • Cumplimiento Ley N° 29733</span>
+    </div>
+    <div class="policy-content">
+<pre>
+Politicas de privacidad
+Gracias por visitar nuestro sitio web y sus páginas asociadas. En “ReNafly”, valoramos profundamente tu privacidad y comodidad. A través de este Aviso de Privacidad, queremos informarte de manera transparente cómo recopilamos, usamos y protegemos la información que compartes con nosotros. Te pedimos que leas este documento con atención.
+El sitio web es propiedad de Renace Con Jesusa y Arnol S.A.C. (en adelante, “ReNafly”). Consideramos fundamental proteger la privacidad de nuestros usuarios y cumplimos con todas las disposiciones establecidas en la Ley N° 29733 – Ley de Protección de Datos Personales (en adelante, la Ley).
+En “ReNafly” estamos comprometidos con el respeto y resguardo de tus datos personales. Toda la información que nos proporciones será tratada y conservada de manera segura, conforme a lo dispuesto por la Ley, en nuestros sistemas informáticos ubicados tanto en el Perú como en otros países, o en plataformas en la nube debidamente protegidas.
+El tratamiento y uso de tus datos personales se realizará únicamente bajo los fines descritos en este Aviso y conforme al consentimiento que hayas otorgado expresamente, ya sea mediante la suscripción de formularios, aceptación de términos digitales o cualquier otro medio equivalente.
+En caso sea necesario utilizar tus datos personales para fines distintos a los descritos en el presente Aviso, nos pondremos en contacto contigo para solicitar tu autorización previa.
+1. ¿Con qué finalidad recopilamos y utilizamos tus datos personales?
+Tus datos personales son utilizados con el propósito de identificarte, ubicarte, contactarte y mantener comunicación contigo, así como para enviarte información relevante y cumplir con las obligaciones contractuales que hayamos asumido.
+Asimismo, podrán emplearse para la creación y actualización de bases de datos, que nos permitan ofrecerte productos o servicios personalizados, propios o de terceros, que puedan resultar de tu interés.
+2. ¿Qué datos personales recopilamos y de qué fuentes los obtenemos?
+Para los fines indicados en este Aviso, podemos solicitar tus datos personales a través de distintos medios:
+De manera presencial.
+Durante tu visita o registro en nuestro sitio web.
+Por comunicación telefónica.
+O mediante otras fuentes permitidas por la Ley de Protección de Datos Personales (Ley N° 29733).
+Los datos personales que podemos recopilar de forma directa o a través de nuestra página web incluyen:
+a) Nombres y apellidos.
+b) Correo electrónico.
+c) Documento de identidad (DNI) y/o número de RUC.
+d) Teléfono celular.
+e) Dirección completa (Departamento, Provincia y Distrito).
+En cumplimiento de la Ley de Protección de Datos Personales, una vez que proporciones tus datos personales a “ReNafly”, estos serán almacenados en medios seguros, cuyo acceso estará restringido únicamente al personal autorizado, ya sean personas naturales o jurídicas que mantengan una relación contractual o de servicio con “ReNafly”.
+Contamos con las medidas de seguridad necesarias para evitar el acceso, uso o divulgación no autorizada de tu información. En caso sea necesario compartir tus datos personales con terceros, esto se realizará únicamente cuando hayas otorgado tu consentimiento expreso o en los casos permitidos por la Ley (Artículo 36).
+El tratamiento de los datos personales que nos has proporcionado se realizará conforme a los términos y condiciones establecidos en este Aviso, y se entenderá que autorizas expresamente su uso mientras no manifiestes tu oposición a través de los medios previstos por la normativa vigente.
+El plazo de conservación de tus datos personales será de dos (2) años, contados desde la finalización del último encargo, servicio o relación contractual mantenida con “ReNafly”.
+3. ¿Cómo acceder, rectificar, cancelar u oponerte al uso de tus datos personales?
+Tienes derecho a acceder a tus datos personales, conocer los detalles de su tratamiento y solicitar su corrección, en caso sean inexactos o incompletos. Asimismo, puedes cancelarlos si consideras que ya no son necesarios para las finalidades establecidas en este Aviso, o oponerte a su uso si detectas que están siendo empleados para fines no autorizados.
+Si deseas ejercer cualquiera de estos derechos o has concluido tu relación con nosotros, puedes enviar una solicitud a:
+📩 info@renace.com.pe
+El plazo máximo de respuesta para atender una solicitud de acceso, rectificación, cancelación u oposición será de diez (10) días hábiles, contados a partir del día siguiente de la recepción de la solicitud correspondiente, conforme al Artículo 55 de la Ley N° 29733.
+
+
+4.- Modificaciones al aviso de privacidad
+“ReNafly” se reserva el derecho de modificar o actualizar este Aviso de Privacidad en cualquier momento, con el fin de adaptarlo a cambios legislativos, políticas internas o a nuevos requerimientos relacionados con la prestación de nuestros productos y/o servicios.
+    </pre>
+    </div>
+    <div class="policy-actions">
+      <button type="button" class="btn btn-soft btn-sm" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i> Subir</button>
+      <button type="button" class="btn btn-soft btn-sm" onclick="navigator.clipboard.writeText(document.querySelector('.policy-content pre').innerText)"><i class="bi bi-clipboard"></i> Copiar</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

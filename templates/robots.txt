@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://renace.com.pe/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /admin-panel/
+Disallow: /accounts/
+
+# Allow important pages
+Allow: /catalogo/
+Allow: /blog/
+Allow: /nosotros/
+Allow: /contacto/
+Allow: /producto/
+
+# Crawl delay
+Crawl-delay: 1

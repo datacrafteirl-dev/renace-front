@@ -1,0 +1,138 @@
+/* Estilos para iconos de la página About */
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #c62076, #f06292);
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    box-shadow: 0 4px 15px rgba(198, 32, 118, 0.3);
+    transition: all 0.3s ease;
+}
+
+.card-icon:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(198, 32, 118, 0.4);
+}
+
+.card-icon i {
+    color: white !important;
+    font-size: 2.5rem !important;
+}
+
+/* Estilos para imágenes placeholder */
+.card-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    height: 300px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.card-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Placeholder para imágenes faltantes */
+.placeholder-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 15px;
+}
+
+.placeholder-content i {
+    color: #c62076 !important;
+    margin-bottom: 1rem;
+}
+
+.placeholder-content h4 {
+    color: #2c3e50;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Estilos para las tarjetas de contenido */
+.content-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid #f8f9fa;
+}
+
+.content-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.content-card h3 {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.content-card p {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Estilos para estadísticas */
+.stats-item {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.stats-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.stats-item i {
+    font-size: 3rem;
+    color: #c62076;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.stats-item .purecounter {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.stats-item p {
+    margin: 0;
+    color: #6c757d;
+}
+
+.stats-item p strong {
+    color: #2c3e50;
+    font-size: 1.1rem;
+}

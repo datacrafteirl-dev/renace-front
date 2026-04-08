@@ -1,0 +1,196 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Renace{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1>{{ page_title }}</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ page_title }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cookies Content -->
+<section class="cookies-policy py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-10 mx-auto">
+        <div class="text-center mb-5">
+          <h2>Política de Cookies</h2>
+          <p class="lead">Información sobre el uso de cookies en nuestro sitio web.</p>
+        </div>
+
+        <!-- What are Cookies -->
+        <div class="what-are-cookies mb-5">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">
+                <i class="bi bi-info-circle text-primary"></i> ¿Qué son las Cookies?
+              </h3>
+              <p class="card-text">{{ cookie_info.what_are_cookies }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Types of Cookies -->
+        <div class="cookie-types mb-5">
+          <h3 class="mb-4">Tipos de Cookies que Utilizamos</h3>
+          <div class="row">
+            {% for type in cookie_info.types %}
+            <div class="col-md-4 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">{{ type.name }}</h5>
+                  <p class="card-text">{{ type.description }}</p>
+                  <h6>Ejemplos:</h6>
+                  <ul class="list-unstyled">
+                    {% for example in type.examples %}
+                    <li><i class="bi bi-dot"></i> {{ example }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Cookie Management -->
+        <div class="cookie-management mb-5">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h3 class="card-title">
+                <i class="bi bi-gear text-primary"></i> Gestión de Cookies
+              </h3>
+              <p class="card-text">{{ cookie_info.management }}</p>
+              
+              <div class="row mt-4">
+                <div class="col-md-6">
+                  <h5>Configuración del Navegador</h5>
+                  <p>Puedes configurar tu navegador para:</p>
+                  <ul>
+                    <li>Bloquear todas las cookies</li>
+                    <li>Permitir solo cookies de sitios de confianza</li>
+                    <li>Eliminar cookies al cerrar el navegador</li>
+                    <li>Recibir notificaciones antes de aceptar cookies</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h5>Nuestro Banner de Cookies</h5>
+                  <p>Utilizamos un banner de cookies que te permite:</p>
+                  <ul>
+                    <li>Aceptar todas las cookies</li>
+                    <li>Rechazar cookies no esenciales</li>
+                    <li>Personalizar tus preferencias</li>
+                    <li>Cambiar tu decisión en cualquier momento</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Browser Instructions -->
+        <div class="browser-instructions mb-5">
+          <h3 class="mb-4">Instrucciones por Navegador</h3>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <i class="bi bi-browser-chrome text-warning"></i> Google Chrome
+                  </h5>
+                  <ol>
+                    <li>Haz clic en el menú de Chrome (⋮)</li>
+                    <li>Selecciona "Configuración"</li>
+                    <li>Haz clic en "Privacidad y seguridad"</li>
+                    <li>Selecciona "Cookies y otros datos de sitios"</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <i class="bi bi-browser-firefox text-danger"></i> Mozilla Firefox
+                  </h5>
+                  <ol>
+                    <li>Haz clic en el menú de Firefox (☰)</li>
+                    <li>Selecciona "Configuración"</li>
+                    <li>Haz clic en "Privacidad y seguridad"</li>
+                    <li>Busca la sección "Cookies y datos del sitio"</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <i class="bi bi-browser-safari text-primary"></i> Safari
+                  </h5>
+                  <ol>
+                    <li>Haz clic en "Safari" en el menú</li>
+                    <li>Selecciona "Preferencias"</li>
+                    <li>Haz clic en la pestaña "Privacidad"</li>
+                    <li>Configura las opciones de cookies</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-4">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <i class="bi bi-browser-edge text-info"></i> Microsoft Edge
+                  </h5>
+                  <ol>
+                    <li>Haz clic en el menú de Edge (⋯)</li>
+                    <li>Selecciona "Configuración"</li>
+                    <li>Haz clic en "Cookies y permisos del sitio"</li>
+                    <li>Gestiona las cookies según tus preferencias</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+          <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+              <h4 class="card-title">
+                <i class="bi bi-question-circle"></i> ¿Tienes Preguntas sobre Cookies?
+              </h4>
+              <p class="card-text">{{ cookie_info.contact }}</p>
+              <a href="{% url 'core:contact' %}" class="btn btn-light">
+                <i class="bi bi-envelope"></i> Contactar Soporte
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Last Updated -->
+        <div class="last-updated mt-4">
+          <p class="text-muted text-center">
+            <small>Última actualización: {{ "now"|date:"d/m/Y" }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

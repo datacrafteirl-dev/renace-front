@@ -1,0 +1,128 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Políticas de Devolución y Reembolso | Renace{% endblock %}
+{% block body_class %}policies-page{% endblock %}
+
+{% block extra_css %}
+<style>
+  .policies-hero {
+    background: linear-gradient(135deg, #c62076 0%, #b01d69 50%, #981958 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin: 24px auto 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .policies-hero::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.25), rgba(255,255,255,0));
+    filter: blur(2px);
+  }
+  .policies-hero h1 {
+    font-size: 1.75rem;
+    margin: 0 0 8px;
+  }
+  .policies-hero p {
+    margin: 0;
+    opacity: .95;
+  }
+  .policies-card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 22px 20px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  }
+  .policies-meta {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px; color: #6c757d;
+    font-size: .95rem;
+  }
+  .policies-content pre {
+    white-space: pre-wrap;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 1rem;
+    line-height: 1.65;
+    color: #333;
+    margin: 0;
+  }
+  .policies-badge {
+    display: inline-block;
+    background: rgba(198,32,118,.08);
+    color: #c62076;
+    border: 1px solid rgba(198,32,118,.25);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: .85rem;
+    margin-left: 8px;
+  }
+  .policies-actions {
+    display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;
+  }
+  .btn-soft {
+    border: 1px solid rgba(0,0,0,0.08);
+    background: #fff;
+    color: #333;
+  }
+  .btn-soft:hover { background: #f8f9fa; }
+  @media (max-width: 576px) {
+    .policies-hero { padding: 22px 18px; }
+    .policies-card { padding: 18px 14px; }
+  }
+</style>
+{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<section class="container py-4">
+  <div class="policies-hero">
+    <h1>Políticas de Devolución y Reembolso <span class="policies-badge">Actualizada</span></h1>
+    <p>Términos y condiciones de uso en ReNafly</p>
+  </div>
+
+  <div class="policies-card mt-3">
+    <div class="policies-meta">
+      <i class="bi bi-shield-check"></i>
+      <span>Vigente • Términos y Condiciones</span>
+    </div>
+    <div class="policies-content">
+<pre>
+Politicas de devolución y reembolso
+Terminos y condiciones de uso:
+Los presentes Términos y Condiciones tienen como finalidad establecer las normas que rigen el acceso y uso del sitio web de Renace Con Jesusa Y Arnol S.A.C (en adelante, "ReNafly"), incluyendo todo tipo de contenido, productos y/o servicios disponibles para los usuarios y clientes del sitio (en adelante, "clientes", "visitantes" y/o "consumidores").
+El sitio web es propiedad exclusiva de Renace Con Jesusa Y Arnol S.A.C, quien se reserva el derecho de modificar, actualizar o alterar total o parcialmente, sin previo aviso, el contenido, diseño, estructura, funcionalidad, productos y/o servicios ofrecidos. En consecuencia, los visitantes reconocen y aceptan que (ReNafly) podrá, en cualquier momento, suspender, eliminar, cambiar o desactivar cualquiera de los elementos que conforman el sitio web. Asimismo, los usuarios declaran que, ante posibles cambios realizados por (ReNafly), deberán consultar los Términos y Condiciones vigentes al momento de acceder al sitio.
+El sitio web está destinado exclusivamente a personas mayores de edad. Por ello, "ReNafly" no asume ninguna responsabilidad, presente o futura, directa o indirecta, por cualquier situación derivada del incumplimiento de este requisito. Al continuar navegando en el sitio, el visitante manifiesta ser mayor de edad y contar con la capacidad legal necesaria para aceptar los presentes Términos y Condiciones, así como cualquier otro documento o disposición publicada en el sitio.
+"ReNafly" se compromete a realizar todos los esfuerzos razonables para garantizar el acceso y funcionamiento continuo del sitio web. No obstante, no será responsable por interrupciones, fallos o limitaciones en el servicio que se originen por causas ajenas a su control.
+ACEPTACIÓN DE LOS TÉRMINOS Y CONDICIONES DE COMPRA
+Al acceder y realizar compras en el sitio web de ReNafly, usted declara haber leído, comprendido y aceptado íntegramente los presentes Términos y Condiciones, reconociendo el alcance legal de cada transacción. Se considerará que ha otorgado su consentimiento expreso para la celebración del contrato de compraventa al manifestarlo mediante el uso de medios electrónicos, digitales u otras tecnologías, quedando vinculado a la operación desde el momento en que acepta la oferta publicada en el sitio. La creación de una cuenta, la realización de una compra y/o el ingreso de datos de pago serán considerados como aceptación voluntaria para todos los efectos legales.
+Registro: Al registrarse y utilizar el sitio web, usted asume la responsabilidad de mantener la confidencialidad de su cuenta y contraseña, así como de restringir el acceso a sus dispositivos. Toda actividad realizada desde su cuenta o con su contraseña será atribuida a usted. En caso de olvido o pérdida de la contraseña, deberá utilizar el enlace de recuperación disponible en el sitio. ReNafly se reserva el derecho de cancelar cuentas, modificar contenido o anular pedidos en caso de incumplimiento de los Términos y Condiciones, infracción de políticas, afectación de derechos de terceros o conductas que perjudiquen la reputación de la marca o la experiencia del cliente. Está prohibido el uso de correos falsos o la suplantación de identidad.
+Precio: ReNafly podrá modificar en cualquier momento, sin previo aviso, los precios de los productos y del envío. No obstante, se compromete a respetar los precios publicados en el sitio web al momento de la compra, siempre que el monto haya sido cubierto en su totalidad por el cliente. Todos los precios exhibidos en el sitio están expresados en soles peruanos (PEN).
+Pedido: Al realizar una compra en el sitio web de "ReNafly", usted recibirá automáticamente un correo electrónico con un comprobante que confirma su intención de compra. Este documento no constituye un contrato vinculante, y "ReNafly" se reserva el derecho de cancelar el pedido en cualquier momento por motivos como falta de fondos, problemas con la autorización del pago, sospechas de fraude, errores en el precio del producto, o cualquier otra causa que considere justificada. Todos los productos adquiridos seguirán siendo propiedad de "ReNafly" hasta que se haya efectuado el pago total. En caso de inconvenientes con el pago, ya sea parcial o incompleto, ReNafly no estará obligada a realizar la entrega. Además, todos los pedidos están sujetos a la disponibilidad de los productos en el momento de la compra.
+Envío: Una vez confirmada la compra, si el cliente elige el servicio de transporte externo ofrecido por ReNafly, nos comprometemos a entregar el pedido en un plazo máximo de 3 días hábiles dentro de Lima. Para envíos a provincias o aquellos gestionados directamente por el cliente, los tiempos de entrega dependerán de las políticas de la empresa de mensajería seleccionada, por lo que "ReNafly" no puede garantizar ni la seguridad ni el cumplimiento de los plazos. En caso de errores en el inventario o en el sistema, "ReNafly" podrá cancelar el pedido y proceder con el reembolso correspondiente. Los productos serán enviados a la dirección proporcionada por el cliente, siendo responsabilidad compartida entre el cliente y la empresa de transporte asegurar su correcta recepción. La propiedad y el riesgo de pérdida se transfieren al cliente en el momento en que el pedido es entregado a la empresa de transporte. "ReNafly" no se responsabiliza por retrasos, pérdidas o daños ocasionados por terceros, fuerza mayor o huelgas. Los productos devueltos no se considerarán propiedad de "ReNafly" hasta que sean recibidos en la dirección de devolución y se cumplan las condiciones establecidas en la política de cancelación.
+Cancelaciones, cambios y devoluciones: El cliente podrá cancelar su compra el mismo día en que fue realizada, siempre que el pedido no haya sido despachado. Para ello, deberá enviar un mensaje al número de celular 964530887 para coordinar la cancelación. En cuanto a devoluciones, estas podrán efectuarse dentro de los 3 días posteriores a la recepción del producto, únicamente si este no cumple razonablemente con lo descrito, presenta daños, está roto o defectuoso, o si así lo establece el Código de Protección al Consumidor. Para gestionar el cambio, el cliente deberá comunicarse vía correo electrónico a ventas@renace.com.pe
+Devoluciones y Envío: Le recomendamos preparar sus devoluciones con cuidado, incluyendo el empaque original y la factura o boleta correspondiente. El cliente asume la responsabilidad de los costos de envío y manipulación de los productos devueltos, así como de garantizar que estos se encuentren en condiciones adecuadas. ReNafly cubrirá los gastos de devolución únicamente cuando esta se deba a un error por parte de la empresa (como el envío de un producto equivocado o defectuoso). En tales casos, deberá contactarse con nuestro equipo de Servicio al Cliente a través del correo electrónico ventas@renace.com.pe para coordinar el proceso.
+Importante: Nos reservamos el derecho de restringir o rechazar solicitudes de reembolso si, tras la revisión, los productos devueltos no cumplen con nuestra Política de Devoluciones, o si se detecta fraude, abuso del sistema de devoluciones u otras conductas que puedan afectar nuestras políticas o condiciones de uso.
+Tratamiento de Datos Personales: ReNafly informa al cliente que tratará los datos personales proporcionados en el sitio web, tales como nombre, apellidos, documento de identidad, correo electrónico, usuario, contraseña, dirección y número telefónico. El cliente reconoce que este tratamiento es necesario para cumplir con las obligaciones de la empresa, incluyendo: (i) emisión de comprobantes de pago, (ii) atención postventa, (iii) envío de promociones y ofertas, (iv) elaboración de proyecciones comerciales, y (v) análisis de datos. El cliente declara haber leído, comprendido y aceptado la Política de Privacidad disponible en el sitio web.
+Advertencia sobre suplantación: Cualquier cuenta que utilice nuestro nombre, logo o variantes sin autorización es completamente ajena a ReNafly. Por lo tanto, no nos hacemos responsables por fraudes o estafas cometidas a través de perfiles falsos o suplantadores.
+    </pre>
+    </div>
+    <div class="policies-actions">
+      <button type="button" class="btn btn-soft btn-sm" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i> Subir</button>
+      <button type="button" class="btn btn-soft btn-sm" onclick="navigator.clipboard.writeText(document.querySelector('.policies-content pre').innerText)"><i class="bi bi-clipboard"></i> Copiar</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

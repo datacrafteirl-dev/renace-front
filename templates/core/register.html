@@ -1,0 +1,248 @@
+{% extends 'core/base.html' %}
+{% load socialaccount %}
+
+{% block title %}Crear Cuenta - Renace{% endblock %}
+{% block body_class %}register-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="current">Crear Cuenta</li>
+          </ol>
+        </nav>
+        <h1>Crear Cuenta</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Register Section -->
+    <section id="register" class="register section py-5">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row justify-content-center">
+          
+          <div class="col-lg-8 col-xl-6">
+            <div class="card shadow-lg border-0 rounded-4">
+              <div class="card-body p-5">
+                
+                <!-- Header -->
+                <div class="text-center mb-4">
+                  <h2 class="h3 fw-bold mb-2">¡Únete a Renace!</h2>
+                  <p class="text-muted mb-0">Crea tu cuenta y descubre productos únicos</p>
+                </div>
+
+                <!-- Messages -->
+                {% if messages %}
+                  <div class="alert-container mb-4">
+                    {% for message in messages %}
+                      <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <!-- Form -->
+                <form method="post" class="needs-validation" novalidate>
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ form.first_name.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-person me-2"></i>{{ form.first_name.label }} *
+                      </label>
+                      {{ form.first_name }}
+                      {% if form.first_name.errors %}
+                        <div class="invalid-feedback d-block">
+                          {% for error in form.first_name.errors %}{{ error }}{% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="{{ form.last_name.id_for_label }}" class="form-label fw-semibold">
+                        <i class="bi bi-person me-2"></i>{{ form.last_name.label }} *
+                      </label>
+                      {{ form.last_name }}
+                      {% if form.last_name.errors %}
+                        <div class="invalid-feedback d-block">
+                          {% for error in form.last_name.errors %}{{ error }}{% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">
+                      <i class="bi bi-envelope me-2"></i>{{ form.email.label }} *
+                    </label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                      <div class="invalid-feedback d-block">
+                        {% for error in form.email.errors %}{{ error }}{% endfor %}
+                      </div>
+                    {% endif %}
+                    <div class="form-text">Usaremos este email para comunicarnos contigo</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="{{ form.telefono.id_for_label }}" class="form-label fw-semibold">
+                      <i class="bi bi-phone me-2"></i>{{ form.telefono.label }} *
+                    </label>
+                    {{ form.telefono }}
+                    {% if form.telefono.errors %}
+                      <div class="invalid-feedback d-block">
+                        {% for error in form.telefono.errors %}{{ error }}{% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="{{ form.fecha_nacimiento.id_for_label }}" class="form-label fw-semibold">
+                      <i class="bi bi-calendar me-2"></i>{{ form.fecha_nacimiento.label }}
+                    </label>
+                    {{ form.fecha_nacimiento }}
+                    {% if form.fecha_nacimiento.errors %}
+                      <div class="invalid-feedback d-block">
+                        {% for error in form.fecha_nacimiento.errors %}{{ error }}{% endfor %}
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="{{ form.password1.id_for_label }}" class="form-label fw-semibold">
+                      <i class="bi bi-lock me-2"></i>{{ form.password1.label }} *
+                    </label>
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                      <div class="invalid-feedback d-block">
+                        {% for error in form.password1.errors %}{{ error }}{% endfor %}
+                      </div>
+                    {% endif %}
+                    <small class="form-text text-muted">{{ form.password1.help_text }}</small>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="{{ form.password2.id_for_label }}" class="form-label fw-semibold">
+                      <i class="bi bi-lock-fill me-2"></i>{{ form.password2.label }} *
+                    </label>
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                      <div class="invalid-feedback d-block">
+                        {% for error in form.password2.errors %}{{ error }}{% endfor %}
+                      </div>
+                    {% endif %}
+                    <small class="form-text text-muted">{{ form.password2.help_text }}</small>
+                  </div>
+
+                  <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="terms" required>
+                    <label class="form-check-label" for="terms">
+                      Acepto los <a href="#" class="text-decoration-none" style="color: #e91e63;">términos y condiciones</a> y la <a href="#" class="text-decoration-none" style="color: #e91e63;">política de privacidad</a>
+                    </label>
+                  </div>
+
+                  <div class="form-check mb-4">
+                    <input class="form-check-input" type="checkbox" id="newsletter">
+                    <label class="form-check-label" for="newsletter">
+                      Quiero recibir ofertas y novedades por email
+                    </label>
+                  </div>
+
+                  <div class="d-grid mb-4">
+                    <button type="submit" class="btn btn-lg" style="background-color: #e91e63; border-color: #e91e63; color: white;">
+                      <i class="bi bi-person-plus me-2"></i> Crear Cuenta
+                    </button>
+                  </div>
+                </form>
+
+                <div class="divider text-center mb-4">
+                  <span class="text-muted">o</span>
+                </div>
+
+                <div class="social-register mb-4">
+                  <div class="d-grid gap-2">
+                    {% get_providers as socialaccount_providers %}
+                    {% for provider in socialaccount_providers %}
+                      {% if provider.id == "google" %}
+                        <a href="{% provider_login_url provider.id %}" class="btn btn-outline-secondary btn-lg">
+                          <i class="bi bi-google me-2"></i> Registrarse con Google
+                        </a>
+                      {% endif %}
+                    {% empty %}
+                      <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Google OAuth no está configurado. Usa el formulario de arriba para registrarte.
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+
+                <div class="form-footer text-center">
+                  <p class="mb-0">¿Ya tienes una cuenta? 
+                    <a href="{% url 'core:login' %}" class="fw-semibold text-decoration-none" style="color: #e91e63;">
+                      Iniciar sesión
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /Register Section -->
+
+  </main>
+
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validación del formulario
+    const form = document.querySelector('.needs-validation');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        });
+    }
+    
+    // Validación de contraseñas
+    const password1 = document.getElementById('{{ form.password1.id_for_label }}');
+    const password2 = document.getElementById('{{ form.password2.id_for_label }}');
+    
+    if (password1 && password2) {
+        function validatePasswords() {
+            if (password1.value !== password2.value) {
+                password2.setCustomValidity('Las contraseñas no coinciden');
+            } else {
+                password2.setCustomValidity('');
+            }
+        }
+        
+        password1.addEventListener('change', validatePasswords);
+        password2.addEventListener('keyup', validatePasswords);
+    }
+});
+</script>
+{% endblock %}

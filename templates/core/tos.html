@@ -1,0 +1,127 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Términos y Condiciones - Renace{% endblock %}
+{% block body_class %}tos-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title light-background">
+      <div class="container">
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'core:home' %}">Inicio</a></li>
+            <li class="current">Términos y Condiciones</li>
+          </ol>
+        </nav>
+        <h1>Términos y Condiciones</h1>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- TOS Section -->
+    <section id="tos" class="tos section">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="row justify-content-center">
+          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="200">
+            <div class="tos-content">
+              
+              <div class="mb-4">
+                <h3>1. Aceptación de los Términos</h3>
+                <p>Al acceder y utilizar este sitio web, usted acepta estar sujeto a estos términos y condiciones de uso. Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestro sitio web.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>2. Descripción del Servicio</h3>
+                <p>Renace es una tienda online especializada en la venta de productos de belleza y maquillaje importados. Ofrecemos una amplia gama de productos de alta calidad para el cuidado personal y la belleza.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>3. Productos y Precios</h3>
+                <p>Los precios de nuestros productos están expresados en soles peruanos (S/) e incluyen IGV. Nos reservamos el derecho de modificar los precios en cualquier momento sin previo aviso.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>4. Pedidos y Pagos</h3>
+                <p>Los pedidos están sujetos a disponibilidad de stock. Aceptamos pagos mediante Yape y transferencia bancaria. El pago debe realizarse según el método seleccionado.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>5. Envíos y Entregas</h3>
+                <p>Realizamos envíos a todo el Perú. Los tiempos de entrega pueden variar según la ubicación. El costo de envío se calcula al momento del checkout.</p>
+              </div>
+
+              
+
+              <div class="mb-4">
+                <h3>7. Privacidad</h3>
+                <p>Respetamos su privacidad y protegemos su información personal de acuerdo con nuestra Política de Privacidad.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>8. Limitación de Responsabilidad</h3>
+                <p>Renace no será responsable por daños indirectos, incidentales o consecuenciales que puedan resultar del uso de nuestros productos o servicios.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>9. Modificaciones</h3>
+                <p>Nos reservamos el derecho de modificar estos términos y condiciones en cualquier momento. Las modificaciones entrarán en vigor inmediatamente después de su publicación en el sitio web.</p>
+              </div>
+
+              <div class="mb-4">
+                <h3>10. Contacto</h3>
+                <p>Si tiene alguna pregunta sobre estos términos y condiciones, puede contactarnos a través de:</p>
+                <ul>
+                  <li>
+                    Email:
+                    {% if configuracion_sitio and configuracion_sitio.email_contacto %}
+                      {{ configuracion_sitio.email_contacto }}
+                    {% else %}
+                      info@renace.com.pe
+                    {% endif %}
+                  </li>
+                  <li>
+                    Teléfono:
+                    {% if configuracion_sitio and configuracion_sitio.telefono_contacto %}
+                      {{ configuracion_sitio.telefono_contacto }}
+                    {% else %}
+                      +51 964 530 887
+                    {% endif %}
+                  </li>
+                  <li>
+                    Dirección:
+                    {% if configuracion_sitio and configuracion_sitio.direccion %}
+                      {{ configuracion_sitio.direccion }}
+                    {% else %}
+                      Lima, Perú
+                    {% endif %}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="text-center mt-5">
+                <p class="text-muted">Última actualización: {{ "now"|date:"d/m/Y" }}</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /TOS Section -->
+
+  </main>
+
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

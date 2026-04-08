@@ -1,0 +1,2052 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block title %}Finalizar Compra - Renace{% endblock %}
+{% block body_class %}checkout-page{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Variables del sitio Renace */
+    :root {
+        --default-font: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+        --heading-font: "Quicksand", sans-serif;
+        --nav-font: "Ubuntu", sans-serif;
+        
+        --background-color: #ffffff;
+        --default-color: #212529;
+        --heading-color: #3e0925;
+        --accent-color: #c62076;
+        --surface-color: #ffffff;
+        --contrast-color: #ffffff;
+        
+        --light-background: #f8f4f6;
+        --border-color: #e9ecef;
+        --text-muted: #6c757d;
+        --success-color: #28a745;
+        --warning-color: #ffc107;
+        --danger-color: #dc3545;
+    }
+
+    .checkout-page {
+        font-family: var(--default-font);
+        background-color: var(--light-background);
+        color: var(--default-color);
+        line-height: 1.6;
+    }
+
+    .checkout-page h1, .checkout-page h2, .checkout-page h3, .checkout-page h4, .checkout-page h5, .checkout-page h6 {
+        font-family: var(--heading-font);
+        color: var(--heading-color);
+        font-weight: 600;
+    }
+
+    .LoadingShell {
+        min-height: calc(100vh - 200px);
+        padding: 3rem 0;
+    }
+
+    .LoadingShellContent {
+        display: grid;
+        grid-template-areas: 'main order-summary';
+        grid-template-columns: 1fr 400px;
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 0 2rem;
+        gap: 3rem;
+    }
+
+    .LoadingShellMain {
+        grid-area: main;
+        background: var(--surface-color);
+        border-radius: 12px;
+        padding: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-color);
+    }
+
+    .LoadingShellOrderSummary {
+        grid-area: order-summary;
+        background: var(--surface-color);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-color);
+        height: fit-content;
+        position: sticky;
+        top: 2rem;
+    }
+
+    .form-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .form-section:last-of-type {
+        border-bottom: none;
+        margin-bottom: 1rem;
+    }
+
+    .form-section h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--heading-color);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .form-section h3::before {
+        content: '';
+        width: 3px;
+        height: 18px;
+        background: var(--accent-color);
+        border-radius: 2px;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 0.375rem;
+        color: var(--default-color);
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem 0.875rem;
+        border: 1.5px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-family: var(--default-font);
+        background-color: var(--surface-color);
+        color: var(--default-color);
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 2px rgba(198, 32, 118, 0.1);
+    }
+
+    .form-group input::placeholder {
+        color: var(--text-muted);
+    }
+
+    /* Authentication Options Styles */
+    .auth-options {
+        margin-bottom: 1rem;
+    }
+
+    .auth-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .auth-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border: 1.5px solid var(--border-color);
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--surface-color);
+        color: var(--default-color);
+        text-decoration: none;
+    }
+
+    .auth-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-btn {
+        border-color: var(--accent-color);
+        color: var(--accent-color);
+    }
+
+    .login-btn:hover {
+        background: var(--accent-color);
+        color: var(--contrast-color);
+        border-color: var(--accent-color);
+    }
+
+    .google-btn {
+        border-color: #4285f4;
+        color: #4285f4;
+    }
+
+    .google-btn:hover {
+        background: #4285f4;
+        color: var(--contrast-color);
+        border-color: #4285f4;
+    }
+
+    .auth-btn i {
+        font-size: 1rem;
+    }
+
+    .auth-divider {
+        text-align: center;
+        position: relative;
+        margin: 1rem 0;
+    }
+
+    .auth-divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--border-color);
+        z-index: 1;
+    }
+
+    .auth-divider span {
+        background: var(--surface-color);
+        padding: 0 1rem;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        position: relative;
+        z-index: 2;
+    }
+
+    /* User Status Styles */
+    .user-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: rgba(40, 167, 69, 0.1);
+        border: 1px solid var(--success-color);
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--success-color);
+        font-size: 0.9rem;
+    }
+
+    .user-info i {
+        font-size: 1.1rem;
+    }
+
+    .logout-link {
+        color: var(--text-muted);
+        text-decoration: none;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .logout-link:hover {
+        color: var(--danger-color);
+        background: rgba(220, 53, 69, 0.1);
+    }
+
+    /* Auth Modal Styles */
+    .auth-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    }
+
+    .auth-modal-content {
+        background: var(--surface-color);
+        border-radius: 12px;
+        width: 90%;
+        max-width: 450px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .auth-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .auth-modal-header h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        color: var(--heading-color);
+    }
+
+    .auth-modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .auth-modal-close:hover {
+        background: var(--light-background);
+        color: var(--default-color);
+    }
+
+    .auth-modal-body {
+        padding: 1.5rem;
+    }
+
+    .auth-tabs {
+        display: flex;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .auth-tab {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        background: none;
+        border: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .auth-tab.active {
+        color: var(--accent-color);
+        border-bottom-color: var(--accent-color);
+    }
+
+    .auth-tab:hover {
+        color: var(--accent-color);
+    }
+
+    .auth-form {
+        display: none;
+    }
+
+    .auth-form.active {
+        display: block;
+    }
+
+    .auth-submit-btn {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        background: linear-gradient(135deg, var(--accent-color), #a01a5c);
+        color: var(--contrast-color);
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: var(--heading-font);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-top: 1rem;
+    }
+
+    .auth-submit-btn:hover {
+        background: linear-gradient(135deg, #a01a5c, #8a1550);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(198, 32, 118, 0.3);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+
+    .payment-methods {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .delivery-methods {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .delivery-option {
+        border: 1.5px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--surface-color);
+        position: relative;
+    }
+
+    .delivery-option:hover {
+        border-color: var(--accent-color);
+        box-shadow: 0 4px 12px rgba(198, 32, 118, 0.1);
+    }
+
+    .delivery-option input[type="radio"] {
+        display: none;
+    }
+
+    .delivery-option input[type="radio"]:checked + .delivery-label {
+        color: var(--accent-color);
+    }
+
+    .delivery-option input[type="radio"]:checked {
+        border-color: var(--accent-color);
+        background: rgba(198, 32, 118, 0.05);
+    }
+
+    .delivery-label {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .delivery-radio {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .delivery-radio .radio-circle {
+        width: 18px;
+        height: 18px;
+        border: 1.5px solid var(--border-color);
+        border-radius: 50%;
+        background: var(--surface-color);
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .delivery-option input[type="radio"]:checked + .delivery-label .delivery-radio .radio-circle {
+        border-color: var(--accent-color);
+        background: var(--accent-color);
+    }
+
+    .delivery-option input[type="radio"]:checked + .delivery-label .delivery-radio .radio-circle::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 6px;
+        height: 6px;
+        background: var(--contrast-color);
+        border-radius: 50%;
+    }
+
+    .delivery-info {
+        flex: 1;
+    }
+
+    .delivery-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--default-color);
+    }
+
+    .delivery-subtitle {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 0.2rem;
+    }
+
+    .delivery-option input[type="radio"]:checked + .delivery-label .delivery-text {
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+
+    /* Shipping Options Styles */
+    .shipping-options-grid {
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .shipping-option {
+        border: 1.5px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--surface-color);
+        position: relative;
+    }
+
+    .shipping-option:hover {
+        border-color: var(--accent-color);
+        box-shadow: 0 2px 8px rgba(198, 32, 118, 0.1);
+    }
+
+    .shipping-option input[type="radio"] {
+        display: none;
+    }
+
+    .shipping-option input[type="radio"]:checked + .shipping-label {
+        color: var(--accent-color);
+    }
+
+    .shipping-option input[type="radio"]:checked {
+        border-color: var(--accent-color);
+        background: rgba(198, 32, 118, 0.05);
+    }
+
+    .shipping-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .shipping-radio {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+    }
+
+    .shipping-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .shipping-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--default-color);
+    }
+
+    .shipping-subtitle {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .shipping-option input[type="radio"]:checked + .shipping-label .shipping-text {
+        color: var(--accent-color);
+        font-weight: 600;
+    }
+
+    .shipping-price {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent-color);
+        text-align: right;
+        min-width: 80px;
+    }
+
+    .delivery-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--light-background);
+        border-radius: 6px;
+        color: var(--text-muted);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .delivery-option input[type="radio"]:checked + .delivery-label .delivery-icon {
+        background: var(--accent-color);
+        color: var(--contrast-color);
+    }
+
+    /* Pickup Locations Styles */
+    .pickup-header {
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .pickup-header h3 {
+        margin-bottom: 0.375rem;
+    }
+
+    .pickup-subtitle {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 0.375rem;
+    }
+
+    .change-location-link {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: 0.8rem;
+        color: var(--accent-color);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .change-location-link:hover {
+        text-decoration: underline;
+    }
+
+    .pickup-location-card {
+        background: var(--surface-color);
+        border: 1.5px solid var(--accent-color);
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .pickup-location-info {
+        flex: 1;
+    }
+
+    .pickup-location-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--heading-color);
+        margin-bottom: 0.375rem;
+    }
+
+    .pickup-location-address {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 0.375rem;
+    }
+
+    .pickup-location-time {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin: 0;
+    }
+
+    .pickup-location-cost {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+
+    .cost-free {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--success-color);
+        background: rgba(40, 167, 69, 0.1);
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+    }
+
+    .pickup-time-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        background: var(--accent-color);
+        color: var(--contrast-color);
+        padding: 0.375rem 0.75rem;
+        border-radius: 15px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .pickup-time-badge i {
+        font-size: 0.8rem;
+    }
+
+    /* Form Check Styles */
+    .form-check {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+        color: var(--default-color);
+        cursor: pointer;
+        margin: 0;
+    }
+
+    /* Form Row with 3 columns */
+    .form-row-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .payment-option {
+        border: 1.5px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: var(--surface-color);
+    }
+
+    .payment-option:hover {
+        border-color: var(--accent-color);
+        box-shadow: 0 2px 8px rgba(198, 32, 118, 0.1);
+    }
+
+    .payment-option input[type="radio"] {
+        display: none;
+    }
+
+    .payment-option input[type="radio"]:checked + .payment-label {
+        color: var(--accent-color);
+    }
+
+    .payment-option input[type="radio"]:checked {
+        border-color: var(--accent-color);
+        background: rgba(198, 32, 118, 0.05);
+    }
+
+    .payment-label {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+    }
+
+    .payment-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--light-background);
+        border-radius: 6px;
+        color: var(--accent-color);
+        font-size: 1rem;
+    }
+
+    .payment-info h6 {
+        margin: 0;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--heading-color);
+    }
+
+    .payment-info p {
+        margin: 0;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .checkout-button {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        background: linear-gradient(135deg, var(--accent-color), #a01a5c);
+        color: var(--contrast-color);
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: var(--heading-font);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        margin-top: 0.75rem;
+    }
+
+    .checkout-button:hover {
+        background: linear-gradient(135deg, #a01a5c, #8a1550);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(198, 32, 118, 0.3);
+    }
+
+    .checkout-button:disabled {
+        background: var(--text-muted);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }
+
+    .order-summary-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--heading-color);
+        text-align: center;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid var(--accent-color);
+    }
+
+    .LoadingShellLineItems {
+        display: grid;
+        gap: 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .LoadingShellLine {
+        display: grid;
+        grid-template-columns: 70px 1fr auto;
+        gap: 0.75rem;
+        align-items: center;
+        padding: 0.75rem;
+        background: var(--light-background);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+
+    .LoadingShellLineImageWrapper {
+        width: 70px;
+        height: 70px;
+        position: relative;
+    }
+
+    .LoadingShellLineImage {
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+        overflow: hidden;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+    }
+
+    .LoadingShellLineImage img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .LoadingShellLineQuantity {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: var(--accent-color);
+        color: var(--contrast-color);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        font-weight: 600;
+    }
+
+    .LoadingShellLineContent {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    .LoadingShellLineContent .Text--size-small:first-child {
+        font-weight: 600;
+        color: var(--heading-color);
+        font-size: 0.85rem;
+    }
+
+    .LoadingShellLineContent .Text--appearance-subdued {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+    }
+
+    .LoadingShellLinePrice {
+        font-weight: 600;
+        color: var(--accent-color);
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.25rem;
+    }
+
+    .checkout-remove-item {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        text-decoration: none;
+    }
+    .checkout-remove-item:hover {
+        color: var(--danger-color);
+        text-decoration: underline;
+    }
+
+    .Divider {
+        width: 100%;
+        height: 1px;
+        background: var(--border-color);
+        margin: 1rem 0;
+    }
+
+    .InlineStack {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+    }
+
+    .InlineStack .Text--size-small {
+        font-size: 0.85rem;
+        color: var(--default-color);
+    }
+
+    .summary-total {
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        color: var(--heading-color) !important;
+        padding-top: 0.75rem;
+        border-top: 2px solid var(--accent-color);
+        margin-top: 0.75rem;
+    }
+
+    .yape-payment-section {
+        margin-top: 1.5rem;
+        padding: 1.5rem;
+        background: var(--light-background);
+        border-radius: 8px;
+        border: 1.5px solid var(--accent-color);
+    }
+
+    .yape-payment-section h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: var(--heading-color);
+        text-align: center;
+    }
+
+    .yape-qr {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .yape-qr img {
+        max-width: 180px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .yape-info {
+        background: var(--surface-color);
+        padding: 1rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        border: 1px solid var(--border-color);
+    }
+
+    .yape-info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .yape-info-item:last-child {
+        border-bottom: none;
+        font-weight: 700;
+        color: var(--accent-color);
+        font-size: 1rem;
+    }
+
+    .yape-info-item span:first-child {
+        font-weight: 500;
+        color: var(--default-color);
+        font-size: 0.85rem;
+    }
+
+    .yape-info-item span:last-child {
+        font-weight: 600;
+        color: var(--heading-color);
+        font-size: 0.85rem;
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+        .LoadingShellContent {
+            grid-template-areas: 'main' 'order-summary';
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .LoadingShellMain {
+            padding: 1.5rem;
+        }
+        
+        .LoadingShellOrderSummary {
+            position: static;
+        }
+        
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-row-3 {
+            grid-template-columns: 1fr;
+        }
+        
+        .pickup-location-card {
+            flex-direction: column;
+            text-align: center;
+            padding: 0.75rem;
+        }
+        
+        .pickup-location-cost {
+            align-items: center;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+        
+        .shipping-label {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .shipping-price {
+            align-self: flex-end;
+            margin-top: 0.5rem;
+        }
+        
+        .change-location-link {
+            position: static;
+            margin-top: 0.375rem;
+            display: inline-block;
+        }
+        
+        .yape-payment-section {
+            padding: 1rem;
+        }
+        
+        .yape-qr img {
+            max-width: 150px;
+        }
+        
+        .auth-buttons {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+        
+        .auth-modal-content {
+            width: 95%;
+            margin: 1rem;
+        }
+        
+        .user-status {
+            flex-direction: column;
+            text-align: center;
+            gap: 0.5rem;
+        }
+        
+        .LoadingShellLine {
+            grid-template-columns: 60px 1fr auto;
+            gap: 0.75rem;
+        }
+        
+        .LoadingShellLineImageWrapper {
+            width: 60px;
+            height: 60px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .LoadingShell {
+            padding: 1rem 0;
+        }
+        
+        .LoadingShellContent {
+            padding: 0 1rem;
+        }
+        
+        .LoadingShellMain {
+            padding: 1rem;
+        }
+        
+        .LoadingShellOrderSummary {
+            padding: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="LoadingShell">
+    <!-- Main Content -->
+    <div class="LoadingShellContent">
+        <!-- Checkout Form -->
+        <div class="LoadingShellMain">
+            <div class="LoadingShellMainContent">
+                <form method="post" action="{% url 'core:procesar_pedido' %}" id="checkout-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="shipping_cost_value" name="shipping_cost" value="0">
+                    <input type="hidden" id="shipping_option_value" name="shipping_option" value="pickup">
+                    
+                    <!-- Contact Information -->
+                    <div class="form-section">
+                        <h3>Información de contacto</h3>
+                        
+                        {% if user.is_authenticated %}
+                        <!-- User is logged in -->
+                        <div class="user-status">
+                            <div class="user-info">
+                                <i class="bi bi-person-check"></i>
+                                <span>Conectado como: <strong>{{ user.first_name|default:user.username }}</strong></span>
+                            </div>
+                            <a href="{% url 'logout' %}" class="logout-link">Cerrar sesión</a>
+                        </div>
+                        {% else %}
+                        <!-- Authentication Options -->
+                        <div class="auth-options">
+                            <div class="auth-buttons">
+                                <button type="button" class="auth-btn login-btn" onclick="showLoginModal()">
+                                    <i class="bi bi-person"></i>
+                                    Iniciar sesión / Registrarse
+                                </button>
+                                <button type="button" class="auth-btn google-btn" onclick="loginWithGoogle()">
+                                    <i class="bi bi-google"></i>
+                                    Continuar con Google
+                                </button>
+                            </div>
+                            <div class="auth-divider">
+                                <span>o continúa como invitado</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required value="{{ user.email|default_if_none:'' }}">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first_name">Nombres</label>
+                                <input type="text" id="first_name" name="first_name" required placeholder="Nombres" value="{{ user.first_name|default:'' }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Apellidos</label>
+                                <input type="text" id="last_name" name="last_name" required placeholder="Apellidos" value="{{ user.last_name|default:'' }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Teléfono / Celular</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="Ej. 999 888 777" value="{% if user.profile %}{{ user.profile.phone|default:'' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <!-- Delivery Method -->
+                    <div class="form-section">
+                        <h3>Entrega</h3>
+                        <div class="delivery-methods">
+                            <div class="delivery-option">
+                                <input type="radio" id="pickup" name="delivery_method" value="pickup" checked>
+                                <label for="pickup" class="delivery-label">
+                                    <div class="delivery-radio">
+                                        <div class="radio-circle"></div>
+                                    </div>
+                                    <div class="delivery-info">
+                                        <span class="delivery-text">Recojo en oficina</span>
+                                        <span class="delivery-subtitle">Gratis</span>
+                                    </div>
+                                    <div class="delivery-icon">
+                                        <i class="bi bi-shop"></i>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="delivery-option">
+                                <input type="radio" id="shipping" name="delivery_method" value="shipping">
+                                <label for="shipping" class="delivery-label">
+                                    <div class="delivery-radio">
+                                        <div class="radio-circle"></div>
+                                    </div>
+                                    <div class="delivery-info">
+                                        <span class="delivery-text">Envío a domicilio</span>
+                                        <span class="delivery-subtitle">Desde S/.12.00</span>
+                                    </div>
+                                    <div class="delivery-icon">
+                                        <i class="bi bi-truck"></i>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shipping Options (shown when shipping is selected) -->
+                    <div id="shipping-options" class="form-section" style="display: none;">
+                        <h3>Opciones de envío</h3>
+                        <div class="shipping-options-grid">
+                            <div class="shipping-option">
+                                <input type="radio" id="lima_metropolitana" name="shipping_option" value="lima_metropolitana" checked>
+                                <label for="lima_metropolitana" class="shipping-label">
+                                    <div class="shipping-radio">
+                                        <div class="radio-circle"></div>
+                                    </div>
+                                    <div class="shipping-info">
+                                        <span class="shipping-text">Lima Metropolitana - Envío a domicilio 24 horas</span>
+                                        <span class="shipping-subtitle">Entrega rápida dentro de Lima Metropolitana</span>
+                                    </div>
+                                    <div class="shipping-price" id="price_lima_metropolitana">S/.12.00</div>
+                                </label>
+                            </div>
+                            
+                            <div class="shipping-option">
+                                <input type="radio" id="provincia_agencia" name="shipping_option" value="provincia_agencia">
+                                <label for="provincia_agencia" class="shipping-label">
+                                    <div class="shipping-radio">
+                                        <div class="radio-circle"></div>
+                                    </div>
+                                    <div class="shipping-info">
+                                        <span class="shipping-text">Provincia - Agencia</span>
+                                        <span class="shipping-subtitle">Envío a agencia de transporte (pago destino)</span>
+                                    </div>
+                                    <div class="shipping-price">Pago destino</div>
+                                </label>
+                            </div>
+                            
+                            <div class="shipping-option">
+                                <input type="radio" id="envio_express" name="shipping_option" value="envio_express">
+                                <label for="envio_express" class="shipping-label">
+                                    <div class="shipping-radio">
+                                        <div class="radio-circle"></div>
+                                    </div>
+                                    <div class="shipping-info">
+                                        <span class="shipping-text">Envío Express (Delivery Express)</span>
+                                        <span class="shipping-subtitle">Motorizado propio</span>
+                                    </div>
+                                    <div class="shipping-price" id="price_envio_express">Según distrito</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Selector de distrito para Lima/Express -->
+                        <div class="form-group mt-3" id="shipping-district-wrapper" style="display: none;">
+                            <label for="shipping_district">Distrito de entrega (Lima Metropolitana)</label>
+                            <select id="shipping_district" name="shipping_district" class="form-control">
+                                <option value="">Selecciona un distrito</option>
+                                {% for d in distritos_envio %}
+                                <option value="{{ d.id }}"
+                                        {% localize off %}data-express="{{ d.costo_delivery_express|floatformat:2 }}"
+                                        data-24h="{{ d.costo_delivery_24h|floatformat:2 }}"{% endlocalize %}>
+                                    {{ d.nombre }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <small class="form-text text-muted">
+                                El costo de envío se actualizará según el distrito y el tipo de entrega seleccionado.
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- Dirección de envío (solo visible si eligió envío a domicilio). Campos required se activan por JS. -->
+                    <div id="shipping-form" class="form-section" style="display: none;">
+                        <h3>Dirección de envío</h3>
+                        <p class="text-muted small">Usaremos los nombres y teléfono que indicaste arriba.</p>
+                        <div class="form-group">
+                            <label for="country">País</label>
+                            <select id="country" name="country">
+                                <option value="PE" selected>Perú</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dni">DNI / RUC</label>
+                            <input type="text" id="dni" name="dni" placeholder="DNI o RUC">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Dirección</label>
+                            <input type="text" id="address" name="address" placeholder="Dirección completa">
+                        </div>
+                        <div class="form-row-3">
+                            <div class="form-group">
+                                <label for="province">Provincia</label>
+                                <input type="text" id="province" name="province" placeholder="Ej. Lima">
+                            </div>
+                            <div class="form-group">
+                                <label for="department">Departamento</label>
+                                <select id="department" name="department">
+                                    <option value="">Seleccionar departamento</option>
+                                    <option value="lima" selected>Lima (Metropolitana)</option>
+                                    <option value="arequipa">Arequipa</option>
+                                    <option value="cusco">Cusco</option>
+                                    <option value="la-libertad">La Libertad</option>
+                                    <option value="piura">Piura</option>
+                                    <option value="lambayeque">Lambayeque</option>
+                                    <option value="junin">Junín</option>
+                                    <option value="cajamarca">Cajamarca</option>
+                                    <option value="puno">Puno</option>
+                                    <option value="ancash">Áncash</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="district">Distrito</label>
+                                <input type="text" id="district" name="district" placeholder="Distrito">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pickup Locations (shown when pickup is selected) -->
+                    <div id="pickup-locations" class="form-section" style="display: none;">
+                        <div class="pickup-header">
+                            <h3>Lugares de retiro</h3>
+                            <p class="pickup-subtitle">Hay 1 sucursal con existencias cerca de ti</p>
+                            <a href="#" class="change-location-link">Cambiar lugar</a>
+                        </div>
+                        <div class="pickup-location-card">
+                            <div class="pickup-location-info">
+                                <h4 class="pickup-location-name">Cal. Rio Ramis Nro. 430 Urb. Canto Rey</h4>
+                                <p class="pickup-location-address">Et. Dos Lima - Lima - San Juan de Lurigancho</p>
+                                <p class="pickup-location-time">Normalmente está listo en 24 horas</p>
+                            </div>
+                            <div class="pickup-location-cost">
+                                <span class="cost-free">GRATIS</span>
+                                <div class="pickup-time-badge">
+                                    <i class="bi bi-clock"></i>
+                                    <span>Retiro en 24 horas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="form-section">
+                        <h3>Método de pago</h3>
+                        <div class="payment-methods">
+                            <div class="payment-option">
+                                <input type="radio" id="yape" name="payment_method" value="yape" checked>
+                                <label for="yape" class="payment-label">
+                                    <div class="payment-icon">
+                                        <i class="bi bi-phone"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <h6>Yape</h6>
+                                        <p>Pago rápido y seguro</p>
+                                    </div>
+                                </label>
+                            </div>
+                            
+                            <div class="payment-option">
+                                <input type="radio" id="plin" name="payment_method" value="plin">
+                                <label for="plin" class="payment-label">
+                                    <div class="payment-icon">
+                                        <i class="bi bi-phone"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <h6>Plin</h6>
+                                        <p>Pago inmediato con Plin</p>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <div class="payment-option">
+                                <input type="radio" id="bank_transfer" name="payment_method" value="bank_transfer">
+                                <label for="bank_transfer" class="payment-label">
+                                    <div class="payment-icon">
+                                        <i class="bi bi-bank"></i>
+                                    </div>
+                                    <div class="payment-info">
+                                        <h6>Transferencia Bancaria</h6>
+                                        <p>Pago directo a cuenta bancaria</p>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Yape Payment Details -->
+                    <div id="yape-payment" class="yape-payment-section">
+                        <h3>Pago con Yape</h3>
+                        <div class="yape-qr">
+                            <img src="{% if qr_yape_url %}{{ qr_yape_url }}{% else %}{% url 'core:qr_yape' %}{% endif %}" alt="QR Code Yape">
+                        </div>
+                        <div class="yape-info">
+                            <div class="yape-info-item">
+                                <span>Número de Yape:</span>
+                                <span>964 530 887</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>Nombre:</span>
+                                <span>Arnol Joel Flores Palacios</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>Monto a pagar:</span>
+                                <span>S/ {{ total|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction_code">Código de transacción</label>
+                            <input type="text" id="transaction_code" name="transaction_code" placeholder="Ingresa el código de tu comprobante">
+                        </div>
+                    </div>
+
+                    <!-- Plin Payment Details -->
+                    <div id="plin-payment" class="yape-payment-section" style="display: none;">
+                        <h3>Pago con Plin</h3>
+                        <div class="yape-qr">
+                            <img src="{% if qr_plin_url %}{{ qr_plin_url }}{% else %}{% url 'core:qr_plin' %}{% endif %}" alt="QR Code Plin">
+                        </div>
+                        <div class="yape-info">
+                            <div class="yape-info-item">
+                                <span>Número de Plin:</span>
+                                <span>964 530 887</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>Nombre:</span>
+                                <span>Arnol Joel Flores Palacios</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>Monto a pagar:</span>
+                                <span>S/ {{ total|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Details -->
+                    <div id="bank_transfer-payment" class="yape-payment-section" style="display: none;">
+                        <h3>Transferencia Bancaria</h3>
+                        <div class="yape-info">
+                            <div class="yape-info-item">
+                                <span>Nombre (titular):</span>
+                                <span>Arnol Joel Flores Palacios</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>Cuenta Simple Soles (Interbank):</span>
+                                <span>0913324540030</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>CCI Interbank:</span>
+                                <span>00309101332454003063</span>
+                            </div>
+                            <div class="yape-info-item">
+                                <span>Total a transferir:</span>
+                                <span>S/ {{ total|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="checkout-button">
+                        Completar pedido
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="LoadingShellOrderSummary">
+            <div class="LoadingShellOrderSummaryContent">
+                <h2 class="order-summary-title">Resumen del pedido</h2>
+                
+                <div class="LoadingShellLineItems">
+                    {% for item in items %}
+                    <div class="LoadingShellLine">
+                        <div class="LoadingShellLineImageWrapper">
+                            <div class="LoadingShellLineImage">
+                                {% if item.producto.imagenes.exists %}
+                                    <img src="{{ item.producto.imagenes.first.imagen.url }}" alt="{{ item.producto.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% else %}
+                                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=60&h=60&fit=crop&crop=center" alt="{{ item.producto.nombre }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                {% endif %}
+                            </div>
+                            <div class="LoadingShellLineQuantity">{{ item.cantidad }}</div>
+                        </div>
+                        <div class="LoadingShellLineContent">
+                            <div class="BlockStack BlockStack--spacing-small500">
+                                <span class="Text Text--size-small">{{ item.producto.nombre }}</span>
+                                <span class="Text Text--size-small Text--appearance-subdued">{{ item.producto.categoria.nombre }}</span>
+                            </div>
+                        </div>
+                        <div class="LoadingShellLinePrice">
+                            <span class="Text Text--size-small">S/ {{ item.subtotal }}</span>
+                            <a href="{% url 'core:remover_del_carrito' item.id %}?next=checkout" class="checkout-remove-item" title="Quitar del pedido">Quitar</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="Divider"></div>
+
+                <div class="BlockStack BlockStack--spacing-small100">
+                    <div class="InlineStack InlineStack--spacing-base InlineStack--block-alignment-start InlineStack--inline-alignment-spaceBetween">
+                        <span class="Text Text--size-small">Subtotal</span>
+                        <span class="Text Text--size-small">S/ {{ subtotal|floatformat:2 }}</span>
+                    </div>
+                    <div class="InlineStack InlineStack--spacing-base InlineStack--block-alignment-start InlineStack--inline-alignment-spaceBetween">
+                        <span class="Text Text--size-small">Envío</span>
+                        <span class="Text Text--size-small" id="shipping-cost">S/ 0.00</span>
+                    </div>
+                    <div class="InlineStack InlineStack--spacing-base InlineStack--block-alignment-start InlineStack--inline-alignment-spaceBetween summary-total">
+                        <span class="Text Text--size-large">Total</span>
+                        <span class="Text Text--size-large" id="total-cost">S/ {{ total|floatformat:2 }}</span>
+                    </div>
+                </div>
+
+                <!-- Opcional: Enviar como regalo / a otra persona -->
+                <div class="Divider mt-3"></div>
+                <div class="form-section mt-3" style="padding: 1.25rem; box-shadow: none;">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" id="gift_toggle">
+                        <label class="form-check-label" for="gift_toggle">
+                            ¿Es un regalo o se enviará a otra persona?
+                        </label>
+                    </div>
+
+                    <div id="gift_fields" style="display: none;">
+                        <div class="mb-2">
+                            <label for="gift_from" class="form-label">De parte de</label>
+                            <input type="text" class="form-control" id="gift_from" name="gift_from" placeholder="Tu nombre">
+                        </div>
+                        <div class="mb-2">
+                            <label for="gift_to" class="form-label">Para</label>
+                            <input type="text" class="form-control" id="gift_to" name="gift_to" placeholder="Nombre de la persona que recibirá el pedido">
+                        </div>
+                        <div class="mb-2">
+                            <label for="gift_phone" class="form-label">Celular de la persona de destino</label>
+                            <input type="tel" class="form-control" id="gift_phone" name="gift_phone" placeholder="Celular de contacto del destinatario">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login/Register Modal -->
+<div id="authModal" class="auth-modal" style="display: none;">
+    <div class="auth-modal-content">
+        <div class="auth-modal-header">
+            <h3>Iniciar Sesión / Registrarse</h3>
+            <button type="button" class="auth-modal-close" onclick="closeAuthModal()">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        <div class="auth-modal-body">
+            <div class="auth-tabs">
+                <button type="button" class="auth-tab active" onclick="switchTab('login')">Iniciar Sesión</button>
+                <button type="button" class="auth-tab" onclick="switchTab('register')">Registrarse</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="login_email">Email</label>
+                    <input type="email" id="login_email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login_password">Contraseña</label>
+                    <input type="password" id="login_password" name="password" required>
+                </div>
+                <button type="submit" class="auth-submit-btn">Iniciar Sesión</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="register_first_name">Nombres</label>
+                    <input type="text" id="register_first_name" name="first_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register_last_name">Apellidos</label>
+                    <input type="text" id="register_last_name" name="last_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register_email">Email</label>
+                    <input type="email" id="register_email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register_phone">Teléfono</label>
+                    <input type="tel" id="register_phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="register_password1">Contraseña</label>
+                    <input type="password" id="register_password1" name="password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="register_password2">Confirmar Contraseña</label>
+                    <input type="password" id="register_password2" name="password2" required>
+                </div>
+                <button type="submit" class="auth-submit-btn">Registrarse</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const deliveryMethods = document.querySelectorAll('input[name="delivery_method"]');
+        const yapePayment = document.getElementById('yape-payment');
+        const plinPayment = document.getElementById('plin-payment');
+        const bankTransferPayment = document.getElementById('bank_transfer-payment');
+        const checkoutForm = document.getElementById('checkout-form');
+        const giftToggle = document.getElementById('gift_toggle');
+        const giftFields = document.getElementById('gift_fields');
+
+        // Payment method toggle
+        paymentMethods.forEach(method => {
+            method.addEventListener('change', function() {
+                if (this.value === 'yape') {
+                    yapePayment.style.display = 'block';
+                    plinPayment.style.display = 'none';
+                    bankTransferPayment.style.display = 'none';
+                } else if (this.value === 'plin') {
+                    yapePayment.style.display = 'none';
+                    plinPayment.style.display = 'block';
+                    bankTransferPayment.style.display = 'none';
+                } else if (this.value === 'bank_transfer') {
+                    yapePayment.style.display = 'none';
+                    plinPayment.style.display = 'none';
+                    bankTransferPayment.style.display = 'block';
+                }
+                updateCheckoutRequiredFields();
+            });
+        });
+
+        // Actualizar required: dirección solo si es envío, código transacción solo si es Yape
+        function updateCheckoutRequiredFields() {
+            const delivery = document.querySelector('input[name="delivery_method"]:checked');
+            const payment = document.querySelector('input[name="payment_method"]:checked');
+            const isShipping = delivery && delivery.value === 'shipping';
+            const isYape = payment && payment.value === 'yape';
+            const shippingIds = ['country', 'dni', 'address', 'province', 'department', 'district'];
+            shippingIds.forEach(function(id) {
+                const el = document.getElementById(id);
+                if (el) { el.required = isShipping; }
+            });
+            const txCode = document.getElementById('transaction_code');
+            if (txCode) { txCode.required = isYape; }
+        }
+
+        // Delivery method toggle
+        deliveryMethods.forEach(method => {
+            method.addEventListener('change', function() {
+                const shippingForm = document.getElementById('shipping-form');
+                const shippingOptionsSection = document.getElementById('shipping-options');
+                const pickupLocations = document.getElementById('pickup-locations');
+                
+                if (this.value === 'shipping') {
+                    shippingForm.style.display = 'block';
+                    shippingOptionsSection.style.display = 'block';
+                    pickupLocations.style.display = 'none';
+                    toggleShippingDistrict();
+                    updateShippingCost();
+                } else if (this.value === 'pickup') {
+                    shippingForm.style.display = 'none';
+                    shippingOptionsSection.style.display = 'none';
+                    pickupLocations.style.display = 'block';
+                    toggleShippingDistrict();
+                    updateShippingCost();
+                }
+                updateCheckoutRequiredFields();
+            });
+        });
+
+        // Shipping options toggle
+        const shippingOptions = document.querySelectorAll('input[name="shipping_option"]');
+        shippingOptions.forEach(option => {
+            option.addEventListener('change', function() {
+                toggleShippingDistrict();
+                updateShippingCost();
+            });
+        });
+
+        // Cambio de distrito
+        const districtSelect = document.getElementById('shipping_district');
+        if (districtSelect) {
+            districtSelect.addEventListener('change', function() {
+                // Al cambiar el distrito, actualizamos costo de envío
+                updateShippingCost();
+                // Y sincronizamos automáticamente los campos de dirección
+                syncAddressWithDistrict();
+            });
+        }
+
+        // Initialize shipping controls on page load
+        toggleShippingDistrict();
+        updateShippingCost();
+        updateCheckoutRequiredFields();
+
+        // Toggle campos de regalo
+        if (giftToggle && giftFields) {
+            giftToggle.addEventListener('change', function() {
+                giftFields.style.display = this.checked ? 'block' : 'none';
+            });
+        }
+        
+        // Form submission: actualizar required según método, validar y enviar
+        checkoutForm.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.checkout-button');
+            updateCheckoutRequiredFields();
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                return;
+            }
+            e.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Procesando...';
+            this.submit();
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleLogin();
+        });
+
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleRegister();
+        });
+    });
+
+    // Modal functions
+    function showLoginModal() {
+        document.getElementById('authModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Asegurar que el formulario de login esté visible por defecto
+        switchTab('login');
+    }
+
+    function closeAuthModal() {
+        document.getElementById('authModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function switchTab(tab) {
+        console.log('Switching to tab:', tab); // Debug
+        const loginTab = document.querySelector('.auth-tab[onclick="switchTab(\'login\')"]');
+        const registerTab = document.querySelector('.auth-tab[onclick="switchTab(\'register\')"]');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+
+        if (tab === 'login') {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.classList.add('active');
+            loginForm.style.display = 'block';
+            registerForm.classList.remove('active');
+            registerForm.style.display = 'none';
+        } else {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.classList.add('active');
+            registerForm.style.display = 'block';
+            loginForm.classList.remove('active');
+            loginForm.style.display = 'none';
+        }
+        console.log('Login form display:', loginForm.style.display); // Debug
+        console.log('Register form display:', registerForm.style.display); // Debug
+    }
+
+    function handleLogin() {
+        const email = document.getElementById('login_email').value;
+        const password = document.getElementById('login_password').value;
+        
+        // Crear formulario temporal para enviar datos como form-data
+        const formData = new FormData();
+        formData.append('username', email); // Django auth usa username
+        formData.append('password', password);
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        
+        fetch('/login/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeAuthModal();
+                alert(data.message);
+                // Reload page to update user state
+                window.location.reload();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al iniciar sesión. Verifica tus credenciales.');
+        });
+    }
+
+    function handleRegister() {
+        const firstName = document.getElementById('register_first_name').value;
+        const lastName = document.getElementById('register_last_name').value;
+        const email = document.getElementById('register_email').value;
+        const phone = document.getElementById('register_phone').value;
+        const password1 = document.getElementById('register_password1').value;
+        const password2 = document.getElementById('register_password2').value;
+        
+        if (password1 !== password2) {
+            alert('Las contraseñas no coinciden');
+            return;
+        }
+        
+        // Crear formulario temporal para enviar datos como form-data
+        const formData = new FormData();
+        formData.append('first_name', firstName);
+        formData.append('last_name', lastName);
+        formData.append('email', email);
+        formData.append('phone', phone);
+        formData.append('password1', password1);
+        formData.append('password2', password2);
+        formData.append('newsletter', false); // Newsletter por defecto en false
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        
+        fetch('/register/', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                closeAuthModal();
+                alert(data.message);
+                // Cambiar a tab de login
+                switchTab('login');
+                // Pre-llenar email en login
+                document.getElementById('login_email').value = email;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al registrarse');
+        });
+    }
+
+    function loginWithGoogle() {
+        // Redirect to Google OAuth using allauth
+        window.location.href = '/accounts/google/login/?next=' + encodeURIComponent(window.location.pathname);
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('authModal');
+        if (e.target === modal) {
+            closeAuthModal();
+        }
+    });
+
+    // Mostrar/ocultar selector de distrito según opción de envío
+    function toggleShippingDistrict() {
+        const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked');
+        const selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
+        const wrapper = document.getElementById('shipping-district-wrapper');
+
+        if (
+            deliveryMethod &&
+            deliveryMethod.value === 'shipping' &&
+            selectedShippingOption &&
+            (selectedShippingOption.value === 'lima_metropolitana' || selectedShippingOption.value === 'envio_express')
+        ) {
+            wrapper.style.display = 'block';
+        } else if (wrapper) {
+            wrapper.style.display = 'none';
+        }
+    }
+
+    // Sincronizar automáticamente departamento / provincia / distrito
+    // según el distrito seleccionado para Lima Metropolitana / Express
+    function syncAddressWithDistrict() {
+        const districtSelect = document.getElementById('shipping_district');
+        const provinceInput = document.getElementById('province');
+        const departmentSelect = document.getElementById('department');
+        const districtInput = document.getElementById('district');
+
+        if (!districtSelect || !provinceInput || !departmentSelect || !districtInput) {
+            return;
+        }
+
+        if (!districtSelect.value) {
+            // Si se deselecciona, no sobreescribimos lo que el usuario haya escrito
+            return;
+        }
+
+        const selectedOption = districtSelect.options[districtSelect.selectedIndex];
+        const distritoNombre = selectedOption ? selectedOption.textContent.trim() : '';
+
+        // Para todos los distritos de esta tabla asumimos Lima Metropolitana
+        // Departamento: "lima" (valor del select)
+        // Provincia: "Lima"
+        // Distrito: nombre del distrito seleccionado
+        if (departmentSelect) {
+            departmentSelect.value = 'lima';
+        }
+        if (provinceInput) {
+            provinceInput.value = 'Lima';
+        }
+        if (districtInput && distritoNombre) {
+            districtInput.value = distritoNombre;
+        }
+    }
+
+    // Function to update shipping cost and total
+    function updateShippingCost() {
+        const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked');
+        const shippingCostElement = document.getElementById('shipping-cost');
+        const totalCostElement = document.getElementById('total-cost');
+        const districtSelect = document.getElementById('shipping_district');
+        const priceLimaElement = document.getElementById('price_lima_metropolitana');
+        const priceExpressElement = document.getElementById('price_envio_express');
+        // Siempre trabajamos con decimales (2) para no perder precisión
+        let shippingCost = 0.00;
+        let shippingText = 'Gratis';
+        
+        if (deliveryMethod && deliveryMethod.value === 'pickup') {
+            // Recojo en oficina - gratis
+            shippingCost = 0;
+            shippingText = 'Gratis';
+        } else if (deliveryMethod && deliveryMethod.value === 'shipping') {
+            // Envío a domicilio - obtener costo de la opción seleccionada
+            const selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
+            if (selectedShippingOption) {
+                switch(selectedShippingOption.value) {
+                    case 'lima_metropolitana':
+                        if (districtSelect && districtSelect.value) {
+                            const opt = districtSelect.options[districtSelect.selectedIndex];
+                            // Valores desde `DistritoEnvio`; normalizar coma decimal para locale (ej. 19,90 → 19.90)
+                            const costo24hRaw = opt.getAttribute('data-24h');
+                            const costo24h = costo24hRaw ? parseFloat(String(costo24hRaw).replace(',', '.')) : 0.00;
+                            shippingCost = costo24h;
+                            const costo24hTexto = shippingCost.toFixed(2);
+                            shippingText = `S/ ${costo24hTexto}`;
+                            if (priceLimaElement) {
+                                priceLimaElement.textContent = `S/ ${costo24hTexto}`;
+                            }
+                        } else {
+                            shippingCost = 0.00;
+                            shippingText = 'Selecciona un distrito';
+                            if (priceLimaElement) {
+                                priceLimaElement.textContent = 'S/ 0.00';
+                            }
+                        }
+                        break;
+                    case 'provincia_agencia':
+                        shippingCost = 0.00;
+                        shippingText = 'Pago destino';
+                        break;
+                    case 'provincia_domicilio':
+                        shippingCost = 0.00;
+                        shippingText = 'Pago destino';
+                        break;
+                    case 'envio_estandar':
+                        // Si en el futuro se quiere usar la tabla, se puede leer de un data-attribute
+                        shippingCost = 15.00;
+                        shippingText = `S/ ${shippingCost.toFixed(2)}`;
+                        break;
+                    case 'envio_express':
+                        if (districtSelect && districtSelect.value) {
+                            const optExpress = districtSelect.options[districtSelect.selectedIndex];
+                            // Valor exacto desde `DistritoEnvio.costo_delivery_express`; normalizar coma decimal
+                            const costoExpressRaw = optExpress.getAttribute('data-express');
+                            const costoExpress = costoExpressRaw ? parseFloat(String(costoExpressRaw).replace(',', '.')) : 0.00;
+                            shippingCost = costoExpress;
+                            const costoExpressTexto = shippingCost.toFixed(2);
+                            shippingText = `S/ ${costoExpressTexto}`;
+                            if (priceExpressElement) {
+                                priceExpressElement.textContent = `S/ ${costoExpressTexto}`;
+                            }
+                        } else {
+                            shippingCost = 0.00;
+                            shippingText = 'Selecciona un distrito';
+                            if (priceExpressElement) {
+                                priceExpressElement.textContent = 'S/ 0.00';
+                            }
+                        }
+                        break;
+                    default:
+                        // Fallback mínimo, manteniendo siempre 2 decimales
+                        shippingCost = 12.00;
+                        shippingText = `S/ ${shippingCost.toFixed(2)}`;
+                }
+            } else {
+                // Si no hay opción seleccionada, dejamos costo 0 para forzar selección de distrito/opción
+                shippingCost = 0.00;
+                shippingText = 'Selecciona una opción de envío';
+            }
+        }
+        
+        // Actualizar costo de envío en el resumen
+        if (shippingCostElement) {
+            shippingCostElement.textContent = shippingText;
+        }
+        
+        // Actualizar campos ocultos para envío al backend
+        const shippingCostValue = document.getElementById('shipping_cost_value');
+        const shippingOptionValue = document.getElementById('shipping_option_value');
+        
+        if (shippingCostValue) {
+            // Enviar siempre con dos decimales al backend
+            shippingCostValue.value = shippingCost.toFixed(2);
+        }
+        
+        if (shippingOptionValue) {
+            if (deliveryMethod && deliveryMethod.value === 'pickup') {
+                shippingOptionValue.value = 'pickup';
+            } else if (deliveryMethod && deliveryMethod.value === 'shipping') {
+                const selectedShippingOption = document.querySelector('input[name="shipping_option"]:checked');
+                shippingOptionValue.value = selectedShippingOption ? selectedShippingOption.value : 'lima_metropolitana';
+            }
+        }
+        
+        // Calcular nuevo total (precios ya incluyen IGV)
+        // Usamos siempre 2 decimales del subtotal para no perder céntimos
+        const subtotal = parseFloat('{{ subtotal|floatformat:2|default:"0.00" }}') || 0.00;
+        const newTotal = subtotal + shippingCost;
+        
+        // Actualizar total en el resumen
+        if (totalCostElement) {
+            totalCostElement.textContent = `S/ ${newTotal.toFixed(2)}`;
+        }
+        
+        console.log('Shipping cost updated:', shippingCost, 'Total:', newTotal); // Debug
+    }
+</script>
+{% endblock %}

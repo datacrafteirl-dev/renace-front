@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}Iniciar Sesión - Renace{% endblock %}
+{% block body_class %}social-login-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <div class="login-icon mb-3">
+                            <i class="bi bi-person-circle" style="font-size: 4rem; color: #e91e63;"></i>
+                        </div>
+                        <h2 class="fw-bold" style="color: #e91e63;">Iniciar Sesión</h2>
+                        <p class="text-muted">Conecta con tu cuenta de {{ provider.name }}</p>
+                    </div>
+
+                    <div class="alert alert-info border-0 bg-light">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-info-circle-fill me-3 fs-4" style="color: #e91e63;"></i>
+                            <div>
+                                <strong>Estás a punto de iniciar sesión</strong><br>
+                                <small>Usando una cuenta externa desde {{ provider.name }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'socialaccount_login' provider.id %}" 
+                           class="btn btn-lg d-flex align-items-center justify-content-center"
+                           style="background-color: #e91e63; border-color: #e91e63; color: white;">
+                            <i class="bi bi-{{ provider.id }} me-2 fs-5"></i>
+                            Continuar con {{ provider.name }}
+                        </a>
+                        
+                        <a href="{% url 'core:login' %}" 
+                           class="btn btn-outline-secondary btn-lg d-flex align-items-center justify-content-center">
+                            <i class="bi bi-arrow-left me-2"></i>
+                            Volver al login
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <small class="text-muted">
+                            Al continuar, aceptas nuestros términos de servicio y política de privacidad
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.social-login-page {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.card {
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e91e63;
+}
+
+.btn-lg {
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-lg:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+}
+
+.btn-outline-secondary {
+    border-radius: 10px;
+    padding: 12px 24px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+</style>
+{% endblock %}

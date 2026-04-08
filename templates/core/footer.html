@@ -1,0 +1,200 @@
+{% load static %}
+<style>
+.brand-slogan {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #c62076;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(198, 32, 118, 0.1) 0%, rgba(198, 32, 118, 0.05) 100%);
+  border-radius: 12px;
+  border: 1px solid rgba(198, 32, 118, 0.2);
+  box-shadow: 0 4px 15px rgba(198, 32, 118, 0.1);
+  transition: all 0.3s ease;
+}
+
+.brand-slogan:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(198, 32, 118, 0.2);
+}
+
+.social-icons a {
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  padding: 8px;
+}
+
+.social-icons a:hover {
+  transform: translateY(-3px) scale(1.1);
+  background: linear-gradient(135deg, #c62076, #c62076);
+  color: white !important;
+}
+
+.footer-logo {
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+  background: transparent !important;
+}
+
+.footer-logo:hover {
+  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+  transform: scale(1.05);
+}
+</style>
+<footer id="footer" class="footer light-background">
+  <div class="footer-main">
+    <div class="container">
+      <div class="row gy-3">
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget footer-about">
+            <p class="brand-slogan">
+              ✨ <strong>
+                {% if configuracion_sitio and configuracion_sitio.descripcion %}
+                  {{ configuracion_sitio.descripcion }}
+                {% else %}
+                  Cuando cuidas tu esencia, tu presencia se vuelve inolvidable.
+                {% endif %}
+              </strong> ✨
+            </p>
+            <div class="social-links mt-4">
+              <h5>Conéctate con Nosotros</h5>
+              <div class="social-icons">
+                <a href="https://www.facebook.com/share/1DFKfnjoiB/" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                <a href="https://www.instagram.com/renaceia27?igsh=OXZkZDRmMzVubmdr" target="_blank" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                <a href="https://www.tiktok.com/@renaceia?_t=ZS-909KBEs3VQ2&_r=1" target="_blank" aria-label="TikTok"><i class="bi bi-tiktok"></i></a>
+                <a href="#" aria-label="Linkedin"><i class="bi bi-linkedin"></i></a>
+              </div>
+              
+          <a href="{% url 'core:libro_reclamaciones' %}"><img src="{% static 'assets/img/libro-reclamaciones.png' %}" alt="Libro de Reclamaciones" style="width: 30%; height: auto;"></a>
+            </div>
+          </div>
+       
+        </div>
+
+        <div class="col-lg-2 col-md-6 col-sm-6">
+          <div class="footer-widget">
+            <h4>Top Subcategorías</h4>
+            <ul class="footer-links">
+              {% for subcategoria in top_subcategorias %}
+                <li>
+                  <a href="{% url 'core:catalogo' %}?subcategoria={{ subcategoria.id }}">{{ subcategoria.nombre }}</a>
+                </li>
+              {% empty %}
+                <li><span>Sin subcategorías</span></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-6 col-sm-6">
+          <div class="footer-widget">
+            <h4>Top Marcas</h4>
+            <ul class="footer-links">
+              {% for marca in top_marcas %}
+                <li>
+                  <a href="{% url 'core:catalogo' %}?marca={{ marca.id }}">{{ marca.nombre }}</a>
+                </li>
+              {% empty %}
+                <li><span>Sin marcas</span></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-6">
+          <div class="footer-widget">
+            <h4>Atención al cliente</h4>
+            <ul class="footer-links">
+              <li><a href="{% url 'core:about' %}">Nosotros</a></li>
+              <li><a href="{% url 'core:contact' %}">Contáctanos</a></li>
+              <li><a href="{% url 'core:privacy' %}">Política de privacidad</a></li>
+              <li><a href="{% url 'core:politicas_devolucion_reembolso' %}">Políticas de devolución y reembolso</a></li>
+              <li><a href="{% url 'core:informacion_envio' %}">Políticas de envío</a></li>
+              <li><a href="{% url 'core:libro_reclamaciones' %}">Libro de reclamaciones</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <div class="footer-widget">
+            <a href="{% url 'core:home' %}" class="logo">
+              <img src="{% static 'assets/img/nuevo_logo.png' %}" height="81" width="276" class="logo-img footer-logo">
+            </a>
+            <h5>Contáctanos</h5>
+            <div class="footer-contact">
+              <div class="contact-item">
+                <i class="bi bi-geo-alt"></i>
+                <span>
+                  {% if configuracion_sitio and configuracion_sitio.direccion %}
+                    {{ configuracion_sitio.direccion }}
+                  {% else %}
+                    Cal. Rio Ramis Nro. 430 Urb. Canto Rey Et. Dos Lima - Lima - San Juan de Lurigancho
+                  {% endif %}
+                </span>
+              </div>
+              <div class="contact-item">
+                <i class="bi bi-telephone"></i>
+                <span>
+                  {% if configuracion_sitio and configuracion_sitio.telefono_contacto %}
+                    {{ configuracion_sitio.telefono_contacto }}
+                  {% else %}
+                    +51 964 530 887 / +51 969 735 748
+                  {% endif %}
+                </span>
+              </div>
+              <div class="contact-item" style="color: #ffffff !important;">
+                <i class="bi bi-envelope"></i>
+                <span>
+                  {% if configuracion_sitio and configuracion_sitio.email_contacto %}
+                    <a href="mailto:{{ configuracion_sitio.email_contacto }}">{{ configuracion_sitio.email_contacto }}</a>
+                  {% else %}
+                    <a href="mailto:info@renace.com.pe">info@renace.com.pe</a>
+                  {% endif %}
+                </span>
+              </div>
+              <div class="contact-item">
+                <i class="bi bi-clock"></i>
+                <span>
+                  {% if configuracion_sitio and configuracion_sitio.horario_atencion %}
+                    {{ configuracion_sitio.horario_atencion }}
+                  {% else %}
+                    Horario: lunes a domingo de 8:20 am a 10:20 pm
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="row gy-3 align-items-center">
+        <div class="col-lg-6 col-md-12">
+          <div class="copyright">
+            <p>© <span>Copyright</span> <strong class="sitename">Renace</strong>. Todos los Derechos Reservados.</p>
+          </div>
+        </div>
+        
+        
+        <div class="col-lg-6 col-md-12">
+          <div class="d-flex flex-wrap justify-content-lg-end justify-content-center align-items-center gap-4">
+            <div class="payment-methods">
+              <div class="payment-icons">
+                <i class="bi bi-phone" aria-label="Yape"></i>
+                <i class="bi bi-bank" aria-label="Transferencia Bancaria"></i>
+              </div>
+            </div>
+            
+            <div class="legal-links">
+              <a href="{% url 'core:tos' %}">Términos</a>
+              <a href="{% url 'core:privacy' %}">Privacidad</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

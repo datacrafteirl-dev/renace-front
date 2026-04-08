@@ -1,0 +1,352 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>{% block title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú. Base, labiales, sombras, cremas faciales y más.{% endblock %}">
+  <meta name="keywords" content="{% block meta_keywords %}maquillaje importado, productos de belleza, cosméticos importados, base de maquillaje, labiales, sombras de ojos, cremas faciales, serums, máscara de pestañas, tienda online belleza, maquillaje Perú, cosméticos online, belleza importada{% endblock %}">
+  <meta name="author" content="Renace - Tienda de Maquillaje y Belleza">
+  <meta name="language" content="es">
+  <meta name="geo.region" content="PE">
+  <meta name="geo.country" content="Perú">
+  <meta name="geo.placename" content="Lima, Perú">
+  <meta name="distribution" content="global">
+  <meta name="rating" content="general">
+  <meta name="revisit-after" content="7 days">
+  <meta name="expires" content="never">
+  <meta name="cache-control" content="public">
+  <meta name="theme-color" content="#c62076">
+  <meta name="msapplication-TileColor" content="#c62076">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Renace Belleza">
+
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  
+  <!-- SEO específico para Perú -->
+  <meta name="geo.region" content="PE-LIM">
+  <meta name="geo.placename" content="Lima, Perú">
+  <meta name="geo.position" content="-12.0464;-77.0428">
+  <meta name="ICBM" content="-12.0464, -77.0428">
+  <meta name="DC.title" content="{% block dc_title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}">
+  <meta name="DC.creator" content="Renace - Tienda de Maquillaje y Belleza">
+  <meta name="DC.subject" content="Maquillaje, Productos de Belleza, Cosméticos Importados, Tienda Online">
+  <meta name="DC.description" content="{% block dc_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú.{% endblock %}">
+  <meta name="DC.publisher" content="Renace">
+  <meta name="DC.contributor" content="Renace">
+  <meta name="DC.date" content="{% now 'Y-m-d' %}">
+  <meta name="DC.type" content="Text">
+  <meta name="DC.format" content="text/html">
+  <meta name="DC.identifier" content="{% block dc_identifier %}{{ request.build_absolute_uri }}{% endblock %}">
+  <meta name="DC.source" content="{% block dc_source %}{{ request.build_absolute_uri }}{% endblock %}">
+  <meta name="DC.language" content="es">
+  <meta name="DC.relation" content="{% block dc_relation %}{{ request.build_absolute_uri }}{% endblock %}">
+  <meta name="DC.coverage" content="Perú">
+  <meta name="DC.rights" content="Copyright Renace">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú.{% endblock %}">
+  <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'assets/img/logo-header.png' %}{% endblock %}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Renace - Tienda de Maquillaje y Belleza">
+  <meta property="og:locale" content="es_PE">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="{% block twitter_url %}{{ request.build_absolute_uri }}{% endblock %}">
+  <meta property="twitter:title" content="{% block twitter_title %}Renace - Maquillaje y Productos de Belleza Importados{% endblock %}">
+  <meta property="twitter:description" content="{% block twitter_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas.{% endblock %}">
+  <meta property="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'assets/img/logo-header.png' %}{% endblock %}">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/img/favicon/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/img/favicon/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/img/favicon/favicon-16x16.png' %}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'assets/img/favicon/android-chrome-192x192.png' %}">
+  <link rel="icon" type="image/png" sizes="512x512" href="{% static 'assets/img/favicon/android-chrome-512x512.png' %}">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendors/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendors/drift-zoom/drift-basic.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Renace",
+    "description": "Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'assets/img/logo-header.png' %}",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'assets/img/logo-header.png' %}",
+    "telephone": "+51-XXX-XXX-XXX",
+    "email": "info@renace.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PE",
+      "addressRegion": "Lima",
+      "addressLocality": "Lima",
+      "postalCode": "15001"
+    },
+    "sameAs": [
+      "https://www.facebook.com/renacebelleza",
+      "https://www.instagram.com/renacebelleza",
+      "https://www.tiktok.com/@renacebelleza"
+    ],
+    "foundingDate": "2024",
+    "slogan": "Tu belleza, nuestra pasión",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Perú"
+    },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Catálogo de Productos de Belleza",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Maquillaje",
+            "description": "Productos de maquillaje importados de alta calidad"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Cuidado Facial",
+            "description": "Cremas, serums y productos para el cuidado facial"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Cuidado Corporal",
+            "description": "Lociones, aceites y productos para el cuidado corporal"
+          }
+        }
+      ]
+    }
+  }
+  </script>
+
+  {% block extra_css %}{% endblock %}
+  <style>
+    /* Botón flotante WhatsApp (por encima del scroll-top) */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 72px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: #25d366;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
+      z-index: 9998;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .whatsapp-float:hover {
+      color: #fff;
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    }
+    @media (max-width: 576px) {
+      .whatsapp-float { bottom: 68px; right: 20px; width: 52px; height: 52px; font-size: 26px; }
+    }
+  </style>
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+
+  {% block header %}{% endblock %}
+
+  <!-- Sistema de mensajes personalizado -->
+  {% include 'core/messages.html' %}
+
+  {% block content %}{% endblock %}
+
+  {% block footer %}{% endblock %}
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Botón flotante WhatsApp (solo sitio público) -->
+  {% if 'admin-panel' not in request.path %}
+  <a href="https://wa.me/51923820266" target="_blank" rel="noopener noreferrer" class="whatsapp-float" title="Chatear por WhatsApp" aria-label="Contactar por WhatsApp">
+    <i class="bi bi-whatsapp"></i>
+  </a>
+  {% endif %}
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendors/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendors/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'vendors/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendors/aos/aos.js' %}"></script>
+  <script src="{% static 'vendors/imagesloaded/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendors/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendors/drift-zoom/Drift.min.js' %}"></script>
+  <script src="{% static 'vendors/purecounter/purecounter_vanilla.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <!-- Additional Structured Data for Website -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Renace - Tienda de Maquillaje y Belleza",
+    "url": "{{ request.scheme }}://{{ request.get_host }}",
+    "description": "Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú.",
+    "inLanguage": "es-PE",
+    "copyrightYear": "2024",
+    "creator": {
+      "@type": "Organization",
+      "name": "Renace"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "{{ request.scheme }}://{{ request.get_host }}/buscar?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- BreadcrumbList Schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "{{ request.scheme }}://{{ request.get_host }}"
+      }
+    ]
+  }
+  </script>
+
+  {% block extra_js %}{% endblock %}
+
+  <!-- Global Cart JavaScript -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Manejar todos los formularios de agregar al carrito
+    const addToCartForms = document.querySelectorAll('form[action*="agregar_al_carrito"]');
+    
+    addToCartForms.forEach(form => {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const url = form.action;
+        
+        // Mostrar loading en el botón
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Agregando...';
+        submitBtn.disabled = true;
+        
+        fetch(url, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Mostrar mensaje de éxito
+            showNotification(data.message, 'success');
+            
+            // Actualizar el carrito en el header
+            updateCartHeader();
+            
+            // Disparar evento personalizado
+            document.dispatchEvent(new CustomEvent('cartUpdated'));
+          } else {
+            showNotification('Error al agregar al carrito', 'error');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showNotification('Error al agregar al carrito', 'error');
+        })
+        .finally(() => {
+          // Restaurar botón
+          submitBtn.innerHTML = originalText;
+          submitBtn.disabled = false;
+        });
+      });
+    });
+  });
+
+  // Función para mostrar notificaciones
+  function showNotification(message, type = 'info') {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remover después de 3 segundos
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.remove();
+      }
+    }, 3000);
+  }
+
+  // Función para actualizar el carrito (definida en header.html)
+  if (typeof updateCartHeader === 'undefined') {
+    function updateCartHeader() {
+      // Esta función se define en header.html
+      console.log('updateCartHeader no está definida');
+    }
+  }
+  </script>
+</body>
+
+</html>

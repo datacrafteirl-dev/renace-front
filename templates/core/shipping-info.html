@@ -1,0 +1,98 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Políticas de Envío - Renace{% endblock %}
+{% block body_class %}shipping-page{% endblock %}
+
+{% block extra_css %}
+<style>
+  .shipping-hero {
+    background: linear-gradient(135deg, #c62076 0%, #b01d69 50%, #981958 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 32px 24px;
+    margin: 24px auto 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .shipping-hero::after {
+    content: '';
+    position: absolute; right: -60px; top: -60px;
+    width: 180px; height: 180px;
+    background: radial-gradient(closest-side, rgba(255,255,255,0.25), rgba(255,255,255,0));
+  }
+  .shipping-card {
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 14px;
+    padding: 22px 20px;
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  }
+  .shipping-content pre {
+    white-space: pre-wrap;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    font-size: 1rem; line-height: 1.65; color: #333; margin: 0;
+  }
+  .shipping-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px; }
+  .btn-soft { border: 1px solid rgba(0,0,0,0.08); background: #fff; color: #333; }
+  .btn-soft:hover { background: #f8f9fa; }
+  @media (max-width: 576px) { .shipping-hero { padding: 22px 18px; } .shipping-card { padding: 18px 14px; } }
+</style>
+{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<section class="container py-4">
+  <div class="shipping-hero">
+    <h1>Políticas de Envío</h1>
+    <p>Alcance nacional e internacional</p>
+  </div>
+
+  <div class="shipping-card mt-3">
+    <div class="shipping-content">
+<pre>
+En ReNafly realizamos envíos a nivel nacional e internacional.
+Una vez completado tu pedido en nuestra tienda online, contamos con un plazo máximo de 24 horas para confirmar la orden y proceder con la gestión del envío.
+Para entregas dentro de la ciudad de Lima, el pedido llegará en un plazo máximo de 3 días hábiles, contados a partir del día siguiente de la confirmación.
+Para provincias del Perú, el tiempo estimado de entrega es de hasta 7 días hábiles, también contados desde la confirmación del pedido.
+Los plazos pueden variar según la disponibilidad del producto en stock.
+El costo de envío no está incluido en el precio de los productos. Este será calculado durante la última etapa del proceso de compra o, si corresponde, coordinado directamente con un asesor de ventas a través de WhatsApp.
+Las entregas se realizan mediante una empresa logística externa, por lo que no es posible garantizar una hora exacta de entrega. El reparto se efectúa dentro del rango horario de 9:00 a.m. a 12:00 p.m.
+Si el cliente elige la opción de recojo en tienda, el pedido podrá ser retirado el mismo día de la compra, siempre que exista stock disponible en el almacén seleccionado. Esta disponibilidad será confirmada al cliente por correo electrónico, llamada telefónica o WhatsApp.
+En caso no se cuente con el stock al momento de la compra, la entrega se realizará en un plazo máximo de 3 días hábiles.
+🕒 Horarios de recojo:
+Lunes a sábado: de 8:30 a.m. a 2:00 p.m. y de 3:00 p.m. a 10:00 p.m.
+Domingos: de 9:00 a.m. a 2:00 p.m.
+📦 La cobertura de nuestros despachos incluye todos los departamentos del territorio nacional. Sin embargo, existen algunas provincias o distritos con acceso limitado. En dichos casos, ReNafly informará al cliente por correo electrónico, llamada telefónica o WhatsApp.
+✅ Es responsabilidad del cliente verificar el estado de los productos al momento de la entrega o recojo. Si alguno presenta daños o defectos, el cliente dispone de un plazo máximo de 5 días calendario desde la recepción del pedido para reportarlo al correo: 📩 info@renace.com.pe
+
+🚚 MÉTODOS DE ENVÍO
+Los pedidos son enviados mediante empresas de transporte externas, seleccionadas en función del destino, tamaño del producto y tiempo estimado de entrega. Habitualmente trabajamos con Shalom, Cargo 1 y Olva Courier para envíos nacionales, y con DHL para envíos internacionales.
+Los precios de los productos publicados en la Tienda Online de ReNafly no incluyen los costos de envío ni el IGV. Estos serán calculados y mostrados en la etapa final del proceso de compra, o bien podrán ser consultados directamente con un asesor de ventas antes de concretar la compra.
+En caso el cliente elija la opción de recojo en tienda, nos comunicaremos por teléfono o correo electrónico para coordinar la fecha y hora de entrega correspondiente.
+La opción de recojo en tienda está disponible exclusivamente en la ciudad de Lima.
+SEGUIMIENTO DEL PEDIDO
+El cliente tiene derecho a consultar en cualquier momento el estado de su pedido, ya sea mediante llamada telefónica o correo electrónico.
+Una vez confirmado el pago del pedido, ReNafly enviará un correo de confirmación con el número de seguimiento asignado por la empresa de transporte (en caso esta lo proporcione). Si el servicio de transporte no genera número de seguimiento, el cliente será informado sobre el estado del envío por correo o llamada telefónica.
+
+COSTOS DE ENVÍO
+Los precios mostrados en los productos no incluyen los gastos de envío.
+El costo del envío será calculado en función del peso, tamaño del producto y la dirección de destino indicada por el cliente.
+Este monto se mostrará en la etapa final del proceso de compra, antes de confirmar el pedido.
+Para visualizar correctamente la tarifa de envío, el cliente deberá seleccionar el distrito de destino durante la compra.
+</pre>
+    </div>
+    <div class="shipping-actions">
+      <button type="button" class="btn btn-soft btn-sm" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="bi bi-arrow-up"></i> Subir</button>
+      <button type="button" class="btn btn-soft btn-sm" onclick="navigator.clipboard.writeText(document.querySelector('.shipping-content pre').innerText)"><i class="bi bi-clipboard"></i> Copiar</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

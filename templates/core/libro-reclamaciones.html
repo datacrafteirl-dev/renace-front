@@ -1,0 +1,102 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Libro de Reclamaciones | Renace - Tienda de Maquillaje y Belleza{% endblock %}
+
+{% block meta_description %}Registre su reclamo o queja a través de nuestro Libro de Reclamaciones. Atención al cliente garantizada en Renace, tu tienda de confianza en maquillaje y belleza.{% endblock %}
+
+{% block meta_keywords %}libro de reclamaciones, reclamos, quejas, atención al cliente, renace, maquillaje, belleza, servicio al cliente{% endblock %}
+
+{% block og_title %}Libro de Reclamaciones | Renace{% endblock %}
+
+{% block og_description %}Registre su reclamo o queja a través de nuestro Libro de Reclamaciones.{% endblock %}
+
+{% block twitter_title %}Libro de Reclamaciones | Renace{% endblock %}
+
+{% block twitter_description %}Registre su reclamo o queja en nuestro Libro de Reclamaciones.{% endblock %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:libro_reclamaciones' %}{% endblock %}
+
+{% block dc_title %}Libro de Reclamaciones | Renace{% endblock %}
+
+{% block dc_description %}Registre su reclamo o queja a través de nuestro Libro de Reclamaciones.{% endblock %}
+
+{% block dc_identifier %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:libro_reclamaciones' %}{% endblock %}
+
+{% block dc_source %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:libro_reclamaciones' %}{% endblock %}
+
+{% block dc_relation %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:libro_reclamaciones' %}{% endblock %}
+
+{% block body_class %}libro-reclamaciones-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<section class="container py-5">
+  <h1 class="mb-4">Libro de Reclamaciones</h1>
+  <p class="text-muted mb-4">Complete el siguiente formulario para registrar su reclamo o queja. Nos pondremos en contacto con usted a la brevedad.</p>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="card mb-4">
+      <div class="card-header"><strong>1. Datos de la persona que presenta el reclamo</strong></div>
+      <div class="card-body row g-3">
+        <div class="col-md-3">{{ form.tipo_documento.label_tag }} {{ form.tipo_documento }}</div>
+        <div class="col-md-3">{{ form.numero_documento.label_tag }} {{ form.numero_documento }}</div>
+        <div class="col-md-3">{{ form.nombre.label_tag }} {{ form.nombre }}</div>
+        <div class="col-md-3">{{ form.apellidos.label_tag }} {{ form.apellidos }}</div>
+        <div class="col-md-4">{{ form.tipo_respuesta.label_tag }} {{ form.tipo_respuesta }}</div>
+        <div class="col-md-4">{{ form.email.label_tag }} {{ form.email }}</div>
+        <div class="col-md-4">{{ form.telefono.label_tag }} {{ form.telefono }}</div>
+        <div class="col-md-6">{{ form.direccion.label_tag }} {{ form.direccion }}</div>
+        <div class="col-md-2">{{ form.departamento.label_tag }} {{ form.departamento }}</div>
+        <div class="col-md-2">{{ form.provincia.label_tag }} {{ form.provincia }}</div>
+        <div class="col-md-2">{{ form.distrito.label_tag }} {{ form.distrito }}</div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header"><strong>2. Información general</strong></div>
+      <div class="card-body row g-3">
+        <div class="col-md-4">{{ form.canal_compra.label_tag }} {{ form.canal_compra }}</div>
+        <div class="col-md-4">{{ form.tipo_comprobante.label_tag }} {{ form.tipo_comprobante }}</div>
+        <div class="col-md-4">{{ form.numero_comprobante.label_tag }} {{ form.numero_comprobante }}</div>
+        <div class="col-md-4">{{ form.bien_contratado.label_tag }} {{ form.bien_contratado }}</div>
+        <div class="col-md-4">{{ form.monto_reclamado.label_tag }} {{ form.monto_reclamado }}</div>
+        <div class="col-md-12">{{ form.descripcion_producto.label_tag }} {{ form.descripcion_producto }}</div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header"><strong>3. Detalle de su reclamo</strong></div>
+      <div class="card-body row g-3">
+        <div class="col-md-4">{{ form.tipo.label_tag }} {{ form.tipo }}</div>
+        <div class="col-md-4">{{ form.motivo.label_tag }} {{ form.motivo }}</div>
+        <div class="col-md-12">{{ form.detalle_reclamo.label_tag }} {{ form.detalle_reclamo }}</div>
+        <div class="col-md-12">{{ form.detalle_pedido.label_tag }} {{ form.detalle_pedido }}</div>
+      </div>
+    </div>
+
+    <div class="form-check mb-3">
+      {{ form.acepta_flujo_transfronterizo }}
+      <label class="form-check-label" for="id_acepta_flujo_transfronterizo">
+        Al enviar este formulario acepto el flujo transfronterizo de mis datos personales, según la Ley de Protección de Datos Personales.
+      </label>
+      {% if form.acepta_flujo_transfronterizo.errors %}
+        <div class="text-danger small">{{ form.acepta_flujo_transfronterizo.errors|striptags }}</div>
+      {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+  </form>
+</section>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}
+
+

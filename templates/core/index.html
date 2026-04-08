@@ -1,0 +1,1584 @@
+
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}
+
+{% block meta_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Base, labiales, sombras, cremas faciales y más. Envíos a todo el Perú.{% endblock %}
+
+{% block meta_keywords %}maquillaje importado, productos de belleza, cosméticos importados, base de maquillaje, labiales, sombras de ojos, cremas faciales, serums, máscara de pestañas, tienda online belleza, maquillaje Perú, cosméticos online, belleza importada{% endblock %}
+
+{% block og_title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}
+
+{% block og_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú.{% endblock %}
+
+{% block twitter_title %}Renace - Maquillaje y Productos de Belleza Importados{% endblock %}
+
+{% block twitter_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas.{% endblock %}
+
+{% block canonical_url %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:home' %}{% endblock %}
+
+{% block dc_title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}
+
+{% block dc_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú.{% endblock %}
+
+{% block dc_identifier %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:home' %}{% endblock %}
+
+{% block dc_source %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:home' %}{% endblock %}
+
+{% block dc_relation %}{{ request.scheme }}://{{ request.get_host }}{% url 'core:home' %}{% endblock %}
+{% block body_class %}index-page{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* Hero banners full-bleed */
+  .hero-banners.section { padding: 0; }
+  .hero-banners .swiper,
+  .hero-banners .swiper-wrapper,
+  .hero-banners .swiper-slide { height: clamp(320px, 60vh, 680px); }
+  .hero-banners .swiper-slide { position: relative; }
+  .hero-banners .banner-img { 
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important; 
+    height: 100% !important; 
+    object-fit: cover !important; 
+    object-position: center !important;
+    display: block !important;
+    z-index: 1 !important;
+  }
+  .hero-banners .hero-banner { background: white !important; }
+  .hero-banners .banner-overlay {
+    position: absolute; left: 4%; bottom: 10%; z-index: 2; color: #fff;
+    max-width: 560px; padding: 16px 20px; border-radius: 8px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.35) 100%);
+    backdrop-filter: saturate(120%) blur(2px);
+  }
+  .hero-banners .banner-title { font-size: clamp(22px, 3.2vw, 40px); margin: 0 0 8px 0; font-weight: 700; }
+  .hero-banners .banner-sub { font-size: clamp(14px, 1.6vw, 16px); margin: 0 0 14px 0; opacity: .95; }
+  .hero-banners .btn-cta { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 32px; font-weight: 600; }
+  .hero-banners .btn-cta i { font-size: 18px; }
+
+  /* Pagination & Nav */
+  .hero-banners .hero-pagination { position: absolute; left: 0; right: 0; bottom: 14px; z-index: 3; }
+  .hero-banners .swiper-pagination-bullet { width: 10px; height: 10px; background: rgba(255,255,255,0.7); opacity: 1; }
+  .hero-banners .swiper-pagination-bullet-active { background: #fff; }
+  .hero-banners .hero-prev,
+  .hero-banners .hero-next { color: #fff; width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.25); backdrop-filter: blur(2px); }
+  .hero-banners .hero-prev:hover,
+  .hero-banners .hero-next:hover { background: rgba(0,0,0,0.38); }
+
+  @media (max-width: 576px) {
+    .hero-banners .banner-overlay { left: 5%; right: 5%; bottom: 8%; padding: 12px 14px; }
+  }
+
+  /* Ajustes extra para que el hero no se vea cortado en móvil */
+  @media (max-width: 768px) {
+    .hero-banners,
+    .hero-banners .swiper,
+    .hero-banners .swiper-wrapper,
+    .hero-banners .swiper-slide {
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+    }
+
+    .hero-banners .banner-img {
+      position: relative !important;
+      width: 100% !important;
+      height: auto !important;
+      object-fit: contain !important;
+      background-color: #ffffff;
+    }
+  }
+
+  /* Brands ticker */
+  .brands-ticker { padding: 14px 0; background: var(--background-color); border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); border-bottom: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); }
+  .brands-ticker .ticker { overflow: hidden; position: relative; }
+  .brands-ticker .track { display: flex; width: max-content; align-items: center; gap: clamp(20px, 3vw, 48px); animation: ticker-scroll 28s linear infinite; will-change: transform; }
+  .brands-ticker .group { display: flex; align-items: center; gap: clamp(20px, 3vw, 48px); }
+  .brands-ticker .logo-item { display: inline-flex; align-items: center; justify-content: center; height: 58px; padding: 6px 10px; opacity: 0.85; transition: opacity .2s ease, filter .2s ease, transform .2s ease; }
+  .brands-ticker .logo-item:hover { opacity: 1; filter: none; transform: translateY(-2px); }
+  .brands-ticker .logo-item img { height: 46px; width: auto; object-fit: contain; filter: grayscale(100%) contrast(90%); opacity: .9; }
+  .brands-ticker .logo-fallback { display: inline-flex; align-items: center; justify-content: center; height: 46px; padding: 0 16px; border-radius: 23px; background: color-mix(in srgb, var(--accent-color), transparent 88%); color: var(--heading-color); font-weight: 600; font-size: 15px; white-space: nowrap; }
+  @keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (max-width: 576px) {
+    .brands-ticker .logo-item { height: 38px; }
+    .brands-ticker .logo-item img { height: 28px; }
+  }
+
+  /* Promo Cards Layout */
+  .promo-carousel-container { 
+    position: relative; 
+    overflow: hidden;
+  }
+  .promo-carousel-container .swiper { 
+    padding: 0 50px; 
+  }
+
+  /* Routine horizontal scroller (sin Swiper) */
+  .routine-viewport { overflow: hidden; }
+  .routine-track { display: flex; gap: 20px; scroll-behavior: smooth; will-change: transform; }
+  .routine-item { flex: 0 0 auto; width: 280px; }
+  .routine-controls .btn { border-radius: 24px; padding: 8px 16px; }
+  @media (max-width: 768px) {
+    .routine-item { width: 260px; }
+  }
+  .promo-carousel-container .swiper-slide { 
+    width: auto; 
+  }
+  .promo-carousel-container .promo-card { 
+    width: 280px; 
+    flex-shrink: 0;
+  }
+  .promo-carousel-container .swiper-button-prev,
+  .promo-carousel-container .swiper-button-next {
+    color: var(--accent-color);
+    background: var(--surface-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .promo-carousel-container .swiper-button-prev:after,
+  .promo-carousel-container .swiper-button-next:after {
+    font-size: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .promo-carousel-container { 
+      margin: 0 -10px;
+    }
+    .promo-carousel-container .swiper { 
+      padding: 0 40px; 
+    }
+    .promo-carousel-container .promo-card { 
+      width: 220px; 
+    }
+  }
+
+  @media (max-width: 576px) {
+    .promo-carousel-container { 
+      margin: 0 -5px;
+    }
+    .promo-carousel-container .swiper { 
+      padding: 0 30px; 
+    }
+    .promo-carousel-container .promo-card { 
+      width: 180px; 
+    }
+  }
+
+  /* Slider Ellos confían en nosotros - fotos clientes */
+  .clientes-carousel-container { position: relative; overflow: hidden; }
+  .clientes-carousel-container .swiper { padding: 0 50px; }
+  .clientes-carousel-container .swiper-slide { width: auto; }
+  .clientes-carousel-container .cliente-slide {
+    width: 260px;
+    height: 320px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  }
+  .clientes-carousel-container .cliente-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+  .clientes-carousel-container .swiper-button-prev,
+  .clientes-carousel-container .swiper-button-next {
+    color: var(--accent-color, #c62076);
+    background: #fff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  .clientes-carousel-container .swiper-button-prev:after,
+  .clientes-carousel-container .swiper-button-next:after { font-size: 16px; }
+  @media (max-width: 768px) {
+    .clientes-carousel-container .swiper { padding: 0 40px; }
+    .clientes-carousel-container .cliente-slide { width: 208px; height: 256px; }
+  }
+  @media (max-width: 576px) {
+    .clientes-carousel-container .swiper { padding: 0 30px; }
+    .clientes-carousel-container .cliente-slide { width: 182px; height: 224px; }
+  }
+
+  /* Reviews */
+  .reviews-section { margin-top: 40px; }
+  .review-card { background: var(--surface-color); border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%); border-radius: 12px; padding: 20px; height: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: transform .2s ease, box-shadow .2s ease; }
+  .review-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.06); }
+  .review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .review-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+  .review-avatar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+  }
+  .review-avatar-m {
+    background: color-mix(in srgb, #2563eb, transparent 88%);
+    color: #1d4ed8;
+  }
+  .review-avatar-f {
+    background: color-mix(in srgb, #c62076, transparent 88%);
+    color: #b01a6c;
+  }
+  .review-avatar-n {
+    background: color-mix(in srgb, var(--default-color), transparent 92%);
+    color: color-mix(in srgb, var(--default-color), transparent 30%);
+  }
+  .review-name { margin: 0; font-weight: 700; font-size: 16px; }
+  .review-meta { font-size: 13px; color: color-mix(in srgb, var(--default-color), transparent 40%); }
+  .review-stars { color: #f5b301; font-size: 14px; letter-spacing: 1px; }
+  .review-text { margin: 6px 0 0 0; font-size: 14px; line-height: 1.6; color: color-mix(in srgb, var(--default-color), transparent 10%); }
+
+  /* Hero Banners Modernos */
+  .hero-banners {
+    position: relative;
+    height: 70vh;
+    min-height: 500px;
+    max-height: 600px;
+    overflow: hidden;
+  }
+  
+  .hero-banner {
+    position: relative;
+    height: 100%;
+    background: linear-gradient(135deg, #c62076 0%, #9a1a5e 100%);
+  }
+  
+  .banner-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+  
+  .gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(198, 32, 118, 0.9) 0%, rgba(166, 21, 99, 0.9) 100%);
+  }
+  
+  .pattern-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+  }
+  
+  .floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+  
+  .floating-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    animation: float-circles 8s ease-in-out infinite;
+  }
+  
+  .circle-1 {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+  
+  .circle-2 {
+    width: 120px;
+    height: 120px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+  }
+  
+  .circle-3 {
+    width: 60px;
+    height: 60px;
+    bottom: 30%;
+    left: 70%;
+    animation-delay: 4s;
+  }
+  
+  @keyframes float-circles {
+    0%, 100% { transform: translateY(0px) scale(1); opacity: 0.1; }
+    25% { transform: translateY(-30px) scale(1.1); opacity: 0.2; }
+    50% { transform: translateY(-15px) scale(0.9); opacity: 0.15; }
+    75% { transform: translateY(-25px) scale(1.05); opacity: 0.18; }
+  }
+  
+  .banner-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    min-height: 70vh;
+    padding: 60px 0;
+  }
+  
+  .brand-badge {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .brand-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  
+  .brand-tagline {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .banner-title {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    color: white;
+  }
+  
+  .title-main {
+    display: block;
+    font-size: 0.7em;
+    opacity: 0.9;
+  }
+  
+  .title-highlight {
+    display: block;
+    font-size: 1em;
+    background: linear-gradient(45deg, #ffffff, #f8bbd9);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  }
+  
+  .title-sub {
+    display: block;
+    font-size: 0.6em;
+    opacity: 0.8;
+    font-weight: 600;
+  }
+  
+  .banner-description {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 32px;
+    max-width: 500px;
+  }
+  
+  .banner-features {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+  }
+  
+  .feature-item i {
+    font-size: 18px;
+    color: #4ade80;
+  }
+  
+  .banner-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .btn-hero {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    text-decoration: none;
+    border: 2px solid white;
+    background: white;
+    color: #c62076;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .btn-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(198, 32, 118, 0.1), transparent);
+    transition: left 0.5s;
+  }
+  
+  .btn-hero:hover::before {
+    left: 100%;
+  }
+  
+  .btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px rgba(198, 32, 118, 0.3);
+    background: white;
+    color: #c62076;
+    border-color: #c62076;
+  }
+  
+  .btn-hero-secondary {
+    padding: 16px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .btn-hero-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    color: white;
+  }
+  
+  .product-showcase {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .product-floating {
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: float-products 8s ease-in-out infinite;
+    cursor: pointer;
+  }
+  
+  .product-floating img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  
+  .product-glow {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+    border-radius: 30px;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    z-index: -1;
+  }
+  
+  .product-floating:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 35px 70px rgba(198, 32, 118, 0.4);
+  }
+  
+  .product-floating:hover img {
+    transform: scale(1.1);
+  }
+  
+  .product-floating:hover .product-glow {
+    opacity: 1;
+  }
+  
+  .product-1 {
+    top: 15%;
+    left: 5%;
+    animation-delay: 0s;
+  }
+  
+  .product-2 {
+    top: 45%;
+    right: 10%;
+    animation-delay: 2.5s;
+  }
+  
+  .product-3 {
+    bottom: 15%;
+    left: 25%;
+    animation-delay: 5s;
+  }
+  
+  @keyframes float-products {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-25px) rotate(3deg); }
+    50% { transform: translateY(-12px) rotate(-2deg); }
+    75% { transform: translateY(-20px) rotate(2deg); }
+  }
+  
+  /* Banner específicos */
+  .medicube-banner {
+    background: linear-gradient(135deg, #c62076 0%, #9a1a5e 100%);
+  }
+  
+  .medicube-banner .gradient-overlay {
+    background: linear-gradient(135deg, rgba(198, 32, 118, 0.9) 0%, rgba(166, 21, 99, 0.9) 100%);
+  }
+  
+  .purito-banner {
+    background: linear-gradient(135deg, #f06292 0%, #c62076 100%);
+  }
+  
+  .purito-banner .gradient-overlay {
+    background: linear-gradient(135deg, rgba(240, 98, 146, 0.9) 0%, rgba(198, 32, 118, 0.9) 100%);
+  }
+  
+  .cosrx-banner {
+    background: linear-gradient(135deg, #ec407a 0%, #b01d69 100%);
+  }
+  
+  .cosrx-banner .gradient-overlay {
+    background: linear-gradient(135deg, rgba(236, 64, 122, 0.9) 0%, rgba(194, 24, 91, 0.9) 100%);
+  }
+  
+  .new-arrivals-banner {
+    background: linear-gradient(135deg, #f48fb1 0%, #9a1a5e 100%);
+  }
+  
+  .new-arrivals-banner .gradient-overlay {
+    background: linear-gradient(135deg, rgba(244, 143, 177, 0.9) 0%, rgba(166, 21, 99, 0.9) 100%);
+  }
+  
+  /* Navegación del carrusel */
+  .hero-pagination {
+    bottom: 30px !important;
+  }
+  
+  .hero-pagination .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 1;
+    transition: all 0.3s ease;
+  }
+  
+  .hero-pagination .swiper-pagination-bullet-active {
+    background: white;
+    transform: scale(1.2);
+  }
+  
+  .hero-prev, .hero-next {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    transition: all 0.3s ease;
+  }
+  
+  .hero-prev:hover, .hero-next:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+  }
+  
+  .hero-prev {
+    left: 30px;
+  }
+  
+  .hero-next {
+    right: 30px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .banner-content {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      text-align: center;
+    }
+    
+    .banner-title {
+      font-size: 48px;
+    }
+    
+    .product-showcase {
+      height: 400px;
+    }
+    
+    .product-floating {
+      width: 140px;
+      height: 140px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .banner-title {
+      font-size: 36px;
+    }
+    
+    .banner-description {
+      font-size: 16px;
+    }
+    
+    .banner-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .btn-hero, .btn-hero-secondary {
+      width: 100%;
+      max-width: 300px;
+      justify-content: center;
+    }
+    
+    .product-showcase {
+      height: 350px;
+    }
+    
+    .product-floating {
+      width: 120px;
+      height: 120px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .banner-title {
+      font-size: 28px;
+    }
+    
+    .brand-badge {
+      padding: 8px 16px;
+    }
+    
+    .brand-name {
+      font-size: 16px;
+    }
+    
+    .hero-prev, .hero-next {
+      width: 50px;
+      height: 50px;
+    }
+    
+    .hero-prev {
+      left: 15px;
+    }
+    
+    .hero-next {
+      right: 15px;
+    }
+  }
+
+  /* Lo más nuevo Section */
+  .products-carousel-container { 
+    position: relative; 
+    overflow: hidden;
+    margin: 0 -20px;
+  }
+  .products-carousel-container .swiper { 
+    padding: 0 70px; 
+  }
+  .products-carousel-container .swiper-slide { 
+    width: auto; 
+    padding: 0 20px;
+  }
+  .products-carousel-container .product-card-new { 
+    width: 300px; 
+    flex-shrink: 0;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .products-carousel-container .product-card-new:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.15);
+    border-color: rgba(198, 32, 118, 0.2);
+  }
+  .product-image-container {
+    position: relative;
+    padding-bottom: 100%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  }
+  .product-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .product-card-new:hover .product-image {
+    transform: scale(1.08);
+  }
+  
+  /* Badges Mejorados */
+  .product-badge-new {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+    box-shadow: 0 6px 16px rgba(198, 32, 118, 0.4);
+    backdrop-filter: blur(10px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .product-badge-special {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    padding: 8px 16px;
+    border-radius: 24px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .product-badge-special.viral {
+    background: linear-gradient(135deg, #000, #333);
+    color: white;
+  }
+  .product-badge-special.exclusive {
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    color: white;
+  }
+  .product-badge-special.dermatologist {
+    background: linear-gradient(135deg, #3182ce, #2c5aa0);
+    color: white;
+    font-size: 10px;
+    padding: 6px 12px;
+    max-width: 120px;
+    text-align: center;
+    line-height: 1.2;
+  }
+  
+  /* Wishlist button mejorado */
+  .wishlist-btn-new {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+  }
+  .wishlist-btn-new:hover {
+    background: #e53e3e;
+    color: white;
+    transform: scale(1.15);
+    border-color: #e53e3e;
+    box-shadow: 0 12px 32px rgba(229, 62, 62, 0.4);
+  }
+  .wishlist-btn-new.active {
+    background: #e53e3e;
+    color: white;
+    border-color: #e53e3e;
+  }
+  
+  /* Product info mejorada */
+  .product-info-new {
+    padding: 24px 20px 20px 20px;
+    background: white;
+  }
+  .product-brand {
+    font-size: 12px;
+    color: #8e8e93;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .product-title-new {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d1d1f;
+    margin-bottom: 12px;
+    line-height: 1.4;
+    height: 2.8em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .product-title-new a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .product-title-new a:hover {
+    color: #c62076;
+  }
+  /* Estilos de precios para el slider */
+  .product-price-new-simple {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1d1d1f;
+    letter-spacing: -0.5px;
+  }
+  
+  .product-price-new-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .price-old-slider {
+    font-size: 13px;
+    color: #9ca3af;
+    text-decoration: line-through;
+    font-weight: 500;
+  }
+  
+  .price-current-slider {
+    font-size: 20px;
+    font-weight: 700;
+    color: #c62076;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #c62076, #b01d69);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .price-discount-slider {
+    font-size: 11px;
+    font-weight: 700;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  /* Botón Ver todos */
+  .ver-todos-btn {
+    border-color: #c62076 !important;
+    color: #c62076 !important;
+    font-weight: 600 !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+  }
+  .ver-todos-btn:hover {
+    background-color: #c62076 !important;
+    color: white !important;
+    border-color: #c62076 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(198, 32, 118, 0.3) !important;
+  }
+
+  /* Navigation buttons mejorados */
+  .products-carousel-container .swiper-button-prev,
+  .products-carousel-container .swiper-button-next {
+    color: #c62076;
+    background: white;
+    border-radius: 50%;
+    width: 52px;
+    height: 52px;
+    margin-top: -26px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    border: 2px solid rgba(198, 32, 118, 0.1);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .products-carousel-container .swiper-button-prev:after,
+  .products-carousel-container .swiper-button-next:after {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .products-carousel-container .swiper-button-prev:hover,
+  .products-carousel-container .swiper-button-next:hover {
+    background: #c62076;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 12px 40px rgba(198, 32, 118, 0.3);
+    border-color: #c62076;
+  }
+
+  @media (max-width: 768px) {
+    .products-carousel-container { 
+      margin: 0 -10px;
+    }
+    .products-carousel-container .swiper { 
+      padding: 0 50px; 
+    }
+    .products-carousel-container .swiper-slide {
+      padding: 0 10px;
+    }
+    .products-carousel-container .product-card-new { 
+      width: 240px; 
+    }
+    .product-info-new {
+      padding: 16px 12px 12px 12px;
+    }
+    .product-title-new {
+      font-size: 14px;
+      height: 2.4em;
+    }
+    .product-price-new {
+      font-size: 16px;
+    }
+    .product-badge-new,
+    .product-badge-special {
+      padding: 6px 12px;
+      font-size: 10px;
+    }
+    .wishlist-btn-new {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .products-carousel-container { 
+      margin: 0 -5px;
+    }
+    .products-carousel-container .swiper { 
+      padding: 0 40px; 
+    }
+    .products-carousel-container .swiper-slide {
+      padding: 0 8px;
+    }
+    .products-carousel-container .product-card-new { 
+      width: 200px; 
+    }
+    .product-info-new {
+      padding: 14px 10px 10px 10px;
+    }
+    .product-title-new {
+      font-size: 13px;
+      height: 2.2em;
+    }
+    .product-price-new {
+      font-size: 15px;
+    }
+    .product-price-old {
+      font-size: 11px;
+    }
+    .product-badge-new,
+    .product-badge-special {
+      padding: 4px 8px;
+      font-size: 9px;
+    }
+    .wishlist-btn-new {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  /* Why Choose Us */
+  #why-choose-us .why-card { background: var(--surface-color); border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%); border-radius: 14px; padding: 22px; height: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.04); transition: transform .2s ease, box-shadow .2s ease; }
+  #why-choose-us .why-card:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(0,0,0,0.08); }
+  #why-choose-us .why-icon { width: 64px; height: 64px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; margin-bottom: 12px; }
+  #why-choose-us .icon-pink { background: rgba(198, 32, 118, 0.12); color: #c62076; }
+  #why-choose-us .icon-blue { background: rgba(57,125,235,0.12); color: #397deb; }
+  #why-choose-us .icon-green { background: rgba(3,179,128,0.12); color: #03b380; }
+  #why-choose-us .icon-purple { background: rgba(126,87,194,0.14); color: #7e57c2; }
+  #why-choose-us .card-title { font-weight: 700; }
+  #why-choose-us ul { margin: 0; padding-left: 1rem; }
+</style>
+{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+  <main class="main">
+
+    <!-- Hero Section (Banners Modernos) -->
+    <section class="hero-banners section" id="hero" aria-label="Promociones principales">
+      <div class="swiper init-swiper" data-aos="fade-up">
+          <script type="application/json" class="swiper-config">
+            {
+              "loop": true,
+            "speed": 800,
+            "slidesPerView": 1,
+            "autoplay": { "delay": 5000, "disableOnInteraction": false },
+            "effect": "fade",
+            "fadeEffect": { "crossFade": true },
+            "navigation": { "nextEl": ".hero-next", "prevEl": ".hero-prev" },
+            "pagination": { "el": ".hero-pagination", "clickable": true, "dynamicBullets": true }
+            }
+          </script>
+          <div class="swiper-wrapper">
+          {% if sliders_activos %}
+            {% for slider in sliders_activos %}
+            <!-- Slider {{ forloop.counter }} -->
+            {% if slider.imagen %}
+            <div class="swiper-slide">
+              <div class="hero-banner">
+                {% if slider.url_destino %}
+                  <a href="{{ slider.url_destino }}" target="_blank" rel="noopener">
+                {% endif %}
+                
+                <img src="{{ slider.imagen.url }}" alt="{{ slider.nombre }}" class="banner-img">
+                
+                {% if slider.titulo or slider.subtitulo or slider.texto_boton %}
+                  <div class="banner-overlay">
+                    {% if slider.titulo %}
+                      <h2 class="banner-title">{{ slider.titulo }}</h2>
+                    {% endif %}
+                    {% if slider.subtitulo %}
+                      <p class="banner-sub">{{ slider.subtitulo }}</p>
+                    {% endif %}
+                    {% if slider.texto_boton and slider.url_destino %}
+                      <a href="{{ slider.url_destino }}" class="btn-cta" target="_blank" rel="noopener">
+                        <i class="bi bi-arrow-right"></i>
+                        {{ slider.texto_boton }}
+                      </a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                
+                {% if slider.url_destino %}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+          {% else %}
+            <!-- Sliders por defecto si no hay sliders configurados -->
+            <div class="swiper-slide">
+              <div class="hero-banner">
+                <img src="{% static 'assets/img/nuevo_logo.png' %}" alt="Banner Principal 1" class="banner-img">
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="hero-banner">
+                <img src="{% static '2.jpg' %}" alt="Banner Principal 2" class="banner-img">
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="hero-banner">
+                <img src="{% static '3.jpg' %}" alt="Banner Principal 3" class="banner-img">
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="hero-banner">
+                <img src="{% static '4.jpg' %}" alt="Banner Principal 4" class="banner-img">
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div class="hero-banner">
+                <img src="{% static '5.jpg' %}" alt="Banner Principal 5" class="banner-img">
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="swiper-pagination hero-pagination"></div>
+        <div class="swiper-button-prev hero-prev"></div>
+        <div class="swiper-button-next hero-next"></div>
+      </div>
+    </section><!-- /Hero Section (Banners Modernos) -->
+
+    <!-- Brands Ticker -->
+    <section class="brands-ticker" aria-label="Marcas disponibles">
+      <div class="container-fluid">
+        <div class="ticker" role="marquee" aria-live="polite">
+          <div class="track">
+            <div class="group">
+              {% if menu_marcas %}
+                {% for marca in menu_marcas %}
+                  <a href="{% url 'core:catalogo' %}?marca={{ marca.id }}" class="logo-item" title="{{ marca.nombre }}">
+                    {% if marca.logo %}
+                      <img src="{{ marca.logo.url }}" alt="Marca {{ marca.nombre }}" loading="lazy">
+                    {% else %}
+                      <span class="logo-fallback">{{ marca.nombre }}</span>
+                    {% endif %}
+                  </a>
+                {% endfor %}
+              {% else %}
+                <span class="logo-fallback">Tus marcas favoritas</span>
+                <span class="logo-fallback">Próximamente</span>
+              {% endif %}
+            </div>
+            <div class="group" aria-hidden="true">
+              {% if menu_marcas %}
+                {% for marca in menu_marcas %}
+                  <a href="{% url 'core:catalogo' %}?marca={{ marca.id }}" class="logo-item" title="{{ marca.nombre }}">
+                    {% if marca.logo %}
+                      <img src="{{ marca.logo.url }}" alt="Marca {{ marca.nombre }}" loading="lazy">
+                    {% else %}
+                      <span class="logo-fallback">{{ marca.nombre }}</span>
+                    {% endif %}
+                  </a>
+                {% endfor %}
+              {% else %}
+                <span class="logo-fallback">Tus marcas favoritas</span>
+                <span class="logo-fallback">Próximamente</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lo más nuevo Section -->
+    <section id="lo-mas-nuevo" class="section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+          <div class="section-title">
+            <h2 class="mb-1">Lo más nuevo</h2>
+          </div>
+          <a href="{% url 'core:catalogo' %}?orden=recientes" class="btn btn-outline-primary ver-todos-btn">Ver todos</a>
+        </div>
+
+        <div class="products-carousel-container">
+          <div class="swiper init-swiper">
+            <script type="application/json" class="swiper-config">
+              {
+                "loop": false,
+                "speed": 500,
+                "spaceBetween": 20,
+                "slidesPerView": 4,
+                "navigation": { "nextEl": ".products-next", "prevEl": ".products-prev" },
+                "breakpoints": {
+                  "320": { "slidesPerView": 1.2, "spaceBetween": 15 },
+                  "576": { "slidesPerView": 2, "spaceBetween": 15 },
+                  "768": { "slidesPerView": 2.5, "spaceBetween": 20 },
+                  "992": { "slidesPerView": 3, "spaceBetween": 25 },
+                  "1200": { "slidesPerView": 4, "spaceBetween": 25 }
+                }
+              }
+            </script>
+            <div class="swiper-wrapper">
+              {% for producto in productos_nuevos %}
+              <div class="swiper-slide" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:100 }}">
+                <div class="product-card-new">
+                  <div class="product-image-container">
+                    {% with primera=producto.imagenes.first %}
+                    {% if primera %}
+                      <img src="{{ primera.imagen.url }}" alt="{{ producto.nombre }}" class="product-image glightbox">
+                    {% else %}
+                      <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop&crop=center" alt="{{ producto.nombre }}" class="product-image glightbox">
+                    {% endif %}
+                    {% endwith %}
+                    
+                    <!-- Badge "Lo nuevo" -->
+                    <div class="product-badge-new">
+                      <i class="bi bi-star-fill"></i>
+                      <span>Lo nuevo</span>
+                    </div>
+                    
+                    <!-- Badges especiales -->
+                    {% if forloop.counter == 2 %}
+                    <div class="product-badge-special viral">
+                      <i class="bi bi-tiktok"></i>
+                      <span>Viral en</span>
+                    </div>
+                    <div class="product-badge-special exclusive">
+                      <span>Solo en Renace</span>
+                    </div>
+                    {% elif forloop.counter == 3 %}
+                    <div class="product-badge-special exclusive">
+                      <span>Solo en Renace</span>
+                    </div>
+                    {% elif forloop.counter == 4 %}
+                    <div class="product-badge-special exclusive">
+                      <span>Solo en Renace</span>
+                    </div>
+                    {% elif forloop.counter == 5 %}
+                    <div class="product-badge-special dermatologist">
+                      <i class="bi bi-plus-circle"></i>
+                      <span>MARCA RECOMENDADA POR DERMATÓLOGOS</span>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Wishlist button -->
+                    <button class="wishlist-btn-new" title="Agregar a favoritos">
+                      <i class="bi bi-heart"></i>
+                    </button>
+                  </div>
+                  
+                  <div class="product-info-new">
+                    <div class="product-brand">{{ producto.marca.nombre }}</div>
+                    <h3 class="product-title-new">
+                      <a href="{% url 'core:detalle_producto' producto.slug %}">{{ producto.nombre|truncatechars:50 }}</a>
+                    </h3>
+                    <!-- Precios mejorados -->
+                    {% if producto.precio_anterior and producto.precio_anterior > producto.precio %}
+                    <div class="product-price-new-slider">
+                      <div class="price-old-slider">S/ {{ producto.precio_anterior|floatformat:2 }}</div>
+                      <div class="price-current-slider">S/ {{ producto.precio|floatformat:2 }}</div>
+                      <div class="price-discount-slider">{{ producto.porcentaje_descuento }}% OFF</div>
+                    </div>
+                    {% else %}
+                    <div class="product-price-new-simple">S/ {{ producto.precio|floatformat:2 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% empty %}
+              <!-- Productos de ejemplo si no hay productos nuevos -->
+              <div class="swiper-slide">
+                <div class="product-card-new">
+                  <div class="product-image-container">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop&crop=center" alt="Producto nuevo" class="product-image">
+                    <div class="product-badge-new">
+                      <i class="bi bi-star-fill"></i>
+                      <span>Lo nuevo</span>
+                    </div>
+                    <button class="wishlist-btn-new" title="Agregar a favoritos">
+                      <i class="bi bi-heart"></i>
+                    </button>
+                  </div>
+                  <div class="product-info-new">
+                    <div class="product-brand">Marca Ejemplo</div>
+                    <h3 class="product-title-new">
+                      <a href="#">Producto Nuevo de Ejemplo</a>
+                    </h3>
+                    <div class="product-price-new">S/ 99.90</div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="swiper-button-prev products-prev"></div>
+            <div class="swiper-button-next products-next"></div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Lo más nuevo Section -->
+
+    <!-- Ellos confían en nosotros - Slider de clientes -->
+    <section id="clientes" class="section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="section-title text-center mb-4">
+          <h2>Ellos confían en nosotros</h2>
+          <p>Clientes que confían en Renace</p>
+        </div>
+
+        <div class="clientes-carousel-container">
+          <div class="swiper init-swiper">
+            <script type="application/json" class="swiper-config">
+              {
+                "loop": true,
+                "speed": 500,
+                "spaceBetween": 20,
+                "slidesPerView": 4,
+                "autoplay": { "delay": 3000, "disableOnInteraction": false },
+                "navigation": { "nextEl": ".clientes-next", "prevEl": ".clientes-prev" },
+                "breakpoints": {
+                  "320": { "slidesPerView": 1.2, "spaceBetween": 15 },
+                  "576": { "slidesPerView": 2, "spaceBetween": 15 },
+                  "768": { "slidesPerView": 3, "spaceBetween": 20 },
+                  "992": { "slidesPerView": 4, "spaceBetween": 20 }
+                }
+              }
+            </script>
+            <div class="swiper-wrapper">
+              {% for cliente in imagenes_clientes %}
+              <div class="swiper-slide">
+                <div class="cliente-slide">
+                  {% if cliente.imagen %}
+                    <img src="{{ cliente.imagen.url }}" alt="Cliente Renace" class="img-fluid">
+                  {% else %}
+                    <div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">Imagen no disponible</div>
+                  {% endif %}
+                </div>
+              </div>
+              {% empty %}
+              <div class="swiper-slide"><div class="cliente-slide"><div class="d-flex align-items-center justify-content-center h-100 bg-light text-muted">Sube imágenes desde el panel de administración</div></div></div>
+              {% endfor %}
+            </div>
+            <div class="swiper-button-prev clientes-prev"></div>
+            <div class="swiper-button-next clientes-next"></div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /Ellos confían en nosotros -->
+
+    <!-- Category Cards Section -->
+    <section id="category-cards" class="category-cards section light-background">
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <!-- Reseñas de Clientes -->
+        <div class="reviews-section" data-aos="fade-up" data-aos-delay="150">
+          <div class="section-title text-center mb-4">
+            <h3 class="mb-1">Reseñas de Clientes</h3>
+            <p class="mb-0">Lo que dicen sobre su experiencia con Renace</p>
+              </div>
+
+          <div class="row g-4">
+            {% for resena in resenas_recientes %}
+            {% with t=resena.avatar_tipo_reseña %}
+            <div class="col-12 col-md-6 col-lg-4">
+              <div class="review-card h-100">
+                <div class="review-header">
+                  <div class="review-avatar review-avatar-icon review-avatar-{{ t }}"
+                       role="img"
+                       aria-label="Avatar de {{ resena.cliente.get_full_name|default:resena.cliente.username }}">
+                    {% if t == 'm' %}
+                      <i class="bi bi-gender-male" aria-hidden="true"></i>
+                    {% elif t == 'f' %}
+                      <i class="bi bi-gender-female" aria-hidden="true"></i>
+                    {% else %}
+                      <i class="bi bi-person-circle" aria-hidden="true"></i>
+                    {% endif %}
+                  </div>
+                  <div>
+                    <h6 class="review-name">
+                      {{ resena.cliente.first_name|default:resena.cliente.username }}
+                    </h6>
+                    <div class="review-meta">
+                      Cliente Renace
+                    </div>
+                  </div>
+                </div>
+                <div class="review-stars" aria-label="{{ resena.calificacion }} de 5 estrellas">
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= resena.calificacion %}
+                      <i class="bi bi-star-fill" aria-hidden="true"></i>
+                    {% else %}
+                      <i class="bi bi-star text-muted" aria-hidden="true"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+                <p class="review-text">“{{ resena.comentario|truncatechars:180 }}”</p>
+              </div>
+            </div>
+            {% endwith %}
+            {% empty %}
+            <div class="col-12">
+              <p class="text-center text-muted mb-0">Aún no hay reseñas publicadas. Sé la primera en compartir tu experiencia.</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Category Cards Section -->
+
+    <!-- Why Choose Us Section -->
+    <section id="why-choose-us" class="section">
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="section-title text-center mb-4">
+          <h2>¿Y por qué elegirnos?</h2>
+          <p>Beneficios que hacen de tu experiencia en Renace algo superior</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="why-card h-100">
+              <div class="why-icon icon-pink"><i class="bi bi-patch-check-fill"></i></div>
+              <h5 class="card-title mb-2">Originalidad Garantizada</h5>
+              <ul>
+                <li>Productos 100% originales</li>
+                <li>Proveedores certificados</li>
+                <li>Sellos y empaque de fábrica</li>
+               </ul>
+          </div>
+        </div>
+
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="150">
+            <div class="why-card h-100">
+              <div class="why-icon icon-blue"><i class="bi bi-truck"></i></div>
+              <h5 class="card-title mb-2">Envío Rápido y Seguro</h5>
+              <ul>
+                <li>Despachos a todo el Perú</li>
+                <li>Empaque protegido</li>
+                <li>Seguimiento en tiempo real</li>
+              </ul>
+                  </div>
+                </div>
+
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+            <div class="why-card h-100">
+              <div class="why-icon icon-green"><i class="bi bi-chat-dots-fill"></i></div>
+              <h5 class="card-title mb-2">Asesoría Personalizada</h5>
+              <ul>
+                <li>Definir aromas para la ocasión</li>
+                <li>Soporte por chat</li>
+                <li>Recomendaciones para la ocasión</li>
+              </ul>
+                </div>
+              </div>
+
+          <div class="col-12 col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="250">
+            <div class="why-card h-100">
+              <div class="why-icon icon-purple"><i class="bi bi-shield-lock-fill"></i></div>
+              <h5 class="card-title mb-2">Compra Fácil y Segura</h5>
+              <ul>
+                <li>Métodos de pago confiables</li>
+                <li>Proceso de compra simple</li>
+                <li>Cambios y soporte oportuno</li>
+              </ul>
+            </div>
+        </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Wishlist functionality para "Lo más nuevo"
+  document.querySelectorAll('.wishlist-btn-new').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.toggle('active');
+      const icon = this.querySelector('i');
+      
+      if (this.classList.contains('active')) {
+        icon.className = 'bi bi-heart-fill';
+        this.style.background = '#e53e3e';
+        this.style.color = 'white';
+        this.style.borderColor = '#e53e3e';
+        this.style.transform = 'scale(1.15)';
+        
+        // Mostrar notificación
+        showNotification('Agregado a favoritos', 'success');
+      } else {
+        icon.className = 'bi bi-heart';
+        this.style.background = 'rgba(255, 255, 255, 0.95)';
+        this.style.color = '#666';
+        this.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+        this.style.transform = 'scale(1)';
+        
+        showNotification('Removido de favoritos', 'info');
+      }
+    });
+  });
+  
+  // Función de notificaciones mejorada
+  function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    notification.style.cssText = `
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: ${type === 'success' ? '#38a169' : type === 'error' ? '#e53e3e' : '#3182ce'};
+      color: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 10000;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    setTimeout(() => {
+      notification.style.transform = 'translateX(100%)';
+      setTimeout(() => {
+        notification.remove();
+      }, 400);
+    }, 3000);
+  }
+});
+</script>
+{% endblock %}
+
+{% block footer %}
+{% include 'core/footer.html' %}
+{% endblock %}

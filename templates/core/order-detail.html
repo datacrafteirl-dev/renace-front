@@ -1,0 +1,663 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Detalle del Pedido #{{ pedido.codigo }} - Renace{% endblock %}
+{% block body_class %}order-detail-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<main class="main">
+  <!-- Page Title -->
+  <div class="page-title light-background">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <ol>
+          <li><a href="{% url 'core:home' %}">Inicio</a></li>
+          <li><a href="{% url 'core:mis_pedidos' %}">Mis Pedidos</a></li>
+          <li class="current">Pedido #{{ pedido.codigo }}</li>
+        </ol>
+      </nav>
+      <h1>Detalle del Pedido #{{ pedido.codigo }}</h1>
+    </div>
+  </div><!-- End Page Title -->
+
+  <div class="container">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div class="avatar-placeholder">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <h4>{{ user.first_name|default:user.username }}</h4>
+            <p>{{ user.email }}</p>
+          </div>
+          
+          <nav class="profile-nav">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:perfil' %}">
+                  <i class="bi bi-person me-2"></i>Información Personal
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'core:mis_pedidos' %}">
+                  <i class="bi bi-bag-check me-2"></i>Mis Pedidos
+                </a>
+              </li>
+              <li class="nav-item">
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:addresses' %}">
+                  <i class="bi bi-geo-alt me-2"></i>Direcciones
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:payment_methods' %}">
+                  <i class="bi bi-credit-card me-2"></i>Métodos de Pago
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:settings' %}">
+                  <i class="bi bi-gear me-2"></i>Configuración
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <div class="order-detail-content">
+          
+          <!-- Order Header -->
+          <div class="order-header">
+            <div class="row align-items-center">
+              <div class="col-md-6">
+                <h3>Pedido #{{ pedido.codigo }}</h3>
+                <p class="order-date">Realizado el {{ pedido.fecha_pedido|date:"d/m/Y H:i" }}</p>
+              </div>
+              <div class="col-md-6 text-md-end">
+                <span class="status-badge status-{{ pedido.estado }}">
+                  {% if pedido.estado == 'pendiente' %}
+                    <i class="bi bi-clock me-1"></i>Pendiente
+                  {% elif pedido.estado == 'confirmado' %}
+                    <i class="bi bi-check-circle me-1"></i>Confirmado
+                  {% elif pedido.estado == 'enviado' %}
+                    <i class="bi bi-truck me-1"></i>Enviado
+                  {% elif pedido.estado == 'entregado' %}
+                    <i class="bi bi-check2-all me-1"></i>Entregado
+                  {% elif pedido.estado == 'cancelado' %}
+                    <i class="bi bi-x-circle me-1"></i>Cancelado
+                  {% endif %}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Progress -->
+          <div class="order-progress">
+            <div class="progress-steps">
+              <div class="step {% if pedido.estado == 'pendiente' or pedido.estado == 'confirmado' or pedido.estado == 'enviado' or pedido.estado == 'entregado' %}completed{% endif %}">
+                <div class="step-icon">
+                  <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="step-content">
+                  <h5>Pedido Realizado</h5>
+                  <p>{{ pedido.fecha_pedido|date:"d/m/Y H:i" }}</p>
+                </div>
+              </div>
+              
+              <div class="step {% if pedido.estado == 'confirmado' or pedido.estado == 'enviado' or pedido.estado == 'entregado' %}completed{% endif %}">
+                <div class="step-icon">
+                  <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="step-content">
+                  <h5>Confirmado</h5>
+                  <p>{% if pedido.fecha_confirmacion %}{{ pedido.fecha_confirmacion|date:"d/m/Y H:i" }}{% else %}Pendiente{% endif %}</p>
+                </div>
+              </div>
+              
+              <div class="step {% if pedido.estado == 'enviado' or pedido.estado == 'entregado' %}completed{% endif %}">
+                <div class="step-icon">
+                  <i class="bi bi-truck"></i>
+                </div>
+                <div class="step-content">
+                  <h5>Enviado</h5>
+                  <p>{% if pedido.fecha_envio %}{{ pedido.fecha_envio|date:"d/m/Y H:i" }}{% else %}Pendiente{% endif %}</p>
+                </div>
+              </div>
+              
+              <div class="step {% if pedido.estado == 'entregado' %}completed{% endif %}">
+                <div class="step-icon">
+                  <i class="bi bi-house-check"></i>
+                </div>
+                <div class="step-content">
+                  <h5>Entregado</h5>
+                  <p>{% if pedido.fecha_entrega %}{{ pedido.fecha_entrega|date:"d/m/Y H:i" }}{% else %}Pendiente{% endif %}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Items -->
+          <div class="order-items-section">
+            <h4>Productos del Pedido</h4>
+            <div class="order-items">
+              {% for item in pedido.items.all %}
+              <div class="order-item">
+                <div class="item-image">
+                  {% if item.producto.imagenes.first %}
+                    <img src="{{ item.producto.imagenes.first.imagen.url }}" alt="{{ item.producto.nombre }}">
+                  {% else %}
+                    <div class="no-image">
+                      <i class="bi bi-image"></i>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="item-details">
+                  <h5>{{ item.producto.nombre }}</h5>
+                  <div class="item-meta">
+                    <span class="item-brand">{{ item.producto.marca.nombre }}</span>
+                    {% if item.producto.subcategoria %}
+                      <span class="item-category">{{ item.producto.categoria.nombre }} - {{ item.producto.subcategoria.nombre }}</span>
+                    {% else %}
+                      <span class="item-category">{{ item.producto.categoria.nombre }}</span>
+                    {% endif %}
+                    {% if item.producto.contenido_neto %}
+                      <span class="item-content">{{ item.producto.contenido_neto }}</span>
+                    {% endif %}
+                    {% if item.producto.tipo_piel %}
+                      <span class="item-skin-type">Para: {{ item.producto.tipo_piel }}</span>
+                    {% endif %}
+                  </div>
+                  <p class="item-variant">
+                    {% if item.variante %}
+                      Variante: {{ item.variante.nombre }}
+                    {% endif %}
+                  </p>
+                  <div class="item-quantity-price">
+                    <span class="item-quantity">Cantidad: {{ item.cantidad }}</span>
+                    <span class="item-price">S/ {{ item.precio_unitario|floatformat:2 }} c/u</span>
+                  </div>
+                </div>
+                <div class="item-total">
+                  <span>S/ {{ item.subtotal|floatformat:2 }}</span>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="shipping-info">
+                  <h5>Información de Envío</h5>
+                  {% if pedido.direccion_envio %}
+                  <div class="info-item">
+                    <strong>Dirección:</strong>
+                    <p>{{ pedido.direccion_envio.direccion }}{% if pedido.direccion_envio.ciudad %}, {{ pedido.direccion_envio.ciudad }}{% endif %}{% if pedido.direccion_envio.provincia %} - {{ pedido.direccion_envio.provincia }}{% endif %}</p>
+                  </div>
+                  <div class="info-item">
+                    <strong>Ciudad:</strong>
+                    <p>{{ pedido.direccion_envio.ciudad }}</p>
+                  </div>
+                  <div class="info-item">
+                    <strong>Teléfono:</strong>
+                    <p>{{ pedido.direccion_envio.telefono }}</p>
+                  </div>
+                  {% else %}
+                  <p class="text-muted">No se especificó dirección de envío.</p>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="payment-info">
+                  <h5>Resumen del Pedido</h5>
+                  <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>S/ {{ pedido.subtotal|floatformat:2 }}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Envío:</span>
+                    <span>S/ {{ pedido.envio|floatformat:2 }}</span>
+                  </div>
+                  <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>S/ {{ pedido.total|floatformat:2 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Information -->
+          {% if pedido.transaccion_yape %}
+          <div class="payment-details">
+            <h5>Información de Pago</h5>
+            <div class="payment-card">
+              <div class="payment-method">
+                <i class="bi bi-phone"></i>
+                <span>Yape Perú</span>
+              </div>
+              <div class="payment-info">
+                <p><strong>Código de Transacción:</strong> {{ pedido.transaccion_yape.codigo_transaccion }}</p>
+                <p><strong>Monto:</strong> S/ {{ pedido.transaccion_yape.monto|floatformat:2 }}</p>
+                <p><strong>Fecha de Pago:</strong> {{ pedido.transaccion_yape.fecha_pago|date:"d/m/Y H:i" }}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+
+          <!-- Order Actions -->
+          <div class="order-actions">
+            <div class="row">
+              <div class="col-md-6">
+                <a href="{% url 'core:mis_pedidos' %}" class="btn btn-outline-primary">
+                  <i class="bi bi-arrow-left me-2"></i>Volver a Mis Pedidos
+                </a>
+              </div>
+              <div class="col-md-6 text-md-end">
+                {% if pedido.estado == 'pendiente' %}
+                  <button class="btn btn-outline-danger" onclick="cancelarPedido({{ pedido.id }})">
+                    <i class="bi bi-x-circle me-2"></i>Cancelar Pedido
+                  </button>
+                {% elif pedido.estado == 'entregado' %}
+                  <button class="btn btn-outline-success">
+                    <i class="bi bi-star me-2"></i>Calificar Productos
+                  </button>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.order-detail-page {
+  background-color: #f8f9fa;
+}
+
+.profile-sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.profile-nav .nav-link {
+  color: #6c757d;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.profile-nav .nav-link:hover,
+.profile-nav .nav-link.active {
+  color: #e91e63;
+  background: none;
+}
+
+.profile-nav .nav-link.active {
+  font-weight: 600;
+}
+
+.order-detail-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.order-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.order-header h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.order-date {
+  color: #6c757d;
+  margin: 0;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-pendiente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-confirmado {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-enviado {
+  background: #cce5ff;
+  color: #004085;
+}
+
+.status-entregado {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.order-progress {
+  margin-bottom: 2rem;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+}
+
+.progress-steps::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: #e9ecef;
+  z-index: 1;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.step.completed .step-icon {
+  background: #e91e63;
+  color: white;
+}
+
+.step-content h5 {
+  font-size: 0.875rem;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.step-content p {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.order-items-section {
+  margin-bottom: 2rem;
+}
+
+.order-items-section h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.order-item {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.item-image {
+  width: 80px;
+  height: 80px;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+}
+
+.item-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.no-image {
+  width: 100%;
+  height: 100%;
+  background: #e9ecef;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+  font-size: 2rem;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-details h5 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.item-variant,
+.item-quantity,
+.item-price {
+  color: #6c757d;
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.item-total {
+  font-weight: 600;
+  color: #e91e63;
+  font-size: 1.2rem;
+}
+
+.order-summary {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.shipping-info h5,
+.payment-info h5 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  margin-bottom: 1rem;
+}
+
+.info-item strong {
+  color: #2c3e50;
+}
+
+.info-item p {
+  color: #6c757d;
+  margin: 0.25rem 0 0 0;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.summary-row.total {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #e91e63;
+  border-bottom: none;
+  border-top: 2px solid #e9ecef;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+}
+
+.payment-details {
+  margin-bottom: 2rem;
+}
+
+.payment-details h5 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.payment-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.payment-method i {
+  font-size: 1.5rem;
+  color: #e91e63;
+}
+
+.payment-info p {
+  margin: 0.25rem 0;
+  color: #6c757d;
+}
+
+.order-actions {
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+@media (max-width: 768px) {
+  .progress-steps {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .progress-steps::before {
+    display: none;
+  }
+  
+  .order-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .item-image {
+    margin-right: 0;
+  }
+  
+  .payment-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Función para cancelar pedido
+function cancelarPedido(pedidoId) {
+  if (confirm('¿Estás seguro de que quieres cancelar este pedido?')) {
+    // Aquí iría la lógica para cancelar el pedido
+    fetch(`/cancelar-pedido/${pedidoId}/`, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert('Error al cancelar el pedido');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Error al cancelar el pedido');
+    });
+  }
+}
+</script>
+{% endblock %}

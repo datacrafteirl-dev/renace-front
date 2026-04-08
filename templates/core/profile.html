@@ -1,0 +1,378 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Mi Perfil - Renace{% endblock %}
+{% block body_class %}profile-page{% endblock %}
+
+{% block header %}
+{% include 'core/header.html' %}
+{% endblock %}
+
+{% block content %}
+<main class="main">
+  <!-- Page Title -->
+  <div class="page-title light-background">
+    <div class="container">
+      <nav class="breadcrumbs">
+        <ol>
+          <li><a href="{% url 'core:home' %}">Inicio</a></li>
+          <li class="current">Mi Perfil</li>
+        </ol>
+      </nav>
+      <h1>Mi Perfil</h1>
+    </div>
+  </div><!-- End Page Title -->
+
+  <div class="container">
+    <div class="row">
+      
+      <!-- Sidebar -->
+      <div class="col-lg-3">
+        <div class="profile-sidebar">
+          <div class="profile-avatar">
+            <div class="avatar-placeholder">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <h4>{{ user.first_name|default:user.username }}</h4>
+            <p>{{ user.email }}</p>
+          </div>
+          
+          <nav class="profile-nav">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link active" href="{% url 'core:perfil' %}">
+                  <i class="bi bi-person me-2"></i>Información Personal
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:mis_pedidos' %}">
+                  <i class="bi bi-bag-check me-2"></i>Mis Pedidos
+                </a>
+              </li>
+              <li class="nav-item">
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:addresses' %}">
+                  <i class="bi bi-geo-alt me-2"></i>Direcciones
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:payment_methods' %}">
+                  <i class="bi bi-credit-card me-2"></i>Métodos de Pago
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'core:settings' %}">
+                  <i class="bi bi-gear me-2"></i>Configuración
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9">
+        <div class="profile-content">
+          
+          <!-- Personal Information -->
+          <div class="profile-section">
+            <div class="section-header">
+              <h3>Información Personal</h3>
+              <p>Gestiona tu información personal y preferencias de cuenta</p>
+            </div>
+            
+            <form method="post" class="profile-form">
+              {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="first_name">Nombre</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                           value="{{ user.first_name }}" placeholder="Tu nombre">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="last_name">Apellido</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                           value="{{ user.last_name }}" placeholder="Tu apellido">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           value="{{ user.email }}" readonly>
+                    <small class="form-text text-muted">El correo no se puede cambiar</small>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" 
+                           value="{{ profile.phone|default:'' }}" placeholder="Tu número de teléfono">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="birth_date">Fecha de Nacimiento</label>
+                <input type="date" class="form-control" id="birth_date" name="birth_date" 
+                       value="{{ profile.birth_date|date:'Y-m-d'|default:'' }}">
+              </div>
+              
+              <div class="form-group">
+                <label for="gender">Género</label>
+                <select class="form-control" id="gender" name="gender">
+                  <option value="">Seleccionar género</option>
+                  <option value="M" {% if profile.gender == 'M' %}selected{% endif %}>Masculino</option>
+                  <option value="F" {% if profile.gender == 'F' %}selected{% endif %}>Femenino</option>
+                  <option value="O" {% if profile.gender == 'O' %}selected{% endif %}>Otro</option>
+                </select>
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                <button type="button" class="btn btn-outline-secondary">Cancelar</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Change Password -->
+          <div class="profile-section">
+            <div class="section-header">
+              <h3>Cambiar Contraseña</h3>
+              <p>Actualiza tu contraseña para mantener tu cuenta segura</p>
+            </div>
+            
+            <form method="post" class="password-form">
+              {% csrf_token %}
+              <input type="hidden" name="form_type" value="password">
+              
+              <div class="form-group">
+                <label for="current_password">Contraseña Actual</label>
+                <input type="password" class="form-control" id="current_password" name="current_password" 
+                       placeholder="Ingresa tu contraseña actual">
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="new_password">Nueva Contraseña</label>
+                    <input type="password" class="form-control" id="new_password" name="new_password" 
+                           placeholder="Nueva contraseña">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="confirm_password">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                           placeholder="Confirma tu nueva contraseña">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Account Statistics -->
+          <div class="profile-section">
+            <div class="section-header">
+              <h3>Estadísticas de Cuenta</h3>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-4">
+                <div class="stat-card">
+                  <div class="stat-icon">
+                    <i class="bi bi-bag-check"></i>
+                  </div>
+                  <div class="stat-content">
+                    <h4>{{ total_pedidos|default:0 }}</h4>
+                    <p>Pedidos Realizados</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="stat-card">
+                  <div class="stat-icon">
+                    <i class="bi bi-heart"></i>
+                  </div>
+                  <div class="stat-content">
+                    <p>Productos Favoritos</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="stat-card">
+                  <div class="stat-icon">
+                    <i class="bi bi-calendar-check"></i>
+                  </div>
+                  <div class="stat-content">
+                    <h4>{{ dias_miembro|default:0 }}</h4>
+                    <p>Días como Miembro</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.profile-page {
+  background-color: #f8f9fa;
+}
+
+.profile-sidebar {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.avatar-placeholder {
+  width: 80px;
+  height: 80px;
+  background: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.profile-nav .nav-link {
+  color: #6c757d;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.profile-nav .nav-link:hover,
+.profile-nav .nav-link.active {
+  color: #c62076;
+  background: none;
+}
+
+.profile-nav .nav-link.active {
+  font-weight: 600;
+}
+
+.profile-content {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.profile-section {
+  margin-bottom: 3rem;
+}
+
+.section-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.section-header h3 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.section-header p {
+  color: #6c757d;
+  margin: 0;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #c62076;
+  box-shadow: 0 0 0 0.2rem rgba(198, 32, 118, 0.25);
+}
+
+.form-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.stat-card {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  color: #c62076;
+  margin-bottom: 1rem;
+}
+
+.stat-content h4 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.stat-content p {
+  color: #6c757d;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .profile-sidebar {
+    margin-bottom: 1rem;
+  }
+  
+  .profile-content {
+    padding: 1rem;
+  }
+}
+</style>
+{% endblock %}
