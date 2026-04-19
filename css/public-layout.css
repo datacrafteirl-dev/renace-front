@@ -1,0 +1,94 @@
+/**
+ * Renace — utilidades compartidas del sitio público (header/footer/base).
+ */
+
+/* Botón flotante WhatsApp */
+.whatsapp-float {
+  position: fixed;
+  bottom: 72px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: #25d366;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
+  z-index: 9998;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.whatsapp-float:hover {
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+@media (max-width: 576px) {
+  .whatsapp-float {
+    bottom: 68px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+    font-size: 26px;
+  }
+}
+
+.footer-libro-reclamaciones-img {
+  width: 30%;
+  height: auto;
+}
+
+.footer-contact-item--emphasis {
+  color: #ffffff !important;
+}
+
+.map-embed-iframe {
+  border: 0;
+  width: 100%;
+  height: 350px;
+}
+
+.catalog-sort-form-inline {
+  display: inline;
+}
+
+/* Detalle de producto — compactación breadcrumb */
+.product-page-title-bar {
+  padding: 16px 0;
+  margin-bottom: 0;
+}
+.product-breadcrumb-nav {
+  margin-bottom: 0;
+}
+.product-breadcrumb-ol {
+  margin-bottom: 0;
+}
+.product-details-main {
+  padding-top: 20px;
+}
+.product-details-container-tight {
+  margin-top: 0;
+}
+
+/* Producto no disponible */
+.product-unavailable-thumb {
+  object-fit: cover;
+  max-height: 360px;
+  filter: grayscale(0.2) opacity(0.85);
+}
+.related-product-card-img {
+  object-fit: cover;
+}
+.related-product-title {
+  min-height: 2.4em;
+}
+
+/* Notificación carrito (main.js / base) */
+.cart-toast-notification {
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 300px;
+}
