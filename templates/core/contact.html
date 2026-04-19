@@ -1,4 +1,3 @@
-
 {% extends 'core/base.html' %}
 
 {% block title %}Contacto | Renace - Tienda de Maquillaje y Belleza{% endblock %}
@@ -43,7 +42,7 @@
       <div class="container">
         <nav class="breadcrumbs">
           <ol>
-            <li><a href="index.html">Inicio</a></li>
+            <li><a href="{% url 'core:home' %}">Inicio</a></li>
             <li class="current">Contacto</li>
           </ol>
         </nav>
@@ -55,11 +54,11 @@
     <section id="contact-2" class="contact-2 section">
 
       <div class="mb-4" data-aos="fade-up" data-aos-delay="200">
-        <iframe style="border:0; width: 100%; height: 350px;" 
-  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3902.9789487787875!2d-77.0013748!3d-11.9759584!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c568820a4cf7%3A0xd446ba021ad238f3!2sRio%20Ramis%20430%2C%20Lima%2015434!5e0!3m2!1ses!2spe!4v1759865693232!5m2!1ses!2spe" 
-  frameborder="0" 
-  allowfullscreen="" 
-  loading="lazy" 
+        <iframe class="map-embed-iframe"
+  src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3902.9789487787875!2d-77.0013748!3d-11.9759584!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105c568820a4cf7%3A0xd446ba021ad238f3!2sRio%20Ramis%20430%2C%20Lima%2015434!5e0!3m2!1ses!2spe!4v1759865693232!5m2!1ses!2spe"
+  title="Ubicación Renace en Google Maps"
+  allowfullscreen=""
+  loading="lazy"
   referrerpolicy="no-referrer-when-downgrade">
 </iframe></div><!-- End Google Maps -->
 

@@ -3,6 +3,10 @@
 
 {% block title %}Producto no disponible | Renace{% endblock %}
 
+{% block meta_robots %}
+  <meta name="robots" content="noindex, follow">
+{% endblock %}
+
 {% block meta_description %}El producto que buscas ya no está disponible en Renace, pero tenemos alternativas que te pueden encantar.{% endblock %}
 
 {% block body_class %}product-unavailable-page{% endblock %}
@@ -22,9 +26,9 @@
               <div class="position-relative rounded-4 overflow-hidden shadow-sm bg-light">
                 {% with primera=producto.imagenes.first %}
                   {% if primera %}
-                    <img src="{{ primera.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid w-100" style="object-fit: cover; max-height: 360px; filter: grayscale(0.2) opacity(0.85);">
+                    <img src="{{ primera.imagen.url }}" alt="{{ producto.nombre }}" class="img-fluid w-100 product-unavailable-thumb">
                   {% else %}
-                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=600&fit=crop&crop=center" alt="{{ producto.nombre }}" class="img-fluid w-100" style="object-fit: cover; max-height: 360px; filter: grayscale(0.2) opacity(0.85);">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=600&fit=crop&crop=center" alt="{{ producto.nombre }}" class="img-fluid w-100 product-unavailable-thumb">
                   {% endif %}
                 {% endwith %}
                 <div class="position-absolute top-0 start-0 m-3 badge bg-secondary text-white rounded-pill px-3 py-2">
@@ -79,9 +83,9 @@
                   <div class="ratio ratio-1x1 bg-light rounded-top">
                     {% with img=p.imagenes.first %}
                       {% if img %}
-                        <img src="{{ img.imagen.url }}" alt="{{ p.nombre }}" class="img-fluid rounded-top" style="object-fit: cover;">
+                        <img src="{{ img.imagen.url }}" alt="{{ p.nombre }}" class="img-fluid rounded-top related-product-card-img">
                       {% else %}
-                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=center" alt="{{ p.nombre }}" class="img-fluid rounded-top" style="object-fit: cover;">
+                        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=center" alt="{{ p.nombre }}" class="img-fluid rounded-top related-product-card-img">
                       {% endif %}
                     {% endwith %}
                   </div>
@@ -89,7 +93,7 @@
                     <div class="small text-muted text-uppercase mb-1">
                       {% if p.marca %}{{ p.marca.nombre }}{% endif %}
                     </div>
-                    <div class="small fw-semibold mb-1" style="min-height: 2.4em;">
+                    <div class="small fw-semibold mb-1 related-product-title">
                       {{ p.nombre|truncatechars:50 }}
                     </div>
                     <div class="fw-bold text-primary">

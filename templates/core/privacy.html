@@ -1,80 +1,12 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}Política de Privacidad - Renace{% endblock %}
+{% block meta_description %}Política de privacidad de Renace: cómo tratamos tus datos personales, cookies y derechos del titular en el marco de la normativa peruana.{% endblock %}
 {% block body_class %}privacy-page{% endblock %}
 
 {% block extra_css %}
-<style>
-  .privacy-hero {
-    background: linear-gradient(135deg, #c62076 0%, #b01d69 50%, #981958 100%);
-    color: #fff;
-    border-radius: 16px;
-    padding: 32px 24px;
-    margin: 24px auto 8px;
-    position: relative;
-    overflow: hidden;
-  }
-  .privacy-hero::after {
-    content: '';
-    position: absolute;
-    right: -60px;
-    top: -60px;
-    width: 180px; height: 180px;
-    background: radial-gradient(closest-side, rgba(255,255,255,0.25), rgba(255,255,255,0));
-    filter: blur(2px);
-  }
-  .privacy-hero h1 {
-    font-size: 1.75rem;
-    margin: 0 0 8px;
-  }
-  .privacy-hero p {
-    margin: 0;
-    opacity: .95;
-  }
-  .policy-card {
-    background: #ffffff;
-    border: 1px solid rgba(0,0,0,0.06);
-    border-radius: 14px;
-    padding: 22px 20px;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
-  }
-  .policy-meta {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 14px; color: #6c757d;
-    font-size: .95rem;
-  }
-  .policy-content pre {
-    white-space: pre-wrap;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    font-size: 1rem;
-    line-height: 1.65;
-    color: #333;
-    margin: 0;
-  }
-  .policy-badge {
-    display: inline-block;
-    background: rgba(198,32,118,.08);
-    color: #c62076;
-    border: 1px solid rgba(198,32,118,.25);
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: .85rem;
-    margin-left: 8px;
-  }
-  .policy-actions {
-    display: flex; gap: 10px; justify-content: flex-end; margin-top: 14px;
-  }
-  .btn-soft {
-    border: 1px solid rgba(0,0,0,0.08);
-    background: #fff;
-    color: #333;
-  }
-  .btn-soft:hover { background: #f8f9fa; }
-  @media (max-width: 576px) {
-    .privacy-hero { padding: 22px 18px; }
-    .policy-card { padding: 18px 14px; }
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/public-legal-pages.css' %}">
 {% endblock %}
 
 {% block header %}

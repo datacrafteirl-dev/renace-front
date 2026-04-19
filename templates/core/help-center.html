@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block title %}{{ page_title }} - Renace{% endblock %}
+{% block meta_description %}Centro de ayuda Renace: pedidos, pagos, envíos y seguimiento de compras de maquillaje y belleza en Perú.{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
@@ -43,18 +44,18 @@
 
         <!-- FAQ Section -->
         <div class="faq-section">
-          <h3 class="mb-4">Preguntas Frecuentes</h3>
+          <h2 class="mb-4 h5">Preguntas frecuentes</h2>
           
           <div class="accordion" id="faqAccordion">
             {% for faq in faqs %}
             <div class="accordion-item">
-              <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+              <h3 class="accordion-header h6 mb-0" id="heading{{ forloop.counter }}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
                         data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false" 
                         aria-controls="collapse{{ forloop.counter }}">
                   {{ faq.pregunta }}
                 </button>
-              </h2>
+              </h3>
               <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" 
                    aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#faqAccordion">
                 <div class="accordion-body">
@@ -70,7 +71,7 @@
         <div class="contact-support mt-5">
           <div class="card">
             <div class="card-body text-center">
-              <h4>¿No encontraste lo que buscabas?</h4>
+              <h3 class="h5">¿No encontraste lo que buscabas?</h3>
               <p>Nuestro equipo de soporte está aquí para ayudarte.</p>
               <div class="row">
                 <div class="col-md-6 mb-3">

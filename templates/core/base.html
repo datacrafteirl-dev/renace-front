@@ -5,6 +5,9 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  {% block meta_robots %}
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  {% endblock %}
   <title>{% block title %}Renace - Maquillaje y Productos de Belleza Importados | Tienda Online Perú{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}Tienda online especializada en maquillaje y productos de belleza importados de las mejores marcas. Envíos a todo el Perú. Base, labiales, sombras, cremas faciales y más.{% endblock %}">
   <meta name="keywords" content="{% block meta_keywords %}maquillaje importado, productos de belleza, cosméticos importados, base de maquillaje, labiales, sombras de ojos, cremas faciales, serums, máscara de pestañas, tienda online belleza, maquillaje Perú, cosméticos online, belleza importada{% endblock %}">
@@ -24,7 +27,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Renace Belleza">
 
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   
@@ -91,6 +93,9 @@
 
   <!-- Main CSS File -->
   <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'css/public-layout.css' %}" rel="stylesheet">
+  <link href="{% static 'css/public-header.css' %}" rel="stylesheet">
+  <link href="{% static 'css/public-footer.css' %}" rel="stylesheet">
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -156,34 +161,6 @@
   </script>
 
   {% block extra_css %}{% endblock %}
-  <style>
-    /* Botón flotante WhatsApp (por encima del scroll-top) */
-    .whatsapp-float {
-      position: fixed;
-      bottom: 72px;
-      right: 24px;
-      width: 56px;
-      height: 56px;
-      background: #25d366;
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
-      z-index: 9998;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .whatsapp-float:hover {
-      color: #fff;
-      transform: scale(1.08);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-    }
-    @media (max-width: 576px) {
-      .whatsapp-float { bottom: 68px; right: 20px; width: 52px; height: 52px; font-size: 26px; }
-    }
-  </style>
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
@@ -322,8 +299,7 @@
   function showNotification(message, type = 'info') {
     // Crear elemento de notificación
     const notification = document.createElement('div');
-    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
-    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed cart-toast-notification`;
     notification.innerHTML = `
       ${message}
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

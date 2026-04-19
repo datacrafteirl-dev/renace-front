@@ -1,47 +1,4 @@
 {% load static %}
-<style>
-.brand-slogan {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #c62076;
-  text-align: left;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(198, 32, 118, 0.1) 0%, rgba(198, 32, 118, 0.05) 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(198, 32, 118, 0.2);
-  box-shadow: 0 4px 15px rgba(198, 32, 118, 0.1);
-  transition: all 0.3s ease;
-}
-
-.brand-slogan:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(198, 32, 118, 0.2);
-}
-
-.social-icons a {
-  transition: all 0.3s ease;
-  border-radius: 50%;
-  padding: 8px;
-}
-
-.social-icons a:hover {
-  transform: translateY(-3px) scale(1.1);
-  background: linear-gradient(135deg, #c62076, #c62076);
-  color: white !important;
-}
-
-.footer-logo {
-  filter: brightness(0) invert(1);
-  transition: all 0.3s ease;
-  background: transparent !important;
-}
-
-.footer-logo:hover {
-  filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-  transform: scale(1.05);
-}
-</style>
 <footer id="footer" class="footer light-background">
   <div class="footer-main">
     <div class="container">
@@ -66,7 +23,7 @@
                 <a href="#" aria-label="Linkedin"><i class="bi bi-linkedin"></i></a>
               </div>
               
-          <a href="{% url 'core:libro_reclamaciones' %}"><img src="{% static 'assets/img/libro-reclamaciones.png' %}" alt="Libro de Reclamaciones" style="width: 30%; height: auto;"></a>
+          <a href="{% url 'core:libro_reclamaciones' %}"><img src="{% static 'assets/img/libro-reclamaciones.png' %}" alt="Libro de Reclamaciones" class="footer-libro-reclamaciones-img"></a>
             </div>
           </div>
        
@@ -142,7 +99,7 @@
                   {% endif %}
                 </span>
               </div>
-              <div class="contact-item" style="color: #ffffff !important;">
+              <div class="contact-item footer-contact-item--emphasis">
                 <i class="bi bi-envelope"></i>
                 <span>
                   {% if configuracion_sitio and configuracion_sitio.email_contacto %}
